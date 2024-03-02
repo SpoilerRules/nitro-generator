@@ -1,0 +1,27 @@
+{
+    "General": {
+        "logGenerationInfo": true,
+        "generationDelay (ms)": 6000,
+        "validateNitroCode": true,
+        "alertWebhookForValidNitroCode": true,
+        "discordWebhookURL": "https://dummylink.com/suspicious-webhook/",
+        "retryDelay (s)": 3
+    },
+    "Multi Threading": {
+        "enabled": false,
+        "threadLimit": 3
+    },
+    "Custom Proxy": {
+        "enabled": false,
+        "mode": 1,
+        "isAuthenticationRequired": false,
+        "host": "162.0.220.211",
+        "port": "0030",
+        "username": "Dummy Internet Suspect",
+        "password": "123Dummy$Password!",
+        "protocol": 1,
+        "proxyFileName": "suspicious-proxies.txt",
+        "rawContentLinks": "https://my-epic-proxy-api/proxies.txt, https://dummy-proxy-api/suspicious-http/proxies.txt",
+        "rawContentSeparator": "\n"
+    }
+}
