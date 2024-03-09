@@ -1,0 +1,7 @@
+.text-area .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-bar .thumb {
+    -fx-background-color: transparent;
+}

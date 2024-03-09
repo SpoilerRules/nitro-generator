@@ -1,5 +1,6 @@
 package com.spoiligaming.generator.gui.tabs
 
+import com.spoiligaming.generator.gui.ColorPalette
 import com.spoiligaming.generator.gui.ResourceHandler
 import com.spoiligaming.generator.gui.TabContainer
 import com.spoiligaming.logging.Logger
@@ -9,6 +10,7 @@ import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.control.Label
 import javafx.scene.control.TextArea
+import javafx.scene.input.ContextMenuEvent
 import javafx.scene.input.KeyCode
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
@@ -30,14 +32,16 @@ class TabConsole : ITab {
     override fun getContent(): GridPane {
         val textArea = TextArea().apply {
             isEditable = false
-            isWrapText = true
+            isWrapText = false
+            isMouseTransparent = false
             setMaxSize(395.0, 275.0)
             setMinSize(395.0, 275.0)
             background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii(16.0), Insets.EMPTY))
-            style = "-fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 14; -fx-text-fill: #FFFFFF;"
+            style = "-fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 14; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR};"
             cursor = Cursor.DEFAULT
-            isMouseTransparent = true
             isFocusTraversable = false
+
+            addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED) { it.consume() }
         }
 
         val originalOut = System.out

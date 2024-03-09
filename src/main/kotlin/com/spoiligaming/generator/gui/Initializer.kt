@@ -39,15 +39,6 @@ class Initializer : Application() {
         primaryStage.scene = scene
         primaryStage.initStyle(StageStyle.TRANSPARENT)
 
-        scene.setOnKeyPressed { event ->
-            isShiftDown = event.isShiftDown
-            isControlDown = event.isControlDown
-        }
-        scene.setOnKeyReleased { event ->
-            isShiftDown = event.isShiftDown
-            isControlDown = event.isControlDown
-        }
-
         scene.setOnMousePressed { event ->
             xOffset = event.sceneX
             yOffset = event.sceneY
@@ -60,6 +51,7 @@ class Initializer : Application() {
 
         scene.stylesheets.add(javaClass.getResource("/console-style.css")!!.toExternalForm())
         scene.stylesheets.add(javaClass.getResource("/checkbox-style.css")!!.toExternalForm())
+        scene.stylesheets.add(javaClass.getResource("/textarea-style.css")!!.toExternalForm())
 
         primaryStage.title = "Spoili's Nitro Generator - 1.0.0"
         primaryStage.isResizable = false
@@ -68,38 +60,7 @@ class Initializer : Application() {
             exitProcess(0)
         }
 
-        borderPane.bottom = addFundamentalButtons(primaryStage)/*HBox().apply {
-            alignment = Pos.BOTTOM_RIGHT
-            padding = Insets(-35.0, 10.0, 10.0, 0.0)
-            style = "-fx-background-color: transparent;"
-
-            val exitButton = Button("Exit").apply {
-                background = Background(BackgroundFill(Color.web("#282828"), CornerRadii(16.0, false), null))
-                style = """
-            -fx-text-fill: #FFFFFF; 
-            -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; 
-            -fx-font-size: 13; 
-            -fx-background-radius: 16px;
-            -fx-background-color: #282828;
-            -fx-control-inner-background: #282828;
-            -fx-focus-color: #282828;
-            -fx-faint-focus-color: transparent;
-            -fx-selection-bar-text: white;
-        """
-                setOnAction { Platform.exit() }
-                setMaxSize(100.0, 25.0)
-                setMinSize(100.0, 25.0)
-
-                setOnMouseEntered {
-                    style += "-fx-text-fill: #414141;"
-                    scene.cursor = Cursor.HAND
-                }
-                setOnMouseExited {
-                    style += "-fx-text-fill: #FFFFFF;"
-                    scene.cursor = Cursor.DEFAULT
-                }
-            }
-            children.add(exitButton)*/
+        borderPane.bottom = addFundamentalButtons(primaryStage)
 
         primaryStage.show()
         BaseConfigurationFactory.createConfig()
@@ -183,7 +144,7 @@ class Initializer : Application() {
             style = buttonStyle("#FFFFFF")
 
             setOnAction {
-                Platform.exit()
+                exitProcess(0)
             }
 
             setOnMouseEntered {
@@ -213,145 +174,5 @@ class Initializer : Application() {
                 }
             })
         }
-    }
-
-    companion object {
-        var isShiftDown = false
-        var isControlDown = false
-
-        fun addGeneralTab(tabPane: TabPane): GridPane {
-            val generalSettings = BaseConfigurationFactory.getInstance().generalSettings
-
-            val gridPane = GridPane().apply {
-                vgap = 10.0
-                hgap = 10.0
-                alignment = Pos.CENTER
-            }
-
-            val cssStyle = """
-    -fx-text-fill: #FFFFFF; 
-    -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; 
-    -fx-font-size: 13; 
-    -fx-background-radius: 12px;
-    -fx-control-inner-background: #4C4C4C;
-    -fx-focus-color: white;
-    -fx-faint-focus-color: transparent;
-    """
-
-            val spinnerStyle = """
-    -fx-text-fill: #FFFFFF; 
-    -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; 
-    -fx-font-size: 13; 
-    -fx-control-inner-background: #4C4C4C;
-    -fx-focus-color: white;
-    -fx-faint-focus-color: transparent;
-    """
-
-            val checkboxes = listOf(
-                CheckBox("Log Generation Info").apply { isSelected = generalSettings.logGenerationInfo },
-                CheckBox("Validate Nitro Code").apply { isSelected = generalSettings.validateNitroCode },
-                CheckBox("Alert Webhook for Valid Nitro Code").apply { isSelected = generalSettings.alertWebhook }
-            )
-
-            val spinners = listOf(
-                Spinner<Int>().apply {
-                    isEditable = true
-                    valueFactory = SpinnerValueFactory.IntegerSpinnerValueFactory(
-                        0,
-                        Int.MAX_VALUE,
-                        generalSettings.generationDelay.toInt(),
-                        1
-                    )
-                },
-                Spinner<Int>().apply {
-                    isEditable = true
-                    valueFactory =
-                        SpinnerValueFactory.IntegerSpinnerValueFactory(0, Int.MAX_VALUE, generalSettings.retryDelay, 1)
-                }
-            )
-
-            val textFieldDiscordWebhookURL = TextField(generalSettings.discordWebhookURL).apply {
-                style = cssStyle
-                textProperty().addListener { _, _, newValue ->
-                    BaseConfigurationFactory.updateValue {
-                        generalSettings.discordWebhookURL = newValue
-                    }
-                }
-            }
-
-            val labels = listOf(
-                Label("Generation Delay (ms)").also { it.style = cssStyle },
-                Label("Retry Delay (s)").also { it.style = cssStyle },
-                Label("Discord Webhook URL").also { it.style = cssStyle }
-            )
-
-            checkboxes.forEachIndexed { index, checkBox ->
-                checkBox.style = cssStyle
-                checkBox.setOnAction {
-                    BaseConfigurationFactory.updateValue {
-                        when (index) {
-                            0 -> generalSettings.logGenerationInfo = checkBox.isSelected
-                            1 -> generalSettings.validateNitroCode = checkBox.isSelected
-                            2 -> generalSettings.alertWebhook = checkBox.isSelected
-                        }
-                    }
-                }
-                gridPane.addRow(index, checkBox)
-            }
-
-            spinners.forEachIndexed { index, spinner ->
-                spinner.style = spinnerStyle
-                spinner.valueProperty().addListener { _, _, newValue ->
-                    BaseConfigurationFactory.updateValue {
-                        when (index) {
-                            0 -> generalSettings.generationDelay = newValue.toLong()
-                            1 -> generalSettings.retryDelay = newValue.toInt()
-                        }
-                    }
-                }
-                gridPane.addRow(index + checkboxes.size, labels[index], spinner)
-            }
-
-            gridPane.addRow(checkboxes.size + spinners.size, labels[2], textFieldDiscordWebhookURL)
-
-            val generalTab = Tab("General", gridPane)
-            generalTab.isClosable = false
-            tabPane.tabs.add(0, generalTab)
-
-            return gridPane
-        }
-    }
-
-    private fun setupConsoleOutput(tabPane: TabPane) {
-        val console = TextArea().apply {
-            isEditable = false
-            isMouseTransparent = true
-            isFocusTraversable = false
-            style = "-fx-text-fill: black; -fx-padding: 28px; -fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-control-inner-background: transparent;"
-            font = Font.font("Roboto", 12.0)
-            background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY))
-            border = Border(BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.EMPTY))
-        }
-
-        val outputStream = object : OutputStream() {
-            override fun write(b: Int) {
-                Platform.runLater {
-                    console.appendText(b.toChar().toString())
-                }
-            }
-
-            override fun write(b: ByteArray, off: Int, len: Int) {
-                val filteredStr = String(b, off, len).replace("\u001B\\[[;\\d]*m".toRegex(), "")
-                Platform.runLater {
-                    console.appendText(filteredStr)
-                }
-            }
-        }
-
-        System.setOut(PrintStream(outputStream, true))
-
-        val consoleTab = Tab("Console", console)
-        consoleTab.isClosable = false
-        tabPane.tabs?.add(3, consoleTab)
     }
 }
