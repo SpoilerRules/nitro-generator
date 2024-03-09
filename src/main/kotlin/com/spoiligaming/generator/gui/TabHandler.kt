@@ -2,14 +2,23 @@ package com.spoiligaming.generator.gui
 
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.configuration.CustomProxy
+import com.spoiligaming.generator.gui.tabs.TabAdvanced
+import com.spoiligaming.generator.gui.tabs.TabConsole
+import com.spoiligaming.generator.gui.tabs.TabGeneral
+import com.spoiligaming.generator.gui.tabs.TabProxy
+import com.spoiligaming.logging.Logger
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.control.*
+import javafx.scene.layout.Background
+import javafx.scene.layout.BackgroundFill
+import javafx.scene.layout.BorderPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
+import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import java.io.File
@@ -40,6 +49,40 @@ class TabHandler(private val tabPane: TabPane) {
         -fx-faint-focus-color: transparent;
         -fx-selection-bar-text: white;
     """
+
+    companion object {
+        lateinit var tabContentPane: BorderPane
+
+        fun allocatePane() {
+            tabContentPane = BorderPane().also { Logger.printDebug("Allocating BorderPane for tab content.") }
+            tabContentPane.apply {
+                this.translateY = -25.0
+                setMinSize(410.0, 350.0)
+                setMaxSize(410.0, 350.0)
+                style = "-fx-background-color: transparent; -fx-background-radius: 16;"
+
+                val generalContent = TabGeneral().getContent()
+                val proxyContent = TabProxy().getContent()
+                val advancedContent = TabAdvanced().getContent()
+                val consoleContent = TabConsole().getContent()
+
+                val stackPane = StackPane(generalContent, proxyContent, advancedContent, consoleContent)
+                stackPane.alignment = Pos.CENTER
+
+                center = stackPane
+
+                TabContainer.currentTabProperty().addListener { _, _, newValue ->
+                    stackPane.children.forEachIndexed { index, node ->
+                        node.isVisible = index == newValue
+                    }
+                }
+
+                stackPane.children.forEachIndexed { index, node ->
+                    node.isVisible = index == TabContainer.currentTab
+                }
+            }
+        }
+    }
 
     fun addProxyTab() {
         val modeOptions = FXCollections.observableArrayList("Static", "One File", "Online API")

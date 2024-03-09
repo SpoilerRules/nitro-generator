@@ -14,6 +14,7 @@ data class General(
     var validateNitroCode: Boolean = true,
     @SerialName("alertWebhookForValidNitroCode") var alertWebhook: Boolean = true,
     var discordWebhookURL: String = "https://dummylink.com/suspicious-webhook/",
+    @SerialName("retry") var retryTillValid: Boolean = true, // yet to be implemented.
     @SerialName("retryDelay (s)") var retryDelay: Int = 3
 )
 

@@ -1,0 +1,19 @@
+.text-area {
+    -fx-font-family: '${ResourceHandler.comfortaaBold.family}';
+    -fx-font-size: 14;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #414141;
+}
+
+.text-area .content {
+    -fx-background-color: #414141;
+    -fx-background-radius: 0;
+}
+
+.text-area:focused .content {
+    -fx-background-color: #414141;
+}
+
+.text-area .scroll-bar {
+    -fx-opacity: 0;
+}

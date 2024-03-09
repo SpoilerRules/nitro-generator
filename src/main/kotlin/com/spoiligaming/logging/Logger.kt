@@ -5,6 +5,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 object Logger {
+    var showDebug = false
+
     private val dateTimeFormatter by lazy { DateTimeFormatter.ofPattern("HH:mm:ss") }
     private val dateFormatter by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss") }
 
@@ -20,7 +22,9 @@ object Logger {
 
     fun <V> printWarning(warning: V) = log("WARNING", warning, CEnum.YELLOW)
 
-    fun <V> printDebug(information: V) = log("DEBUG", information, CEnum.ORANGE)
+    fun <V> printDebug(information: V) {
+        if (showDebug) log("DEBUG", information, CEnum.ORANGE)
+    }
 
     private fun <V> log(level: String, message: V, color: CEnum) {
         println("${createStatus(color, level)} $message")

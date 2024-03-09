@@ -16,6 +16,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
    // implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.3") {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-common")
     }
@@ -24,6 +25,7 @@ dependencies {
     implementation("org.openjfx:javafx-fxml:11.0.2")
     implementation("org.openjfx:javafx-graphics:11.0.2")
     implementation("org.openjfx:javafx-base:11.0.2")
+ //   implementation("org.controlsfx:controlsfx:11.2.0")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
@@ -52,10 +54,6 @@ tasks.jar {
     manifest {
         attributes["Main-Class"] = "${group}.generator.MainKt"
     }
-}
-
-tasks.register("sbuild") {
-    dependsOn("build", "shadowJar")
 }
 
 application {

@@ -1,0 +1,15 @@
+.check-box .box {
+    -fx-background-color: #4C4C4C;
+    -fx-border-color: transparent;
+    -fx-background-radius: 12;
+    -fx-font-size: 18;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: #E85D9B;
+    -fx-shape: "m276.5-270.9 184.8-184.1q7.7-7.7 17.5-7.35t17.5 8.05q7.7 7.7 7.7 17.5t-7.7 17.5L294.7-218.2q-7.7 7.7-17.85 7.7T259.9-218.2L180.8-297.9q-7.7-7.7-7.7-17.5t7.7-17.5q7.7-7.7 17.5-7.7t17.5 7.7l65.8 64.7Z";
+}
+
+.check-box:selected .box {
+    -fx-background-color: #4C4C4C;
+}

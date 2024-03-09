@@ -3,6 +3,8 @@ package com.spoiligaming.generator
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
 import java.net.HttpURLConnection
 import java.net.InetSocketAddress
 import java.net.Proxy
@@ -11,6 +13,9 @@ import java.util.*
 import kotlin.concurrent.timer
 
 object GeneratorBean {
+    var isGenerationPaused: BooleanProperty = SimpleBooleanProperty(false)
+    var fakeValidation = false
+
     private val checkDelay: Long
         get() = BaseConfigurationFactory.getInstance().generalSettings.generationDelay
 
@@ -21,11 +26,16 @@ object GeneratorBean {
         if (!BaseConfigurationFactory.getInstance().generalSettings.validateNitroCode) return
 
         timer(initialDelay = 0, period = checkDelay) {
-            validateNitro(
-                List(if (!promotionalGiftCode) 16 else 24) { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".random() }.joinToString(
-                    ""
-                )
-            )
+            if (!isGenerationPaused.get()) {
+                val nitroCode =
+                    List(if (!promotionalGiftCode) 16 else 24) { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".random() }.joinToString(
+                        ""
+                    )
+                when (fakeValidation) {
+                    true -> Logger.printSuccess("The code $nitroCode is valid.").also { SessionStatistics.validNitroCodes += 1 }
+                    false -> validateNitro(nitroCode)
+                }
+            }
         }
     }
 
@@ -37,6 +47,10 @@ object GeneratorBean {
         while (retry) {
             if (BaseConfigurationFactory.getInstance().generalSettings.logGenerationInfo) {
                 Logger.printSuccess("Validating nitro code: $nitroCode", true)
+            }
+
+            if (isGenerationPaused.get()) {
+                return
             }
 
             var connection: HttpURLConnection? = null
@@ -58,6 +72,7 @@ object GeneratorBean {
 
                         discordValidatorURL.openConnection(proxy) as HttpURLConnection
                     }
+
                     BaseConfigurationFactory.getInstance().customProxy.enabled && BaseConfigurationFactory.getInstance().customProxy.mode == 2 -> {
                         val proxyInfo = ProxyHandler.getNextProxy()
                         if (proxyInfo != null) {
@@ -69,6 +84,7 @@ object GeneratorBean {
                             throw RuntimeException("Cannot find any proxy.")
                         }
                     }
+
                     BaseConfigurationFactory.getInstance().customProxy.mode >= 3 -> throw IllegalArgumentException("Invalid custom proxy mode. The mode value must be either 1 or 2.")
                     else -> discordValidatorURL.openConnection() as HttpURLConnection
                 }
@@ -80,7 +96,13 @@ object GeneratorBean {
                         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
                     )
                     if (BaseConfigurationFactory.getInstance().customProxy.isAuthenticationRequired) {
-                        setRequestProperty("Proxy-Authorization", "Basic ${Base64.getEncoder().encodeToString("${BaseConfigurationFactory.getInstance().customProxy.username}:${BaseConfigurationFactory.getInstance().customProxy.password}".toByteArray())}")
+                        setRequestProperty(
+                            "Proxy-Authorization",
+                            "Basic ${
+                                Base64.getEncoder()
+                                    .encodeToString("${BaseConfigurationFactory.getInstance().customProxy.username}:${BaseConfigurationFactory.getInstance().customProxy.password}".toByteArray())
+                            }"
+                        )
                     }
                     if (BaseConfigurationFactory.getInstance().generalSettings.logGenerationInfo) {
                         Logger.printSuccess(when (responseCode) {
@@ -88,8 +110,10 @@ object GeneratorBean {
                                 if (BaseConfigurationFactory.getInstance().generalSettings.alertWebhook) {
                                     alertWebhook(nitroCode, DISCORD_WEBHOOK_URL)
                                 }
+                                SessionStatistics.validNitroCodes += 1
                             }
-                            404 -> "The code $nitroCode is invalid. " + if (nitroValidationRetries > 0) { "Took $nitroValidationRetries retries." } else { "" }
+
+                            404 -> "The code $nitroCode is invalid. " + if (nitroValidationRetries > 0) "Took $nitroValidationRetries retries." else "".also { SessionStatistics.invalidNitroCodes += 1 }
                             429 -> "The request for code $nitroCode was rate limited.".also {
                                 if (BaseConfigurationFactory.getInstance().customProxy.enabled && BaseConfigurationFactory.getInstance().customProxy.mode == 2) {
                                     for (index in 2 downTo 0) {
@@ -101,6 +125,7 @@ object GeneratorBean {
                                     Thread.sleep(checkDelay)
                                 }
                             }
+
                             else -> {
                                 "Unexpected response while validating the code $nitroCode: $responseCode".also {
                                     if (BaseConfigurationFactory.getInstance().customProxy.enabled && BaseConfigurationFactory.getInstance().customProxy.mode == 2) {
