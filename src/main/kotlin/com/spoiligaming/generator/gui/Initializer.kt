@@ -32,7 +32,7 @@ class Initializer : Application() {
         borderPane.left = TabContainer()
         TabHandler.allocatePane()
         borderPane.center = TabHandler.tabContentPane
-        borderPane.style = "-fx-background-color: #4C4C4C; -fx-background-radius: 16;"
+        borderPane.style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-background-radius: 16;"
         val scene = Scene(borderPane, 600.0, 425.0)
         scene.fill = Color.TRANSPARENT
 
@@ -51,6 +51,7 @@ class Initializer : Application() {
 
         scene.stylesheets.add(javaClass.getResource("/console-style.css")!!.toExternalForm())
         scene.stylesheets.add(javaClass.getResource("/checkbox-style.css")!!.toExternalForm())
+        scene.stylesheets.add(javaClass.getResource("/combobox-style.css")!!.toExternalForm())
         scene.stylesheets.add(javaClass.getResource("/textarea-style.css")!!.toExternalForm())
 
         primaryStage.title = "Spoili's Nitro Generator - 1.0.0"
@@ -64,7 +65,7 @@ class Initializer : Application() {
 
         primaryStage.show()
         BaseConfigurationFactory.createConfig()
-        GeneratorBean.startGeneratingNitro(false)
+      //  GeneratorBean.startGeneratingNitro(false)
     }
 
     private fun addFundamentalButtons(stage: Stage): HBox {

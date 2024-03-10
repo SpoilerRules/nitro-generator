@@ -3,6 +3,7 @@ package com.spoiligaming.generator.gui.element
 import com.spoiligaming.generator.gui.ColorPalette
 import com.spoiligaming.generator.gui.ResourceHandler
 import javafx.application.Platform
+import javafx.beans.property.Property
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleLongProperty
 import javafx.geometry.Insets
@@ -46,9 +47,9 @@ object ElementValue {
         setMaxSize(70.0, 25.0)
         setMinSize(70.0, 25.0)
         if (property is SimpleLongProperty || property is SimpleIntegerProperty) {
-            textProperty().bindBidirectional(property as javafx.beans.property.Property<Number>, DecimalFormat("#"))
+            textProperty().bindBidirectional(property as Property<Number>, DecimalFormat("#"))
         }
-        style = "-fx-background-color: ${ColorPalette.BACKGROUND_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR};"
+        style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR};"
         alignment = Pos.CENTER
 
         var oldValue: String? = null
@@ -85,7 +86,7 @@ object ElementValue {
         onClick: () -> Unit
     ) = Button(text).apply {
         alignment = Pos.CENTER
-        style = "-fx-background-color: ${ColorPalette.BACKGROUND_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 15; -fx-background-radius: 12;"
+        style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 15; -fx-background-radius: 12;"
         setMaxSize(maxWidth, maxHeight)
         setMinSize(maxWidth, maxHeight)
 

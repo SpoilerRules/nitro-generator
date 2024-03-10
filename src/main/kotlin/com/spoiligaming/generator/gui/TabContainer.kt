@@ -1,22 +1,14 @@
 package com.spoiligaming.generator.gui
 
 import com.spoiligaming.generator.SessionStatistics
-import com.spoiligaming.generator.gui.controller.TabController
 import com.spoiligaming.logging.Logger
 import javafx.beans.property.ReadOnlyIntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
-import javafx.geometry.HPos
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.Label
-import javafx.scene.control.TabPane
-import javafx.scene.image.ImageView
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
-import javafx.scene.shape.SVGPath
-import javafx.scene.text.Text
-import javafx.scene.text.TextAlignment
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 class TabContainer : GridPane() {
     companion object {

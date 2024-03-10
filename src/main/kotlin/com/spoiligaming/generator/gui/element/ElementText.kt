@@ -5,9 +5,7 @@ import com.spoiligaming.generator.gui.ResourceHandler
 import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.scene.Cursor
 import javafx.scene.control.TextField
-import javafx.scene.input.MouseEvent
 import javafx.scene.layout.HBox
 
 object ElementText {
@@ -24,7 +22,7 @@ object ElementText {
         children.addAll(TextField().apply {
             setMaxSize(142.0, 25.0)
             setMinSize(142.0, 25.0)
-            style = "-fx-background-color: ${ColorPalette.BACKGROUND_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR};"
+            style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR};"
             text = initialValue
 
             focusedProperty().addListener { _, _, isFocused ->

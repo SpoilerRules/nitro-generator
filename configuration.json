@@ -1,12 +1,12 @@
 {
     "General": {
         "logGenerationInfo": true,
-        "generationDelay (ms)": 6003,
+        "generationDelay": 6000,
         "validateNitroCode": true,
         "alertWebhookForValidNitroCode": true,
         "discordWebhookURL": "https://dummylink.com/suspicious-webhook/",
         "retry": true,
-        "retryDelay (s)": 3
+        "retryDelay": 3
     },
     "Multi Threading": {
         "enabled": false,

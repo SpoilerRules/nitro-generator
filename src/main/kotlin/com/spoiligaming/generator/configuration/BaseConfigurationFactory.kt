@@ -1,5 +1,6 @@
 package com.spoiligaming.generator.configuration
 
+import com.spoiligaming.generator.gui.ColorPalette
 import com.spoiligaming.logging.Logger
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -10,12 +11,12 @@ import java.net.Proxy
 @Serializable
 data class General(
     var logGenerationInfo: Boolean = true,
-    @SerialName("generationDelay (ms)") var generationDelay: Long = 6000,
+    var generationDelay: Long = 6000,
     var validateNitroCode: Boolean = true,
     @SerialName("alertWebhookForValidNitroCode") var alertWebhook: Boolean = true,
     var discordWebhookURL: String = "https://dummylink.com/suspicious-webhook/",
     @SerialName("retry") var retryTillValid: Boolean = true, // yet to be implemented.
-    @SerialName("retryDelay (s)") var retryDelay: Int = 3
+    var retryDelay: Int = 3
 )
 
 @Serializable
@@ -44,6 +45,12 @@ data class CustomProxy(
         else -> throw IllegalArgumentException("Invalid protocol type")
     }
 }
+
+@Serializable
+data class Theme(
+    var accentColor: String = "#E85D9B",
+    var controlColor: String = "#4C4C4C"
+)
 
 @Serializable
 data class BaseConfigurationFactory(
