@@ -38,7 +38,7 @@ object ProxyHandler {
         Logger.printDebug("Loaded ${CEnum.BRIGHT_PINK}${proxies.size} proxies${CEnum.RESET} from file: ${CEnum.BRIGHT_PURPLE}$fileName${CEnum.RESET}")
     }
 
-    private fun loadProxiesFromURL(rawContentLink: List<String>) {
+    private fun loadProxiesFromURL(rawContentLink: List<String>, rawContentSeparator: String) {
         Files.createTempFile("temp_proxies", ".txt").also { tempFile ->
             tempFile.bufferedWriter().use { writer ->
                 rawContentLink.forEach { url ->
@@ -48,6 +48,7 @@ object ProxyHandler {
                     }.onSuccess { content ->
                         Logger.printDebug("Successfully read proxy content from $url in ${CEnum.BRIGHT_PINK}${System.currentTimeMillis() - startTime}ms${CEnum.RESET}. The size of the raw content is ${CEnum.BRIGHT_PINK}${"%.2f".format(content.toByteArray().size / 1024.0)}KB${CEnum.RESET}.")
                         writer.write(content)
+                        writer.write(rawContentSeparator)
                     }.onFailure {
                         Logger.printError("Failed to read proxy content from $url due to ${it.message}")
                     }
@@ -75,9 +76,7 @@ object ProxyHandler {
                 }
             }
             2 -> loadProxiesFromFile(BaseConfigurationFactory.getInstance().customProxy.proxyFileName)
-            3 -> loadProxiesFromURL(BaseConfigurationFactory.getInstance().customProxy.rawContentLinks
-                    .split(",")
-                    .map { it.trim() })
+            3 -> loadProxiesFromURL(BaseConfigurationFactory.getInstance().customProxy.rawContentLinks.split(",").map { it.trim() }, BaseConfigurationFactory.getInstance().customProxy.rawContentSeparator)
         }
     }
 
