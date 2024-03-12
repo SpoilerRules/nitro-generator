@@ -39,6 +39,11 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.register<Copy>("copyDependencies") {
+    from(configurations.runtimeClasspath)
+    into("libs")
+}
+
 tasks.shadowJar {
     mergeServiceFiles()
     duplicatesStrategy = DuplicatesStrategy.FAIL
@@ -52,8 +57,9 @@ tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.FAIL
     archiveFileName.set("NitroGenerator-$version-thin.jar")
     manifest {
-        attributes["Main-Class"] = "${group}.generator.MainKt"
+        attributes["Main-Class"] = "com.spoiligaming.generator.MainKt"
     }
+    dependsOn("copyDependencies")
 }
 
 application {

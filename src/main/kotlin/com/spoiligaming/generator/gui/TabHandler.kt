@@ -2,10 +2,7 @@ package com.spoiligaming.generator.gui
 
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.configuration.CustomProxy
-import com.spoiligaming.generator.gui.tabs.TabAdvanced
-import com.spoiligaming.generator.gui.tabs.TabConsole
-import com.spoiligaming.generator.gui.tabs.TabGeneral
-import com.spoiligaming.generator.gui.tabs.TabProxy
+import com.spoiligaming.generator.gui.tabs.*
 import com.spoiligaming.logging.Logger
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
@@ -64,6 +61,7 @@ class TabHandler(private val tabPane: TabPane) {
                 val generalContent = TabGeneral().getContent()
                 val proxyContent = TabProxy().getContent()
                 val advancedContent = TabAdvanced().getContent()
+           //     val visualsContent = TabVisuals().getContent()
                 val consoleContent = TabConsole().getContent()
 
                 val stackPane = StackPane(generalContent, proxyContent, advancedContent, consoleContent)
@@ -305,7 +303,7 @@ class TabHandler(private val tabPane: TabPane) {
                 }
 
             setOnMouseEntered {
-                style = "-fx-text-fill: #FFFFFF; -fx-background-color: #606060; -fx-cursor: hand; -fx-background-radius: 12px; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 13;"
+                style = "-fx-text-fill: #FFFFFF; -fx-background-color: #606060; -fx-cursor: hand; -fx-background-radius: 12; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 13;"
             }
 
             setOnMouseExited {

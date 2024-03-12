@@ -7,6 +7,7 @@ import com.spoiligaming.generator.gui.ResourceHandler
 import javafx.collections.ObservableList
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Cursor
 import javafx.scene.control.ComboBox
 import javafx.scene.control.ListCell
 import javafx.scene.control.skin.ComboBoxListViewSkin
@@ -36,13 +37,15 @@ object ElementList {
             setCellFactory {
                 object : ListCell<String>() {
                     init {
-                        style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-border-color: transparent;"
+                        style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR};"
                         setOnMouseEntered {
                             style =
-                                "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.ACCENT_COLOR}; -fx-border-color: transparent;"
+                                "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.ACCENT_COLOR};"
+                            cursor = Cursor.HAND
                         }
                         setOnMouseExited {
-                            style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-border-color: transparent;"
+                            style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR};"
+                            cursor = Cursor.DEFAULT
                         }
                     }
                     override fun updateItem(item: String?, empty: Boolean) {
@@ -60,7 +63,6 @@ object ElementList {
             buttonCell = object : ListCell<String>() {
                 init {
                     alignment = Pos.CENTER_LEFT
-                  //  this.padding = Insets(0.0, 0.0, 0.0, 10.0)
                     textFill = Color.web(ColorPalette.TEXT_COLOR)
                 }
 

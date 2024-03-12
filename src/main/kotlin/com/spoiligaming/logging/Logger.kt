@@ -22,12 +22,12 @@ object Logger {
 
     fun <V> printWarning(warning: V) = log("WARNING", warning, CEnum.YELLOW)
 
-    fun <V> printDebug(information: V) {
-        if (showDebug) log("DEBUG", information, CEnum.ORANGE)
-    }
+    fun <V> printDebug(information: V) = log("DEBUG", information, CEnum.ORANGE)
 
     private fun <V> log(level: String, message: V, color: CEnum) {
-        println("${createStatus(color, level)} $message")
+        if (level != "DEBUG" || showDebug) {
+            println("${createStatus(color, level)} $message")
+        }
         logFile.appendText("${"[${LocalDateTime.now().format(dateTimeFormatter)}] ${createStatus(color, level)} $message".replace("\u001B\\[[;\\d]*m".toRegex(), "")}\n")
     }
 

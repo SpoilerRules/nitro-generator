@@ -29,12 +29,12 @@ data class Multithreading(
 data class CustomProxy(
     var enabled: Boolean = false,
     var mode: Int = 1,
+    var protocol: Int = 2,
     var isAuthenticationRequired: Boolean = false,
     var host: String = "162.0.220.211",
     var port: String = "46148",
     var username: String = "Dummy Internet Suspect",
     var password: String = "123Dummy\$Password!",
-    var protocol: Int = 2,
     var proxyFileName: String = "suspicious-proxies.txt",
     var rawContentLinks: String = "https://my-epic-proxy-api/proxies.txt, https://dummy-proxy-api/suspicious-http/proxies.txt",
     var rawContentSeparator: String = "\n"
@@ -49,14 +49,18 @@ data class CustomProxy(
 @Serializable
 data class Theme(
     var accentColor: String = "#E85D9B",
-    var controlColor: String = "#4C4C4C"
+    var menuColor: String = "#282828",
+    var controlColor: String = "#4C4C4C",
+    var secondaryColor: String = "#414141",
+    var textColor: String = "#FFFFFF"
 )
 
 @Serializable
 data class BaseConfigurationFactory(
     @SerialName("General") var generalSettings: General = General(),
     @SerialName("Multi Threading") var multithreading: Multithreading = Multithreading(),
-    @SerialName("Custom Proxy") var customProxy: CustomProxy = CustomProxy()
+    @SerialName("Custom Proxy") var customProxy: CustomProxy = CustomProxy(),
+    @SerialName("Theme") var themeSettings: Theme = Theme()
 ) {
     companion object {
         private var pcFactoryInstance: BaseConfigurationFactory? = null

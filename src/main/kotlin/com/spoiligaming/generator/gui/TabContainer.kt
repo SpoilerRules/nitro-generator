@@ -24,7 +24,7 @@ class TabContainer : GridPane() {
     }
 
     init {
-        background = Background(BackgroundFill(Color.web("#414141"), CornerRadii(16.0, 0.0, 16.0, 16.0, false), null))
+        background = Background(BackgroundFill(Color.web(ColorPalette.SECONDARY_COLOR), CornerRadii(16.0, 0.0, 16.0, 16.0, false), null))
 
         setMaxSize(175.0, 425.0)
         setMinSize(175.0, 425.0)
@@ -38,7 +38,7 @@ class TabContainer : GridPane() {
     }
 
     private fun implementTabBox() {
-        val tabLabels = listOf("General", "Proxy", "Advanced", "Console")
+        val tabLabels = listOf("General", "Proxy", "Advanced", /*"Visuals",*/ "Console")
         val tabs = tabLabels.mapIndexed { index, labelText ->
             createTab(labelText, index)
         }
@@ -52,7 +52,7 @@ class TabContainer : GridPane() {
         }
 
         add(GridPane().apply {
-            background = Background(BackgroundFill(Color.web("#282828"), CornerRadii(16.0, false), null))
+            background = Background(BackgroundFill(Color.web(ColorPalette.MENU_COLOR), CornerRadii(16.0, false), null))
             setMaxSize(160.0, 275.0)
             setMinSize(160.0, 275.0)
             alignment = Pos.TOP_CENTER
@@ -80,7 +80,7 @@ class TabContainer : GridPane() {
         setMinSize(145.0, 35.0)
 
         setOnMouseEntered {
-            background = Background(BackgroundFill(Color.web("#4C4C4C"), CornerRadii(8.0, false), null))
+            background = Background(BackgroundFill(Color.web(ColorPalette.CONTROL_COLOR), CornerRadii(8.0, false), null))
         }
 
         setOnMouseExited {
@@ -91,7 +91,7 @@ class TabContainer : GridPane() {
 
         children.add(Label(labelText).apply {
             style =
-                "-fx-text-fill: #FFFFFF; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 14;"
+                "-fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 14;"
             setMaxSize(145.0, 35.0)
             setMinSize(145.0, 35.0)
             alignment = Pos.CENTER_LEFT
@@ -101,7 +101,7 @@ class TabContainer : GridPane() {
 
     private fun implementStatisticsBox() {
         add(Region().apply {
-            background = Background(BackgroundFill(Color.web("#282828"), CornerRadii(16.0, false), null))
+            background = Background(BackgroundFill(Color.web(ColorPalette.MENU_COLOR), CornerRadii(16.0, false), null))
             setMaxSize(160.0, 75.0)
             setMinSize(160.0, 75.0)
             alignment = Pos.TOP_CENTER
@@ -110,7 +110,7 @@ class TabContainer : GridPane() {
 
         add(Label("Statistics").apply {
             background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY))
-            style = "-fx-text-fill: #E85D9B; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
+            style = "-fx-text-fill: ${ColorPalette.ACCENT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
             setMaxSize(160.0, 75.0)
             setMinSize(160.0, 75.0)
             alignment = Pos.TOP_CENTER
@@ -119,7 +119,7 @@ class TabContainer : GridPane() {
 
         val validLabel = Label("Valid").apply {
             background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY))
-            style = "-fx-text-fill: #4C4C4C; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
+            style = "-fx-text-fill: ${ColorPalette.CONTROL_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
             setMaxSize(160.0, 75.0)
             setMinSize(160.0, 75.0)
             alignment = Pos.TOP_CENTER
@@ -127,7 +127,7 @@ class TabContainer : GridPane() {
 
         val validHitsLabel = Label(SessionStatistics.validNitroCodes.toString()).apply {
             background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY))
-            style = "-fx-text-fill: #FFFFFF; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 12; -fx-font-weight: bold;"
+            style = "-fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 12;"
             setMaxSize(160.0, 75.0)
             setMinSize(160.0, 75.0)
             alignment = Pos.TOP_CENTER
@@ -181,7 +181,7 @@ class TabContainer : GridPane() {
 
     private fun implementInfoBox() {
         add(Region().apply {
-            background = Background(BackgroundFill(Color.web("#282828"), CornerRadii(16.0, false), null))
+            background = Background(BackgroundFill(Color.web(ColorPalette.MENU_COLOR), CornerRadii(16.0, false), null))
             setMaxSize(160.0, 40.0)
             setMinSize(160.0, 40.0)
             alignment = Pos.BOTTOM_CENTER
@@ -195,11 +195,11 @@ class TabContainer : GridPane() {
                 setMinSize(160.0, 40.0)
                 alignment = pos
                 setMargin(this, Insets(0.0, 0.0, bottomMargin, 0.0))
-                style = "-fx-text-fill: $textColor; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 11; -fx-font-antialiasing: true; -fx-font-weight: bold;"
+                style = "-fx-text-fill: $textColor; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 11;"
             }
         }
 
-        add(createLabel("Nitro Generator", Pos.TOP_CENTER, 0.0, "#E85D9B"), 0, 2)
-        add(createLabel("1.0.0", Pos.BOTTOM_CENTER, 15.0, "#4C4C4C"), 0, 2)
+        add(createLabel("Nitro Generator", Pos.TOP_CENTER, 0.0, ColorPalette.ACCENT_COLOR), 0, 2)
+        add(createLabel("1.0.0", Pos.BOTTOM_CENTER, 15.0, ColorPalette.CONTROL_COLOR), 0, 2)
     }
 }

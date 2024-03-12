@@ -23,17 +23,23 @@ object GeneratorBean {
         get() = BaseConfigurationFactory.getInstance().generalSettings.discordWebhookURL
 
     fun startGeneratingNitro(promotionalGiftCode: Boolean = false) {
-        if (!BaseConfigurationFactory.getInstance().generalSettings.validateNitroCode) return
-
         timer(initialDelay = 0, period = checkDelay) {
+            if (!BaseConfigurationFactory.getInstance().generalSettings.validateNitroCode) return@timer
+
             if (!isGenerationPaused.get()) {
                 val nitroCode =
                     List(if (!promotionalGiftCode) 16 else 24) { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".random() }.joinToString(
                         ""
                     )
                 when (fakeValidation) {
-                    true -> Logger.printSuccess("The code $nitroCode is valid.").also { SessionStatistics.validNitroCodes += 1 }
-                    false -> validateNitro(nitroCode)
+                    true -> Logger.printSuccess("The code $nitroCode is valid.")
+                        .also { SessionStatistics.validNitroCodes += 1 }
+
+                    false -> when {
+                        BaseConfigurationFactory.getInstance().multithreading.enabled ->
+                            NitroValidatorSimple.validateNitro(nitroCode, BaseConfigurationFactory.getInstance(), 0)
+                        else -> validateNitro(nitroCode)
+                    }
                 }
             }
         }
@@ -41,7 +47,8 @@ object GeneratorBean {
 
     //todo: when there are multiple proxy files to index through, merge all of them in a temp txt file and iterate through the proxies there.
     private fun validateNitro(nitroCode: String) {
-        var retry = true
+        val shouldRetry = BaseConfigurationFactory.getInstance().generalSettings.retryTillValid
+        var retry = shouldRetry
         var nitroValidationRetries = 0
 
         while (retry) {
@@ -73,10 +80,10 @@ object GeneratorBean {
                         discordValidatorURL.openConnection(proxy) as HttpURLConnection
                     }
 
-                    BaseConfigurationFactory.getInstance().customProxy.enabled && BaseConfigurationFactory.getInstance().customProxy.mode == 2 -> {
+                    BaseConfigurationFactory.getInstance().customProxy.enabled && (BaseConfigurationFactory.getInstance().customProxy.mode == 2 || BaseConfigurationFactory.getInstance().customProxy.mode == 3) -> {
                         val proxyInfo = ProxyHandler.getNextProxy()
                         if (proxyInfo != null) {
-                            Logger.printWarning("Using proxy: ${proxyInfo.first}:${proxyInfo.second}")
+                            Logger.printDebug("Using proxy: ${proxyInfo.first}:${proxyInfo.second}")
                             val address = InetSocketAddress(proxyInfo.first, proxyInfo.second)
                             val proxy = Proxy(Proxy.Type.HTTP, address)
                             discordValidatorURL.openConnection(proxy) as HttpURLConnection
@@ -85,7 +92,7 @@ object GeneratorBean {
                         }
                     }
 
-                    BaseConfigurationFactory.getInstance().customProxy.mode >= 3 -> throw IllegalArgumentException("Invalid custom proxy mode. The mode value must be either 1 or 2.")
+                    BaseConfigurationFactory.getInstance().customProxy.mode > 3 -> throw IllegalArgumentException("Invalid custom proxy mode. The mode value must be either 1 or 2.")
                     else -> discordValidatorURL.openConnection() as HttpURLConnection
                 }
 
@@ -141,20 +148,23 @@ object GeneratorBean {
                             }
                         }, true)
                     }
-                    retry = responseCode !in listOf(200, 404)
+                    retry = responseCode !in listOf(200, 404) && shouldRetry
                     nitroValidationRetries++
                 }
             }.onFailure { exception ->
                 Logger.printError("Occurred while validating a nitro code: ${exception.message}")
-                if (BaseConfigurationFactory.getInstance().customProxy.enabled && BaseConfigurationFactory.getInstance().customProxy.mode == 2) {
-                    retry = true
-                } else {
-                    for (index in 2 downTo 0) {
-                        print("\r${CEnum.RESET}[${CEnum.YELLOW}WARNING${CEnum.RESET}] Retrying in ${CEnum.ORANGE}${index + 1}${CEnum.RESET} seconds.")
-                        Thread.sleep(1000)
+
+                if (shouldRetry) {
+                    if (BaseConfigurationFactory.getInstance().customProxy.enabled && BaseConfigurationFactory.getInstance().customProxy.mode == 2) {
+                        retry = true
+                    } else {
+                        for (index in 2 downTo 0) {
+                            print("\r${CEnum.RESET}[${CEnum.YELLOW}WARNING${CEnum.RESET}] Retrying in ${CEnum.ORANGE}${index + 1}${CEnum.RESET} seconds.")
+                            Thread.sleep(1000)
+                        }
+                        print("\r")
+                        nitroValidationRetries++
                     }
-                    print("\r")
-                    nitroValidationRetries++
                 }
             }.also {
                 connection?.disconnect()

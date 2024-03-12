@@ -8,6 +8,8 @@ package com.spoiligaming.logging
  * The enum constants are:
  * - `RESET`: Resets the color. It is used to bring the console color back to the default after it has been changed.
  * - `GREEN`: Represents the color green.
+ * - `BRIGHT_PINK`: Represents a bright pink color, typically used for highlighting or emphasis.
+ * - `BRIGHT_PURPLE`: Represents a bright purple color, often used for highlighting or emphasis.
  * - `ERROR_RED`: Represents the color red. This is typically used to display error messages.
  * - `WHITE`: Represents the color white.
  * - `YELLOW`: Represents the color yellow.
@@ -20,6 +22,8 @@ package com.spoiligaming.logging
 enum class CEnum(private val escapeCode: String) {
     RESET("\u001B[0m"),
     GREEN("\u001B[32m"),
+    BRIGHT_PINK("\u001B[95m"),
+    BRIGHT_PURPLE("\u001B[35m"),
     ERROR_RED("\u001B[31m"),
     WHITE("\u001B[97m"),
     YELLOW("\u001B[33m"),

@@ -1,6 +1,6 @@
 package com.spoiligaming.generator.gui.tabs
 
-import javafx.scene.layout.GridPane
+import javafx.scene.Node
 
 sealed interface ITab {
     enum class TabVisibility {
@@ -8,7 +8,7 @@ sealed interface ITab {
         INVISIBLE
     }
 
-    fun getContent(): GridPane
+    fun getContent(): Node
 
     fun setVisibility(visibility: TabVisibility)
 }

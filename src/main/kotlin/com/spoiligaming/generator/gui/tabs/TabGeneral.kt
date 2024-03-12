@@ -32,6 +32,7 @@ class TabGeneral : ITab {
                     this@apply, "General", 225.0, ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().generalSettings.logGenerationInfo,
                         "Log Generation Info",
+                        null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 generalSettings.logGenerationInfo = newValue
@@ -42,6 +43,7 @@ class TabGeneral : ITab {
                     ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().generalSettings.validateNitroCode,
                         "Validate Nitro Code",
+                        null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 generalSettings.validateNitroCode = newValue
@@ -52,6 +54,7 @@ class TabGeneral : ITab {
                     ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().generalSettings.retryTillValid,
                         "Retry",
+                        null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 generalSettings.retryTillValid = newValue
@@ -86,6 +89,7 @@ class TabGeneral : ITab {
                     ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().generalSettings.alertWebhook,
                         "Alert Webhook",
+                        null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 generalSettings.alertWebhook = newValue
@@ -96,11 +100,12 @@ class TabGeneral : ITab {
                     ElementText.addTextValue(
                         BaseConfigurationFactory.getInstance().generalSettings.discordWebhookURL,
                         "Webhook Link",
+                        null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 generalSettings.discordWebhookURL = newValue
                             }
-                        })
+                        }, padding = Insets(10.0, 0.0, 0.0, 10.0))
                 )
             }
         }

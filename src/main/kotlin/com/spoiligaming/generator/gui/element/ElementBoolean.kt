@@ -12,6 +12,7 @@ object ElementBoolean {
     fun addBooleanValue(
         initialValue: Boolean,
         labelText: String,
+        tooltipText: String? = null,
         valueUpdater: (Boolean) -> Unit,
         padding: Insets
     ): HBox = HBox().apply {
@@ -34,5 +35,8 @@ object ElementBoolean {
                 valueUpdater(newValue)
             }
         }, CommonElement.createLabel(labelText))
+        tooltipText?.let {
+            children.add(CommonElement.createTooltip(it))
+        }
     }
 }

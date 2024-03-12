@@ -65,7 +65,7 @@ class Initializer : Application() {
 
         primaryStage.show()
         BaseConfigurationFactory.createConfig()
-      //  GeneratorBean.startGeneratingNitro(false)
+        GeneratorBean.startGeneratingNitro(false)
     }
 
     private fun addFundamentalButtons(stage: Stage): HBox {
@@ -86,7 +86,7 @@ class Initializer : Application() {
             setOnAction {
                 GeneratorBean.isGenerationPaused.set(!GeneratorBean.isGenerationPaused.get())
                 if (GeneratorBean.isGenerationPaused.get()) {
-                    Logger.printSuccess("Nitro generation has been paused.")
+                    Logger.printSuccess("Nitro generation has been paused. Any ongoing nitro validation process will now exit.")
                 } else {
                     Logger.printSuccess("Nitro generation has resumed.")
                 }

@@ -32,14 +32,14 @@ class TabConsole : ITab {
     override fun getContent(): GridPane {
         val textArea = TextArea().apply {
             isEditable = false
-            isWrapText = false
+            isWrapText = true
             isMouseTransparent = false
-            setMaxSize(395.0, 275.0)
-            setMinSize(395.0, 275.0)
+            isFocusTraversable = false
+            setMaxSize(395.0, 285.0)
+            setMinSize(395.0, 285.0)
             background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii(16.0), Insets.EMPTY))
             style = "-fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 14; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR};"
             cursor = Cursor.DEFAULT
-            isFocusTraversable = false
 
             addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED) { it.consume() }
         }
@@ -63,9 +63,9 @@ class TabConsole : ITab {
         return consolePane.apply {
             add(VBox().apply {
                 background = Background(BackgroundFill(Color.web("#414141"), CornerRadii(16.0, false), null))
-                setMaxSize(410.0, 330.0)
-                setMinSize(410.0, 330.0)
-                GridPane.setMargin(this, Insets(0.0, 0.0, 0.0, -2.4))
+                setMaxSize(410.0, 355.0)
+                setMinSize(410.0, 355.0)
+                GridPane.setMargin(this, Insets(0.0, 0.0, 0.0, 4.4))
                 children.add(HBox().apply {
                     alignment = Pos.CENTER
                     background = Background(BackgroundFill(Color.web("#282828"), CornerRadii(16.0, 16.0, 0.0, 0.0, false), null))
@@ -73,7 +73,7 @@ class TabConsole : ITab {
                     setMinSize(410.0, 40.0)
 
                     children.add(Label("Output Console").apply {
-                        style = "-fx-text-fill: #E85D9B; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 14;"
+                        style = "-fx-text-fill: ${ColorPalette.ACCENT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 14;"
                     })
                 })
                 children.add(VBox(textArea).apply {
