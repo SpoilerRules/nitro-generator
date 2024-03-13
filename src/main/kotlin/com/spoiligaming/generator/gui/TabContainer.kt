@@ -99,6 +99,7 @@ class TabContainer : GridPane() {
         })
     }
 
+    //todo: make this update regularly based on the generation delay
     private fun implementStatisticsBox() {
         add(Region().apply {
             background = Background(BackgroundFill(Color.web(ColorPalette.MENU_COLOR), CornerRadii(16.0, false), null))

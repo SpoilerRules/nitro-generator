@@ -3,19 +3,15 @@ package com.spoiligaming.generator
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.Logger
 import java.net.HttpURLConnection
-import java.net.InetSocketAddress
-import java.net.Proxy
 import java.net.URI
 import java.util.*
 
-open class NitroValidationWrapper {
-    companion object {
-        fun retryRecursively() {}
+object NitroValidationWrapper {
+    fun retryRecursively() {}
 
-        fun retrySimple() {}
-    }
+    fun retrySimple() {}
 
-    protected fun setProperties(connectionInstance: HttpURLConnection) {
+    fun setProperties(connectionInstance: HttpURLConnection) {
         with(connectionInstance) {
             setRequestProperty(
                 "User-Agent",
@@ -33,11 +29,14 @@ open class NitroValidationWrapper {
         }
     }
 
-    protected fun alertWebhook(nitroCode: String) {
+
+    //TODO: broken, fix it.
+    fun alertWebhook(nitroCode: String) {
         var connection: HttpURLConnection? = null
 
         runCatching {
-            connection = URI.create( BaseConfigurationFactory.getInstance().generalSettings.discordWebhookURL).toURL().openConnection() as HttpURLConnection
+            connection = URI.create(BaseConfigurationFactory.getInstance().generalSettings.discordWebhookURL).toURL()
+                .openConnection() as HttpURLConnection
             connection?.apply {
                 requestMethod = "POST"
                 setRequestProperty("Content-Type", "application/json")
@@ -52,8 +51,12 @@ open class NitroValidationWrapper {
                 this.write("{\"content\":\"Valid nitro code: $nitroCode\"}".toByteArray())
                 this.flush()
             }
-        }.onFailure {
-            Logger.printError("Occurred while connecting to the webhook: ${it.message}")
+
+        }.onFailure { error ->
+            Logger.printError("Error occurred while connecting to the webhook: ${error.message}")
+            connection?.responseCode?.let {
+                Logger.printDebug("Discord Webhook response code: $it")
+            } ?: Logger.printError("Failed to get Discord Webhook response code.")
         }.also {
             connection?.disconnect()
         }

@@ -8,7 +8,7 @@ import java.net.InetSocketAddress
 import java.net.Proxy
 import java.net.URI
 
-object NitroValidatorSimple : NitroValidationWrapper() {
+object NitroValidatorSimple {
     fun validateNitro(nitroCode: String, configuration: BaseConfigurationFactory, retryCount: Int) {
         if (GeneratorBean.isGenerationPaused.get()) {
             return
@@ -37,14 +37,14 @@ object NitroValidatorSimple : NitroValidationWrapper() {
                         }
                     ) as HttpURLConnection
             ) {
-                setProperties(this)
+                NitroValidationWrapper.setProperties(this)
 
                 if (configuration.generalSettings.logGenerationInfo) {
                     Logger.printSuccess(when (responseCode) {
                         200 -> "The code $nitroCode is valid. " + if (nitroValidationRetries > 0) "Took $retryCount retries." else "".also {
                             SessionStatistics.validNitroCodes += 1
                             if (BaseConfigurationFactory.getInstance().generalSettings.alertWebhook) {
-                                alertWebhook(nitroCode)
+                               NitroValidationWrapper.alertWebhook(nitroCode)
                             }
                         }
 

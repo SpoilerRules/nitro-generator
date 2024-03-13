@@ -12,10 +12,10 @@ import javafx.scene.control.ComboBox
 import javafx.scene.control.ListCell
 import javafx.scene.control.skin.ComboBoxListViewSkin
 import javafx.scene.layout.HBox
-import javafx.scene.layout.Region
 import javafx.scene.paint.Color
-import javafx.scene.shape.Shape
 
+
+//supports only proxy settings for now. TODO: make this more scalable and flexible
 object ElementList {
     fun addListValue(
         items: ObservableList<String>,

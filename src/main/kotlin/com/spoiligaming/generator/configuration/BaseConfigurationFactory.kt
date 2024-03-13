@@ -1,6 +1,5 @@
 package com.spoiligaming.generator.configuration
 
-import com.spoiligaming.generator.gui.ColorPalette
 import com.spoiligaming.logging.Logger
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -35,7 +34,7 @@ data class CustomProxy(
     var port: String = "46148",
     var username: String = "Dummy Internet Suspect",
     var password: String = "123Dummy\$Password!",
-    var proxyFileName: String = "suspicious-proxies.txt",
+    var proxyFilePath: String = "",
     var rawContentLinks: String = "https://my-epic-proxy-api/proxies.txt, https://dummy-proxy-api/suspicious-http/proxies.txt",
     var rawContentSeparator: String = "\n"
 ) {

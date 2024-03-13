@@ -8,6 +8,7 @@ import javafx.geometry.Pos
 import javafx.scene.control.ColorPicker
 import javafx.scene.layout.HBox
 
+//very experimental and undone.
 object ElementColorPicker {
     fun addColorPickerValue(
         initialValue: String,

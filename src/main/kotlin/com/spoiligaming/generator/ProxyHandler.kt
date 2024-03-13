@@ -75,7 +75,7 @@ object ProxyHandler {
                     throw UnsupportedOperationException(this)
                 }
             }
-            2 -> loadProxiesFromFile(BaseConfigurationFactory.getInstance().customProxy.proxyFileName)
+            2 -> loadProxiesFromFile(BaseConfigurationFactory.getInstance().customProxy.proxyFilePath)
             3 -> loadProxiesFromURL(BaseConfigurationFactory.getInstance().customProxy.rawContentLinks.split(",").map { it.trim() }, BaseConfigurationFactory.getInstance().customProxy.rawContentSeparator)
         }
     }

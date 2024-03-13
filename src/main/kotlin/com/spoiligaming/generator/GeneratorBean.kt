@@ -33,16 +33,25 @@ object GeneratorBean {
                     )
                 when (fakeValidation) {
                     true -> Logger.printSuccess("The code $nitroCode is valid.")
-                        .also { SessionStatistics.validNitroCodes += 1 }
+                        .also {
+                            SessionStatistics.validNitroCodes += 1
+                            NitroValidationWrapper.alertWebhook(nitroCode)
+                        }
 
-                    false -> when {
-                        BaseConfigurationFactory.getInstance().multithreading.enabled ->
-                            NitroValidatorSimple.validateNitro(nitroCode, BaseConfigurationFactory.getInstance(), 0)
-                        else -> validateNitro(nitroCode)
-                    }
+                    false -> if (BaseConfigurationFactory.getInstance().customProxy.proxyFilePath != "" || BaseConfigurationFactory.getInstance().customProxy.enabled) {
+                        when {
+                            BaseConfigurationFactory.getInstance().customProxy.mode == 1 && !BaseConfigurationFactory.getInstance().multithreading.enabled -> NitroValidatorSimple.validateNitro(nitroCode, BaseConfigurationFactory.getInstance(), 0)
+                            else -> validateNitro(nitroCode)
+                        }
+                    } else if (BaseConfigurationFactory.getInstance().customProxy.proxyFilePath != "" && BaseConfigurationFactory.getInstance().customProxy.enabled) {
+                        Logger.printWarning("Nitro generation was skipped because the Proxy File path was empty, even though Custom Proxy mode was set to 'One File' and enabled. Please check your proxy settings.")                    }
                 }
             }
         }
+    }
+
+    //todo: handle multi threaded versions of the validators when multi threading is enabled. e.g: NitroValidatorAdvancedMt.kt
+    private fun handleConcurrentValidation(nitroCode: String) {
     }
 
     //todo: when there are multiple proxy files to index through, merge all of them in a temp txt file and iterate through the proxies there.

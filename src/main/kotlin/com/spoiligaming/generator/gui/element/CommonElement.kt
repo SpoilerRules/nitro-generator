@@ -76,7 +76,7 @@ class CommonElement {
             setMaxSize(15.0, 25.0)
             setMinSize(15.0, 25.0)
             alignment = Pos.CENTER
-            children.add(Button("?").apply {
+            children.add(Button("?").apply buttonNode@ {
                 setMaxSize(18.0, 20.0)
                 setMinSize(18.0, 20.0)
                 alignment = Pos.CENTER
