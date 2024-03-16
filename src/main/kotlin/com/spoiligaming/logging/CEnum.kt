@@ -14,6 +14,10 @@ package com.spoiligaming.logging
  * - `WHITE`: Represents the color white.
  * - `YELLOW`: Represents the color yellow.
  * - `ORANGE`: Represents the color orange.
+ * - `BLUE`: Represents the color blue.
+ * - `CYAN`: Represents the color cyan.
+ * - `BOLD`: Represents bold text.
+ * - `UNDERLINE`: Represents underlined text.
  *
  * Each enum constant holds an escape code, which is a `String` that contains the ANSI escape sequence for the corresponding color.
  *
@@ -27,7 +31,11 @@ enum class CEnum(private val escapeCode: String) {
     ERROR_RED("\u001B[31m"),
     WHITE("\u001B[97m"),
     YELLOW("\u001B[33m"),
-    ORANGE("\u001B[38;5;208m");
+    ORANGE("\u001B[38;5;208m"),
+    BLUE("\u001B[34m"),
+    CYAN("\u001B[36m"),
+    BOLD("\u001B[1m"),
+    UNDERLINE("\u001B[4m");
 
     override fun toString(): String = escapeCode
 }

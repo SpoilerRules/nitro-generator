@@ -1,19 +1,14 @@
 package com.spoiligaming.generator.gui.tabs
 
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
-import com.spoiligaming.generator.gui.ColorPalette
-import com.spoiligaming.generator.gui.ResourceHandler
 import com.spoiligaming.generator.gui.TabContainer
 import com.spoiligaming.generator.gui.element.CommonElement
 import com.spoiligaming.generator.gui.element.ElementBoolean
-import com.spoiligaming.generator.gui.element.ElementText
 import com.spoiligaming.generator.gui.element.ElementValue
 import com.spoiligaming.logging.Logger
 import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.scene.control.Label
-import javafx.scene.layout.*
-import javafx.scene.paint.Color
+import javafx.scene.layout.GridPane
 
 class TabAdvanced : ITab {
     private val advancedPane: GridPane = GridPane()
@@ -33,7 +28,7 @@ class TabAdvanced : ITab {
             vgap = 7.5
             CommonElement().run {
                 createContentField(
-                    this@apply, "Multi Threading", 120.0, ElementBoolean.addBooleanValue(
+                    this@apply, "Multi Threading (experimental)", 150.0, ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().multithreading.enabled,
                         "Enabled",
                         null,
@@ -50,12 +45,22 @@ class TabAdvanced : ITab {
                     ElementValue.addUnitValue(
                         BaseConfigurationFactory.getInstance().multithreading.threadLimit,
                         "Thread Amount",
+                        null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 multithreading.threadLimit = newValue
                             }
-                        },
-                        Insets(10.0, 0.0, 0.0, 10.0)
+                        }
+                    ),
+                    ElementValue.addUnitValue(
+                        BaseConfigurationFactory.getInstance().multithreading.threadLaunchDelay,
+                        "Start Delay (ms)",
+                        "Specifies the delay between the initiation of threads.\nFor instance, the second thread will commence after the specified milliseconds following the start of the first thread.",
+                        { newValue ->
+                            BaseConfigurationFactory.updateValue {
+                                multithreading.threadLaunchDelay = newValue
+                            }
+                        }
                     )
                 )
             }

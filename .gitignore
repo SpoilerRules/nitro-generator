@@ -3,6 +3,7 @@ build/
 logs/
 libs/
 buildlibs/
+workspace/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/

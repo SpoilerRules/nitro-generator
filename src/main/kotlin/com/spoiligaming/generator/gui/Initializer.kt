@@ -4,20 +4,17 @@ import com.spoiligaming.generator.GeneratorBean
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.Logger
 import javafx.application.Application
-import javafx.application.Platform
 import javafx.beans.binding.Bindings
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.Scene
-import javafx.scene.control.*
+import javafx.scene.control.Button
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
-import javafx.scene.text.Font
+import javafx.stage.Screen
 import javafx.stage.Stage
 import javafx.stage.StageStyle
-import java.io.OutputStream
-import java.io.PrintStream
 import kotlin.system.exitProcess
 
 class Initializer : Application() {
@@ -45,8 +42,13 @@ class Initializer : Application() {
         }
 
         scene.setOnMouseDragged { event ->
-            primaryStage.x = event.screenX - xOffset
-            primaryStage.y = event.screenY - yOffset
+            // prevents the user from dragging the window outside the visible area of the screen or behind the taskbar
+            Screen.getPrimary().visualBounds.let { bounds ->
+                primaryStage.apply {
+                    x = (event.screenX - xOffset).coerceIn(bounds.minX, bounds.maxX - width)
+                    y = (event.screenY - yOffset).coerceIn(bounds.minY, bounds.maxY - height)
+                }
+            }
         }
 
         scene.stylesheets.add(javaClass.getResource("/console-style.css")!!.toExternalForm())
@@ -65,7 +67,7 @@ class Initializer : Application() {
 
         primaryStage.show()
         BaseConfigurationFactory.createConfig()
-        GeneratorBean.startGeneratingNitro(false)
+        GeneratorBean.startGeneratingNitro()
     }
 
     private fun addFundamentalButtons(stage: Stage): HBox {

@@ -51,6 +51,7 @@ object ElementFilePicker {
                                     ProxyHandler.loadProxies().also { Logger.printDebug("Reloading proxies...") }
                                 } ?: run {
                                     Logger.printError("Failed to select a proxy file because no file was chosen.")
+                                    valueUpdater("")
                                     selectedFileLabel.text = "No proxy file was selected."
                                 }
                             }

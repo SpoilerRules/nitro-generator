@@ -1,6 +1,7 @@
 package com.spoiligaming.generator
 
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
+import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
 import java.net.HttpURLConnection
 import java.net.URI
@@ -11,18 +12,18 @@ object NitroValidationWrapper {
 
     fun retrySimple() {}
 
-    fun setProperties(connectionInstance: HttpURLConnection) {
+    fun setProperties(connectionInstance: HttpURLConnection, config: BaseConfigurationFactory) {
         with(connectionInstance) {
             setRequestProperty(
                 "User-Agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
             )
-            if (BaseConfigurationFactory.getInstance().customProxy.isAuthenticationRequired) {
+            if (config.customProxy.isAuthenticationRequired && config.customProxy.enabled && config.customProxy.mode == 1) {
                 setRequestProperty(
                     "Proxy-Authorization",
                     "Basic ${
                         Base64.getEncoder()
-                            .encodeToString("${BaseConfigurationFactory.getInstance().customProxy.username}:${BaseConfigurationFactory.getInstance().customProxy.password}".toByteArray())
+                            .encodeToString("${config.customProxy.username}:${config.customProxy.password}".toByteArray())
                     }"
                 )
             }
@@ -52,14 +53,32 @@ object NitroValidationWrapper {
                 this.flush()
             }
 
+            connection?.responseCode?.takeIf { it != HttpURLConnection.HTTP_OK && it != HttpURLConnection.HTTP_NO_CONTENT }?.let {
+                Logger.printError("Failed to send Discord webhook. Server responded with code $it: ${connection?.responseMessage ?: "No response message"}")
+            }
         }.onFailure { error ->
             Logger.printError("Error occurred while connecting to the webhook: ${error.message}")
-            connection?.responseCode?.let {
-                Logger.printDebug("Discord Webhook response code: $it")
-            } ?: Logger.printError("Failed to get Discord Webhook response code.")
         }.also {
             connection?.disconnect()
         }
+    }
+
+    inline fun retryValidation(
+        nitroCode: String,
+        configuration: BaseConfigurationFactory,
+        retryCount: Int,
+        crossinline validateFunction: (String, BaseConfigurationFactory, Int) -> Unit
+    ) {
+        if (configuration.generalSettings.retryDelay > 0 && configuration.customProxy.mode !in 2..3) {
+            for (index in (configuration.generalSettings.retryDelay - 1) downTo 0) {
+                Logger.printWarning("Retrying validation of $nitroCode in ${CEnum.ORANGE}${index + 1}${CEnum.RESET} seconds.")
+                Thread.sleep(1000)
+            }
+        } else if (configuration.customProxy.mode in 2..3) {
+            Logger.printWarning("Retrying validation of nitro code: $nitroCode.")
+        }
+
+        validateFunction(nitroCode, configuration, retryCount)
     }
 }
 

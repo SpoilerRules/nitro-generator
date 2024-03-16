@@ -10,18 +10,20 @@ import java.net.Proxy
 @Serializable
 data class General(
     var logGenerationInfo: Boolean = true,
+    var generatePromotionalGiftCode: Boolean = false,
     var generationDelay: Long = 6000,
     var validateNitroCode: Boolean = true,
     @SerialName("alertWebhookForValidNitroCode") var alertWebhook: Boolean = true,
     var discordWebhookURL: String = "https://dummylink.com/suspicious-webhook/",
-    @SerialName("retry") var retryTillValid: Boolean = true, // yet to be implemented.
+    @SerialName("retry") var retryTillValid: Boolean = true,
     var retryDelay: Int = 3
 )
 
 @Serializable
 data class Multithreading(
     var enabled: Boolean = false,
-    var threadLimit: Int = 3
+    var threadLimit: Int = 3,
+    var threadLaunchDelay: Long = 3000
 )
 
 @Serializable
@@ -45,6 +47,8 @@ data class CustomProxy(
     }
 }
 
+
+// experimental and undone.
 @Serializable
 data class Theme(
     var accentColor: String = "#E85D9B",

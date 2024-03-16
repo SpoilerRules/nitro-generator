@@ -1,5 +1,6 @@
 package com.spoiligaming.logging
 
+import javafx.application.Platform
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -25,10 +26,21 @@ object Logger {
     fun <V> printDebug(information: V) = log("DEBUG", information, CEnum.ORANGE)
 
     private fun <V> log(level: String, message: V, color: CEnum) {
-        if (level != "DEBUG" || showDebug) {
-            println("${createStatus(color, level)} $message")
+        Platform.runLater {
+            if (level != "DEBUG" || showDebug) {
+                println("${createStatus(color, level)} $message")
+            }
+            logFile.appendText(
+                "${
+                    "[${LocalDateTime.now().format(dateTimeFormatter)}] ${
+                        createStatus(
+                            color,
+                            level
+                        )
+                    } $message".replace("\u001B\\[[;\\d]*m".toRegex(), "")
+                }\n"
+            )
         }
-        logFile.appendText("${"[${LocalDateTime.now().format(dateTimeFormatter)}] ${createStatus(color, level)} $message".replace("\u001B\\[[;\\d]*m".toRegex(), "")}\n")
     }
 
     private fun createStatus(primaryColor: CEnum, status: String): String = "${CEnum.RESET}[$primaryColor$status${CEnum.RESET}]${CEnum.RESET}"

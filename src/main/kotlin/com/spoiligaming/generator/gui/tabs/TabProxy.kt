@@ -32,7 +32,7 @@ class TabProxy : ITab {
         padding = Insets(-0.5, 0.0, 0.0, 0.0)
         style = "-fx-background-color: transparent; -fx-background: transparent; -fx-border-width: 0;"
 
-        content = proxyPane.apply proxyPaneApply@{
+        content = proxyPane.apply proxyPaneApply@ {
             alignment = Pos.TOP_CENTER
             hgap = 20.0
             vgap = 7.5
@@ -48,9 +48,9 @@ class TabProxy : ITab {
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 customProxy.enabled = newValue
-                                // explicitly load proxies only when multi threading is enabled. the non-mt-supported simple validators will automatically load proxies on validation.
-                                if (BaseConfigurationFactory.getInstance().multithreading.enabled || BaseConfigurationFactory.getInstance().customProxy.mode != 1) ProxyHandler.loadProxies()
                             }
+                            // explicitly load proxies only when multi threading is enabled. the non-mt-supported simple validators will automatically load proxies on validation.
+                            if (BaseConfigurationFactory.getInstance().multithreading.enabled || BaseConfigurationFactory.getInstance().customProxy.mode != 1) ProxyHandler.loadProxies()
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
                     ),
@@ -158,18 +158,7 @@ class TabProxy : ITab {
                 createContentField(
                     this@proxyPaneApply,
                     "Mode Specific",
-                    170.0,
-                    ElementText.addTextValue(
-                        if (BaseConfigurationFactory.getInstance().customProxy.rawContentSeparator == "\n") "\\n" else BaseConfigurationFactory.getInstance().customProxy.rawContentSeparator,
-                        "Content Separator",
-                        null,
-                        { newValue ->
-                            BaseConfigurationFactory.updateValue {
-                                customProxy.rawContentSeparator = newValue
-                            }
-                        },
-                        Insets(10.0, 0.0, 0.0, 10.0)
-                    ),
+                    200.0,
                     ElementFilePicker.addTextValue(
                         this@proxyPaneApply,
                         BaseConfigurationFactory.getInstance().customProxy.proxyFilePath,
@@ -177,6 +166,18 @@ class TabProxy : ITab {
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 customProxy.proxyFilePath = newValue
+                            }
+                        },
+                        Insets(10.0, 0.0, 0.0, 10.0)
+                    ),
+                    ElementNote.addNote("Settings below will not take effect dynamically.", "13"),
+                    ElementText.addTextValue(
+                        if (BaseConfigurationFactory.getInstance().customProxy.rawContentSeparator == "\n") "\\n" else BaseConfigurationFactory.getInstance().customProxy.rawContentSeparator,
+                        "Content Separator",
+                        null,
+                        { newValue ->
+                            BaseConfigurationFactory.updateValue {
+                                customProxy.rawContentSeparator = newValue
                             }
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)

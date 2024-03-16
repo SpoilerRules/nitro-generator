@@ -5,6 +5,7 @@ import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
+import kotlinx.coroutines.*
 import java.net.HttpURLConnection
 import java.net.InetSocketAddress
 import java.net.Proxy
@@ -22,37 +23,60 @@ object GeneratorBean {
     private val DISCORD_WEBHOOK_URL: String
         get() = BaseConfigurationFactory.getInstance().generalSettings.discordWebhookURL
 
-    fun startGeneratingNitro(promotionalGiftCode: Boolean = false) {
-        timer(initialDelay = 0, period = checkDelay) {
-            if (!BaseConfigurationFactory.getInstance().generalSettings.validateNitroCode) return@timer
+    fun startGeneratingNitro() {
+        timer(initialDelay = 0, period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay) {
+            val config = BaseConfigurationFactory.getInstance()
+            if (isGenerationPaused.get()) return@timer
 
-            if (!isGenerationPaused.get()) {
-                val nitroCode =
-                    List(if (!promotionalGiftCode) 16 else 24) { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".random() }.joinToString(
-                        ""
-                    )
-                when (fakeValidation) {
-                    true -> Logger.printSuccess("The code $nitroCode is valid.")
-                        .also {
-                            SessionStatistics.validNitroCodes += 1
-                            NitroValidationWrapper.alertWebhook(nitroCode)
-                        }
+            val nitroCode = generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
 
-                    false -> if (BaseConfigurationFactory.getInstance().customProxy.proxyFilePath != "" || BaseConfigurationFactory.getInstance().customProxy.enabled) {
+            if (!config.generalSettings.validateNitroCode) {
+                return@timer Logger.printSuccess("Generated nitro code: $nitroCode")
+            }
+
+            when (fakeValidation) {
+                true -> {
+                    Logger.printSuccess("The code $nitroCode is valid.")
+                    SessionStatistics.validNitroCodes += 1
+                    NitroValidationWrapper.alertWebhook(nitroCode)
+                }
+                false -> {
+                    val proxy = config.customProxy
+                    val multithreading = config.multithreading.enabled
+                    if ((proxy.proxyFilePath.isNotEmpty() && proxy.mode == 2 && proxy.enabled) || proxy.enabled && proxy.mode != 2 || !proxy.enabled) {
                         when {
-                            BaseConfigurationFactory.getInstance().customProxy.mode == 1 && !BaseConfigurationFactory.getInstance().multithreading.enabled -> NitroValidatorSimple.validateNitro(nitroCode, BaseConfigurationFactory.getInstance(), 0)
-                            else -> validateNitro(nitroCode)
+                            proxy.mode in 1..3 && !multithreading -> NitroValidatorOrdinary.validateNitro(nitroCode, config, 0)
+                            else -> handleConcurrentValidation(nitroCode, config)
                         }
-                    } else if (BaseConfigurationFactory.getInstance().customProxy.proxyFilePath != "" && BaseConfigurationFactory.getInstance().customProxy.enabled) {
-                        Logger.printWarning("Nitro generation was skipped because the Proxy File path was empty, even though Custom Proxy mode was set to 'One File' and enabled. Please check your proxy settings.")                    }
+                    } else if (proxy.proxyFilePath.isEmpty() && proxy.mode == 2 && proxy.enabled) {
+                        Logger.printWarning("Nitro generation was skipped because ${CEnum.UNDERLINE}the Proxy File path was empty${CEnum.RESET}, even though Custom Proxy mode was set to 'One File' and enabled. Please check your proxy settings.")
+                    }
                 }
             }
         }
     }
 
     //todo: handle multi threaded versions of the validators when multi threading is enabled. e.g: NitroValidatorAdvancedMt.kt
-    private fun handleConcurrentValidation(nitroCode: String) {
+    //todo: fix race
+    private fun handleConcurrentValidation(initialNitroCode: String, config: BaseConfigurationFactory) {
+        runBlocking {
+            Logger.printDebug("Launching concurrent validation with thread limit: ${config.multithreading.threadLimit}")
+            List(config.multithreading.threadLimit) { index ->
+                val nitroCode =
+                    if (index == 0) initialNitroCode else generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
+                launch(Dispatchers.IO) {
+                    when (config.customProxy.mode) {
+                        1 -> {
+                            NitroValidatorSimpleMt.validateNitro(nitroCode, config, 0, "${index + 1}")
+                        }
+                    }
+                }
+                delay(config.multithreading.threadLaunchDelay)
+            }.run { joinAll() }
+        }
     }
+
+    private fun generateNitroCode(promotionalGiftCode: Boolean): String = List(if (!promotionalGiftCode) 16 else 24) { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".random() }.joinToString("")
 
     //todo: when there are multiple proxy files to index through, merge all of them in a temp txt file and iterate through the proxies there.
     private fun validateNitro(nitroCode: String) {

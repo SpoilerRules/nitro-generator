@@ -14,6 +14,8 @@ object ProxyHandler {
     private var proxyIndex = 0
     private var proxies: List<Pair<String, Int>> = emptyList()
 
+    private val numericRegex = Regex("[^0-9]")
+
     init {
         loadProxies()
     }
@@ -29,7 +31,7 @@ object ProxyHandler {
         proxies = file.readLines().mapNotNull { line ->
             line.split(":").takeIf { it.size == 2 }?.let { (host, port) ->
                 runCatching {
-                    Pair(host, port.toInt())
+                    Pair(host, port.trim().replace(numericRegex, "").toInt())
                 }.onFailure {
                     Logger.printError("Invalid port number in proxy file: $line due to $it.message")
                 }.getOrNull()
@@ -64,6 +66,15 @@ object ProxyHandler {
             }.onSuccess {
                 Logger.printDebug("Temporary proxy file deleted after saving the content to random access memory.")
             }
+        }
+    }
+
+    //use when mode is static or custom proxy is disabled
+    fun unloadProxies() {
+        if (proxies.isNotEmpty()) {
+            proxies = emptyList()
+            proxyIndex = 0
+            Logger.printSuccess("Proxies have been unloaded to free up system memory.")
         }
     }
 

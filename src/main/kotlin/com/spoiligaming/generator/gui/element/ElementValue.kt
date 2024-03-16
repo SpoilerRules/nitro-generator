@@ -19,6 +19,7 @@ object ElementValue {
     fun <T : Number> addUnitValue(
         initialValue: T,
         labelText: String,
+        tooltipText: String? = null,
         valueUpdater: (T) -> Unit,
         padding: Insets = Insets(10.0, 0.0, 0.0, 10.0)
     ): HBox {
@@ -35,6 +36,9 @@ object ElementValue {
                 createButton("+", 30.0, 25.0) { updateValue(property, 1, valueUpdater as (Number) -> Unit) },
                 CommonElement.createLabel(labelText)
             )
+            tooltipText?.let {
+                children.add(CommonElement.createTooltip(it))
+            }
 
             Platform.runLater { requestFocus() }
         }
