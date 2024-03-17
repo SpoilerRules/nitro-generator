@@ -51,7 +51,7 @@ object ElementValue {
         setMaxSize(70.0, 25.0)
         setMinSize(70.0, 25.0)
         if (property is SimpleLongProperty || property is SimpleIntegerProperty) {
-            textProperty().bindBidirectional(property as Property<Number>, DecimalFormat("#"))
+            textProperty().bindBidirectional(property as Property<out Number>, DecimalFormat("#"))
         }
         style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR};"
         alignment = Pos.CENTER

@@ -6,12 +6,13 @@ import com.spoiligaming.logging.Logger
 import java.io.File
 import java.net.URI
 import java.nio.file.Files
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.bufferedWriter
 import kotlin.io.path.deleteIfExists
 
 object ProxyHandler {
-    private var proxyIndex = 0
+    private val proxyIndex = AtomicInteger(0)
     private var proxies: List<Pair<String, Int>> = emptyList()
 
     private val numericRegex = Regex("[^0-9]")
@@ -69,16 +70,21 @@ object ProxyHandler {
         }
     }
 
-    //use when mode is static or custom proxy is disabled
+    //use when new mode is static or custom proxy is disabled
     fun unloadProxies() {
         if (proxies.isNotEmpty()) {
             proxies = emptyList()
-            proxyIndex = 0
+            proxyIndex.set(0)
             Logger.printSuccess("Proxies have been unloaded to free up system memory.")
         }
     }
 
+    @Synchronized
     fun loadProxies() {
+       /* Exception("Debugging Stack Trace").apply {
+            stackTrace.forEach { println(it) }
+        }*/
+
         when (BaseConfigurationFactory.getInstance().customProxy.mode) {
             1 -> {
                 "Proxy Mode was set to 'Static', and ProxyHandler class cannot be used for Static mode. Please contact your developer for assistance.".run {
@@ -91,13 +97,25 @@ object ProxyHandler {
         }
     }
 
+    @Synchronized
     fun getNextProxy(): Pair<String, Int>? {
-        if (proxies.isEmpty() || proxyIndex >= proxies.size) {
-            Logger.printWarning("All proxies are exhausted.")
+        if (proxies.isEmpty()) {
+            Logger.printWarning("All proxies are exhausted. Consider inserting new set of proxies.")
             return null
         }
 
-        proxyIndex = (proxyIndex + 1) % proxies.size
-        return proxies[proxyIndex]
+        if (proxyIndex.get() >= proxies.size) {
+            if (BaseConfigurationFactory.getInstance().customProxy.recursiveUsaqe) {
+                Logger.printWarning("All proxies are exhausted. Starting from the beginning of the proxy list.")
+                proxyIndex.set(0)
+            } else {
+                Logger.printWarning("All proxies are exhausted. Consider inserting new set of proxies.")
+                return null
+            }
+        }
+
+        val proxy = proxies[proxyIndex.get()]
+        proxyIndex.set((proxyIndex.get() + 1) % proxies.size)
+        return proxy
     }
 }

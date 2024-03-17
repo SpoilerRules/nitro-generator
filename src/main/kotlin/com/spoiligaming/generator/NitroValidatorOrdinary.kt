@@ -24,6 +24,9 @@ object NitroValidatorOrdinary {
      * @param retryCount The number of retry attempts for validation.
      */
     fun validateNitro(nitroCode: String, config: BaseConfigurationFactory, retryCount: Int) {
+       /* Exception("Debugging Stack Trace").apply {
+            stackTrace.forEach { println(it) }
+        }*/
         if (GeneratorBean.isGenerationPaused.get()) {
             return
         }
@@ -99,20 +102,31 @@ object NitroValidatorOrdinary {
                         if (it == Proxy.Type.SOCKS && config.customProxy.isAuthenticationRequired) {
                             Authenticator.setDefault(object : Authenticator() {
                                 override fun getPasswordAuthentication(): PasswordAuthentication {
-                                    return PasswordAuthentication(config.customProxy.username, config.customProxy.password.toCharArray())
+                                    return PasswordAuthentication(
+                                        config.customProxy.username,
+                                        config.customProxy.password.toCharArray()
+                                    )
                                 }
                             })
                         }
                     },
                     InetSocketAddress(config.customProxy.host, config.customProxy.port.toInt())
                 )
+
                 else -> ProxyHandler.getNextProxy()?.let { proxyInfo ->
                     Logger.printDebug("Using proxy: ${CEnum.CYAN}${proxyInfo.first}:${proxyInfo.second}${CEnum.RESET}")
-                    Proxy(config.customProxy.getProxyType(config.customProxy.protocol), InetSocketAddress(proxyInfo.first, proxyInfo.second))
-                } ?: throw RuntimeException("Failed to establish a connection to validate the nitro code because the next proxy is null.")
+                    Proxy(
+                        config.customProxy.getProxyType(config.customProxy.protocol),
+                        InetSocketAddress(proxyInfo.first, proxyInfo.second)
+                    )
+                }
+                    ?: throw RuntimeException("Failed to establish a connection to validate the nitro code because the next proxy is null.")
             }
         }
 
-        return URI("https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode?with_application=false&with_subscription_plan=true").toURL().openConnection(proxy) as HttpURLConnection
+        NitroValidationWrapper.disableProxySecurity()
+
+        return URI("https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode?with_application=false&with_subscription_plan=true").toURL()
+            .openConnection(proxy) as HttpURLConnection
     }
 }

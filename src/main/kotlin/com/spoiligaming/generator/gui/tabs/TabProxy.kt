@@ -1,8 +1,10 @@
 package com.spoiligaming.generator.gui.tabs
 
+import com.spoiligaming.generator.NitroValidatorAdvancedMt
 import com.spoiligaming.generator.ProxyHandler
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.TabContainer
+import com.spoiligaming.generator.gui.TooltipKeyAccessor
 import com.spoiligaming.generator.gui.element.*
 import com.spoiligaming.logging.Logger
 import javafx.collections.FXCollections
@@ -40,7 +42,7 @@ class TabProxy : ITab {
                 createContentField(
                     this@proxyPaneApply,
                     "Custom Proxy",
-                    220.0,
+                    257.0,
                     ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().customProxy.enabled,
                         "Enabled",
@@ -50,7 +52,20 @@ class TabProxy : ITab {
                                 customProxy.enabled = newValue
                             }
                             // explicitly load proxies only when multi threading is enabled. the non-mt-supported simple validators will automatically load proxies on validation.
-                            if (BaseConfigurationFactory.getInstance().multithreading.enabled || BaseConfigurationFactory.getInstance().customProxy.mode != 1) ProxyHandler.loadProxies()
+                            if (newValue && BaseConfigurationFactory.getInstance().multithreading.enabled && BaseConfigurationFactory.getInstance().customProxy.mode in 2..3) ProxyHandler.loadProxies()
+                            if (newValue && BaseConfigurationFactory.getInstance().customProxy.mode == 1) ProxyHandler.unloadProxies()
+                        },
+                        Insets(10.0, 0.0, 0.0, 10.0)
+                    ),
+                    ElementBoolean.addBooleanValue(
+                        BaseConfigurationFactory.getInstance().customProxy.recursiveUsaqe,
+                        "Recursive Usage",
+                        TooltipKeyAccessor.getValue("recursive.usage"),
+                        { newValue ->
+                            BaseConfigurationFactory.updateValue {
+                                customProxy.recursiveUsaqe = newValue
+                            }
+                            if (newValue) NitroValidatorAdvancedMt.isNextProxyAvailable.set(true)
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
                     ),
@@ -63,6 +78,7 @@ class TabProxy : ITab {
                             else -> "Static"
                         },
                         { newValue: String ->
+                            val previousMode = BaseConfigurationFactory.getInstance().customProxy.mode
                             val mode = when (newValue) {
                                 "Static" -> 1
                                 "One File" -> 2
@@ -71,8 +87,12 @@ class TabProxy : ITab {
                             }
 
                             BaseConfigurationFactory.getInstance().customProxy.mode = mode
-                            if (mode != 1 && BaseConfigurationFactory.getInstance().customProxy.enabled) {
+                            if (previousMode != mode && mode != 1 && BaseConfigurationFactory.getInstance().multithreading.enabled && BaseConfigurationFactory.getInstance().customProxy.enabled) {
                                 ProxyHandler.loadProxies()
+                            }
+                            // free resources when the new mode is static
+                            if (previousMode in 2..3 && mode == 1) {
+                                ProxyHandler.unloadProxies()
                             }
                         },
                         "Mode",
@@ -158,7 +178,7 @@ class TabProxy : ITab {
                 createContentField(
                     this@proxyPaneApply,
                     "Mode Specific",
-                    200.0,
+                    195.0,
                     ElementFilePicker.addTextValue(
                         this@proxyPaneApply,
                         BaseConfigurationFactory.getInstance().customProxy.proxyFilePath,

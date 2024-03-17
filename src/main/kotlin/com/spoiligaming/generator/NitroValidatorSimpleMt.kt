@@ -4,7 +4,6 @@ import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
 import java.net.*
-import kotlin.random.Random
 
 object NitroValidatorSimpleMt {
     fun validateNitro(nitroCode: String, config: BaseConfigurationFactory, retryCount: Int, threadIdentity: String) {
@@ -23,7 +22,7 @@ object NitroValidatorSimpleMt {
 
         runCatching {
             with(
-                URI(/*"https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode?with_application=false&with_subscription_plan=true"*/"https://httpbin.org/status/${if (Random.nextInt(0, 100) < 30) "200" else "404"}").toURL()
+                URI("https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode?with_application=false&with_subscription_plan=true").toURL()
                     .openConnection(
                         if (config.customProxy.enabled && config.customProxy.mode == 1) {
                             Proxy(
@@ -46,6 +45,7 @@ object NitroValidatorSimpleMt {
                         }
                     ) as HttpURLConnection
             ) {
+                NitroValidationWrapper.disableProxySecurity()
                 NitroValidationWrapper.setProperties(this, config)
 
                 val responseMessage = when (responseCode) {

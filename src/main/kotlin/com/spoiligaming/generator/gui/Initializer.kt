@@ -73,15 +73,15 @@ class Initializer : Application() {
     private fun addFundamentalButtons(stage: Stage): HBox {
         val buttonSize = 100.0 to 25.0
         val buttonStyle = { color: String ->
-            "-fx-background-color: #282828; -fx-text-fill: $color; -fx-background-radius: 16px; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 13;"
+            "-fx-background-color: ${ColorPalette.MENU_COLOR}; -fx-text-fill: $color; -fx-background-radius: 16px; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 13;"
         }
 
         val pauseButton = Button().apply {
             setMaxSize(buttonSize.first, buttonSize.second)
             setMinSize(buttonSize.first, buttonSize.second)
             styleProperty().bind(Bindings.`when`(GeneratorBean.isGenerationPaused)
-                .then(buttonStyle("#E85D9B"))
-                .otherwise(buttonStyle("#FFFFFF")))
+                .then(buttonStyle(ColorPalette.ACCENT_COLOR))
+                .otherwise(buttonStyle(ColorPalette.TEXT_COLOR)))
             textProperty().bind(Bindings.`when`(GeneratorBean.isGenerationPaused)
                 .then("Resume")
                 .otherwise("Pause"))
@@ -96,14 +96,14 @@ class Initializer : Application() {
 
             setOnMouseEntered {
                 styleProperty().bind(Bindings.`when`(GeneratorBean.isGenerationPaused)
-                    .then(buttonStyle("#c84969"))
-                    .otherwise(buttonStyle("#c8c8c8")))
+                    .then(buttonStyle(toRgba(ColorPalette.ACCENT_COLOR, 0.8)))
+                    .otherwise(buttonStyle(toRgba(ColorPalette.TEXT_COLOR, 0.8))))
                 scene.cursor = Cursor.HAND
             }
             setOnMouseExited {
                 styleProperty().bind(Bindings.`when`(GeneratorBean.isGenerationPaused)
-                    .then(buttonStyle("#E85D9B"))
-                    .otherwise(buttonStyle("#FFFFFF")))
+                    .then(buttonStyle(ColorPalette.ACCENT_COLOR))
+                    .otherwise(buttonStyle(ColorPalette.TEXT_COLOR)))
                 scene.cursor = Cursor.DEFAULT
             }
         }
@@ -112,8 +112,8 @@ class Initializer : Application() {
             setMaxSize(buttonSize.first, buttonSize.second)
             setMinSize(buttonSize.first, buttonSize.second)
             styleProperty().bind(Bindings.`when`(stage.iconifiedProperty())
-                .then(buttonStyle("#E85D9B"))
-                .otherwise(buttonStyle("#FFFFFF")))
+                .then(buttonStyle(ColorPalette.ACCENT_COLOR))
+                .otherwise(buttonStyle(ColorPalette.TEXT_COLOR)))
             textProperty().bind(Bindings.`when`(stage.iconifiedProperty())
                 .then("Restore")
                 .otherwise("Minimize"))
@@ -129,14 +129,14 @@ class Initializer : Application() {
 
             setOnMouseEntered {
                 styleProperty().bind(Bindings.`when`(stage.iconifiedProperty())
-                    .then(buttonStyle("#c84969"))
-                    .otherwise(buttonStyle("#c8c8c8")))
+                    .then(buttonStyle(toRgba(ColorPalette.ACCENT_COLOR, 0.8)))
+                    .otherwise(buttonStyle(toRgba(ColorPalette.TEXT_COLOR, 0.8))))
                 scene.cursor = Cursor.HAND
             }
             setOnMouseExited {
                 styleProperty().bind(Bindings.`when`(stage.iconifiedProperty())
-                    .then(buttonStyle("#E85D9B"))
-                    .otherwise(buttonStyle("#FFFFFF")))
+                    .then(buttonStyle(ColorPalette.ACCENT_COLOR))
+                    .otherwise(buttonStyle(ColorPalette.TEXT_COLOR)))
                 scene.cursor = Cursor.DEFAULT
             }
         }
@@ -144,19 +144,19 @@ class Initializer : Application() {
         val exitButton = Button("Exit").apply {
             setMaxSize(buttonSize.first, buttonSize.second)
             setMinSize(buttonSize.first, buttonSize.second)
-            style = buttonStyle("#FFFFFF")
+            style = buttonStyle(ColorPalette.TEXT_COLOR)
 
             setOnAction {
                 exitProcess(0)
             }
 
             setOnMouseEntered {
-                style += "-fx-text-fill: #c8c8c8;"
+                style = buttonStyle("rgba(255, 255, 255, 0.8)")
                 scene.cursor = Cursor.HAND
             }
 
             setOnMouseExited {
-                style += "-fx-text-fill: #FFFFFF;"
+                style = buttonStyle("#FFFFFF")
                 scene.cursor = Cursor.DEFAULT
             }
         }
@@ -167,7 +167,7 @@ class Initializer : Application() {
             style = "-fx-background-color: transparent;"
 
             children.add(BorderPane().apply {
-                background = Background(BackgroundFill(Color.web("#414141"), CornerRadii(16.0), Insets.EMPTY))
+                background = Background(BackgroundFill(Color.web(ColorPalette.SECONDARY_COLOR), CornerRadii(16.0), Insets.EMPTY))
                 setMaxSize(325.0, 40.0)
                 setMinSize(325.0, 40.0)
 
@@ -178,4 +178,6 @@ class Initializer : Application() {
             })
         }
     }
+
+    private fun toRgba(color: String, opacity: Double) = "rgba(${color.removePrefix("#").chunked(2).joinToString { it.toInt(16).toString() }}, $opacity)"
 }

@@ -16,6 +16,8 @@ import javafx.scene.layout.VBox
 import javafx.stage.FileChooser
 import java.io.File
 
+
+//TODO: make this more flexible and scalable.
 object ElementFilePicker {
     fun addTextValue(
         gridPane: GridPane,

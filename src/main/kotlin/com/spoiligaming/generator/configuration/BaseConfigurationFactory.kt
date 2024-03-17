@@ -21,9 +21,12 @@ data class General(
 
 @Serializable
 data class Multithreading(
+   // var mode: String = "Normal",
     var enabled: Boolean = false,
     var threadLimit: Int = 3,
-    var threadLaunchDelay: Long = 3000
+    var threadLaunchDelay: Long = 3000,
+
+   // var waitDelay: Long = 10000
 )
 
 @Serializable
@@ -31,6 +34,7 @@ data class CustomProxy(
     var enabled: Boolean = false,
     var mode: Int = 1,
     var protocol: Int = 2,
+    var recursiveUsaqe: Boolean = true,
     var isAuthenticationRequired: Boolean = false,
     var host: String = "162.0.220.211",
     var port: String = "46148",
@@ -73,6 +77,7 @@ data class BaseConfigurationFactory(
             prettyPrint = true
         }
 
+        @Synchronized
         fun getInstance(): BaseConfigurationFactory {
             pcFactoryInstance = pcFactoryInstance ?: if (configFile.exists()) {
                 jsonFormatter.decodeFromString(serializer(), configFile.readText())

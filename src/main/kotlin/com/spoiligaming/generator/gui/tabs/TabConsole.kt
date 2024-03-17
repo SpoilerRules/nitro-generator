@@ -4,17 +4,14 @@ import com.spoiligaming.generator.gui.ColorPalette
 import com.spoiligaming.generator.gui.ResourceHandler
 import com.spoiligaming.generator.gui.TabContainer
 import com.spoiligaming.logging.Logger
-import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.control.Label
 import javafx.scene.control.TextArea
 import javafx.scene.input.ContextMenuEvent
-import javafx.scene.input.KeyCode
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
-import java.awt.event.KeyEvent
 import java.io.OutputStream
 import java.io.PrintStream
 
@@ -45,30 +42,27 @@ class TabConsole : ITab {
         }
 
         val originalOut = System.out
-        val outputStream = object : OutputStream() {
+        System.setOut(PrintStream(object : OutputStream() {
             override fun write(b: Int) {
                 textArea.appendText(b.toChar().toString())
                 originalOut.write(b)
             }
 
             override fun write(b: ByteArray, off: Int, len: Int) {
-                val filteredStr = String(b, off, len).replace("\u001B\\[[;\\d]*m".toRegex(), "")
-                textArea.appendText(filteredStr)
+                textArea.appendText(String(b, off, len).replace("\u001B\\[[;\\d]*m".toRegex(), ""))
                 originalOut.write(b, off, len)
             }
-        }
-
-        System.setOut(PrintStream(outputStream))
+        }))
 
         return consolePane.apply {
             add(VBox().apply {
-                background = Background(BackgroundFill(Color.web("#414141"), CornerRadii(16.0, false), null))
+                background = Background(BackgroundFill(Color.web(ColorPalette.SECONDARY_COLOR), CornerRadii(16.0, false), null))
                 setMaxSize(410.0, 355.0)
                 setMinSize(410.0, 355.0)
                 GridPane.setMargin(this, Insets(0.0, 0.0, 0.0, 4.4))
                 children.add(HBox().apply {
                     alignment = Pos.CENTER
-                    background = Background(BackgroundFill(Color.web("#282828"), CornerRadii(16.0, 16.0, 0.0, 0.0, false), null))
+                    background = Background(BackgroundFill(Color.web(ColorPalette.MENU_COLOR), CornerRadii(16.0, 16.0, 0.0, 0.0, false), null))
                     setMaxSize(410.0, 40.0)
                     setMinSize(410.0, 40.0)
 

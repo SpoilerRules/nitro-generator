@@ -14,9 +14,7 @@ class TabContainer : GridPane() {
     companion object {
         private val currentTabProperty = SimpleIntegerProperty(0)
 
-        fun currentTabProperty(): ReadOnlyIntegerProperty {
-            return currentTabProperty
-        }
+        fun currentTabProperty(): ReadOnlyIntegerProperty = currentTabProperty
 
         var currentTab: Int
             get() = currentTabProperty.get()
@@ -38,8 +36,7 @@ class TabContainer : GridPane() {
     }
 
     private fun implementTabBox() {
-        val tabLabels = listOf("General", "Proxy", "Advanced", /*"Visuals",*/ "Console")
-        val tabs = tabLabels.mapIndexed { index, labelText ->
+        val tabs = listOf("General", "Proxy", "Advanced", /*"Visuals",*/ "Console").mapIndexed { index, labelText ->
             createTab(labelText, index)
         }
 
@@ -153,7 +150,7 @@ class TabContainer : GridPane() {
         add(Label("Success Rate").apply {
             background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY))
             style =
-                "-fx-text-fill: #4C4C4C; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
+                "-fx-text-fill: ${ColorPalette.CONTROL_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
             setMaxSize(160.0, 75.0)
             setMinSize(160.0, 75.0)
             alignment = Pos.TOP_CENTER
@@ -170,7 +167,7 @@ class TabContainer : GridPane() {
 
         val successRateLabel = Label(successRateLabelText).apply {
             background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY))
-            style = "-fx-text-fill: #FFFFFF; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 12; -fx-font-antialiasing: true;"
+            style = "-fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 12;"
             setMaxSize(160.0, 75.0)
             setMinSize(160.0, 75.0)
             alignment = Pos.TOP_CENTER

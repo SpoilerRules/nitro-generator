@@ -2,6 +2,7 @@ package com.spoiligaming.generator.gui.tabs
 
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.TabContainer
+import com.spoiligaming.generator.gui.TooltipKeyAccessor
 import com.spoiligaming.generator.gui.element.CommonElement
 import com.spoiligaming.generator.gui.element.ElementBoolean
 import com.spoiligaming.generator.gui.element.ElementText
@@ -52,7 +53,7 @@ class TabGeneral : ITab {
                     ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().generalSettings.validateNitroCode,
                         "Validate Nitro Code",
-                        "Disables validation of the generated nitro codes.\nDisabling this will prevent the use of multi-threading.\n\nWho needs a multi-threaded alphanumeric string generator, anyway?",
+                        TooltipKeyAccessor.getValue("validate.nitro.code"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 generalSettings.validateNitroCode = newValue
@@ -111,7 +112,7 @@ class TabGeneral : ITab {
                     ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().generalSettings.alertWebhook,
                         "Alert Webhook",
-                        null,
+                        TooltipKeyAccessor.getValue("alert.webhook"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 generalSettings.alertWebhook = newValue

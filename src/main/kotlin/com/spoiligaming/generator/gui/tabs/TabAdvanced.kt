@@ -1,5 +1,6 @@
 package com.spoiligaming.generator.gui.tabs
 
+import com.spoiligaming.generator.NitroValidatorAdvancedMt
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.TabContainer
 import com.spoiligaming.generator.gui.element.CommonElement
@@ -37,6 +38,7 @@ class TabAdvanced : ITab {
                                 multithreading.enabled = newValue
                             }
                             if (newValue) {
+                                NitroValidatorAdvancedMt.isNextProxyAvailable.set(true)
                                 Logger.printWarning("When multi-threading is enabled, only 'Static' proxy mode or no proxy can be used. Some features may be unavailable due to stability issues.")
                             }
                         },

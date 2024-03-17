@@ -8,17 +8,13 @@ import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.Tooltip
-import javafx.scene.layout.Background
-import javafx.scene.layout.BackgroundFill
-import javafx.scene.layout.CornerRadii
-import javafx.scene.layout.GridPane
-import javafx.scene.layout.HBox
-import javafx.scene.layout.VBox
+import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import javafx.util.Duration
 
 class CommonElement {
     private var contentFieldIndex: Int = 0
+
     fun createContentField(
         gridPane: GridPane,
         contentFieldTitle: String,
