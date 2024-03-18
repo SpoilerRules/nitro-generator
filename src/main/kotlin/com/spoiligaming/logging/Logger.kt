@@ -25,7 +25,7 @@ object Logger {
 
     fun <V> printDebug(information: V) = log("DEBUG", information, CEnum.ORANGE)
 
-    private fun <V> log(level: String, message: V, color: CEnum) {
+    private fun <V> log(level: String, message: V, color: CEnum) =
         Platform.runLater {
             if (level != "DEBUG" || showDebug) {
                 println("${createStatus(color, level)} $message")
@@ -41,7 +41,6 @@ object Logger {
                 }\n"
             )
         }
-    }
 
     private fun createStatus(primaryColor: CEnum, status: String): String = "${CEnum.RESET}[$primaryColor$status${CEnum.RESET}]${CEnum.RESET}"
 }

@@ -3,8 +3,10 @@ package com.spoiligaming.generator.gui.tabs
 import com.spoiligaming.generator.NitroValidatorAdvancedMt
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.TabContainer
+import com.spoiligaming.generator.gui.TooltipKeyAccessor
 import com.spoiligaming.generator.gui.element.CommonElement
 import com.spoiligaming.generator.gui.element.ElementBoolean
+import com.spoiligaming.generator.gui.element.ElementText
 import com.spoiligaming.generator.gui.element.ElementValue
 import com.spoiligaming.logging.Logger
 import javafx.geometry.Insets
@@ -29,7 +31,7 @@ class TabAdvanced : ITab {
             vgap = 7.5
             CommonElement().run {
                 createContentField(
-                    this@apply, "Multi Threading (experimental)", 150.0, ElementBoolean.addBooleanValue(
+                    this@apply, "Multi Threading", 150.0, ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().multithreading.enabled,
                         "Enabled",
                         null,
@@ -39,7 +41,6 @@ class TabAdvanced : ITab {
                             }
                             if (newValue) {
                                 NitroValidatorAdvancedMt.isNextProxyAvailable.set(true)
-                                Logger.printWarning("When multi-threading is enabled, only 'Static' proxy mode or no proxy can be used. Some features may be unavailable due to stability issues.")
                             }
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
@@ -57,10 +58,44 @@ class TabAdvanced : ITab {
                     ElementValue.addUnitValue(
                         BaseConfigurationFactory.getInstance().multithreading.threadLaunchDelay,
                         "Start Delay (ms)",
-                        "Specifies the delay between the initiation of threads.\nFor instance, the second thread will commence after the specified milliseconds following the start of the first thread.",
+                        TooltipKeyAccessor.getValue("thread.start.delay"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 multithreading.threadLaunchDelay = newValue
+                            }
+                        }
+                    )
+                )
+                createContentField(
+                    this@apply,
+                    "Auto Claim", 152.0,
+                    ElementBoolean.addBooleanValue(
+                        BaseConfigurationFactory.getInstance().autoClaimSettings.enabled,
+                        "Enabled",
+                        TooltipKeyAccessor.getValue("auto.claim.description"),
+                        { newValue ->
+                            BaseConfigurationFactory.updateValue {
+                                autoClaimSettings.enabled = newValue
+                            }
+                        }
+                    ),
+                    ElementBoolean.addBooleanValue(
+                        BaseConfigurationFactory.getInstance().autoClaimSettings.retryTillSuccess,
+                        "Retry",
+                        TooltipKeyAccessor.getValue("auto.claim.retry"),
+                        { newValue ->
+                            BaseConfigurationFactory.updateValue {
+                                autoClaimSettings.retryTillSuccess = newValue
+                            }
+                        }
+                    ),
+                    ElementText.addTextValue(
+                        BaseConfigurationFactory.getInstance().autoClaimSettings.accountToken,
+                        "Discord Account Token",
+                        null,
+                        { newValue ->
+                            BaseConfigurationFactory.updateValue {
+                                autoClaimSettings.accountToken = newValue
                             }
                         }
                     )

@@ -41,45 +41,32 @@ object NitroValidatorOrdinary {
             with(getConnection(nitroCode, config)) {
                 NitroValidationWrapper.setProperties(this, config)
 
-                val responseMessage = when (responseCode) {
-                    200, 204 -> {
-                        SessionStatistics.validNitroCodes += 1
-                        if (config.generalSettings.alertWebhook) {
-                            NitroValidationWrapper.alertWebhook(nitroCode)
-                        }
-                        "The code $nitroCode is valid. " + if (nitroValidationRetries > 0) "Took $retryCount retries." else ""
+                NitroValidationWrapper.reactToResponseCode(
+                    responseCode,
+                    nitroCode,
+                    nitroValidationRetries,
+                    config,
+                    null
+                ) {
+                    nitroValidationRetries++
+                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { code, _, count ->
+                        validateNitro(
+                            code,
+                            BaseConfigurationFactory.getInstance(),
+                            count,
+                        )
                     }
-
-                    404 -> {
-                        SessionStatistics.invalidNitroCodes += 1
-                        "The code $nitroCode is invalid. " + if (nitroValidationRetries > 0) "Took $nitroValidationRetries retries." else ""
-                    }
-
-                    429 -> "The request for code $nitroCode was rate limited."
-
-                    else -> "Unexpected response while validating the code $nitroCode: $responseCode"
-                }
-
-                if (config.generalSettings.logGenerationInfo) {
-                    Logger.printSuccess(responseMessage, true)
                 }
 
                 // explicitly disconnect to free resources as soon as possible
                 disconnect()
-
-                if (responseCode !in listOf(200, 204, 404) && config.generalSettings.retryTillValid) {
-                    nitroValidationRetries++
-                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount) { code, _, count ->
-                        validateNitro(code, BaseConfigurationFactory.getInstance(), count)
-                    }
-                }
             }
         }.onFailure {
             Logger.printError("Occurred while validating a nitro code: ${it.message}")
 
             if (config.generalSettings.retryTillValid) {
                 nitroValidationRetries++
-                NitroValidationWrapper.retryValidation(nitroCode, config, retryCount) { code, _, count ->
+                NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { code, _, count ->
                     validateNitro(code, BaseConfigurationFactory.getInstance(), count)
                 }
             }

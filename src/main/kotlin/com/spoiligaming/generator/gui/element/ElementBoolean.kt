@@ -14,7 +14,7 @@ object ElementBoolean {
         labelText: String,
         tooltipText: String? = null,
         valueUpdater: (Boolean) -> Unit,
-        padding: Insets
+        padding: Insets = Insets(10.0, 0.0, 0.0, 10.0)
     ): HBox = HBox().apply {
         alignment = Pos.TOP_LEFT
         spacing = 5.0

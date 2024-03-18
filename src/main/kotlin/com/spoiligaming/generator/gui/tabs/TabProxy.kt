@@ -118,7 +118,7 @@ class TabProxy : ITab {
                     ElementText.addTextValue(
                         BaseConfigurationFactory.getInstance().customProxy.host,
                         "Host",
-                        "Only available in Static mode.",
+                        TooltipKeyAccessor.getValue("available.static.mode"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 customProxy.host = newValue
@@ -129,7 +129,7 @@ class TabProxy : ITab {
                     ElementText.addTextValue(
                         BaseConfigurationFactory.getInstance().customProxy.port,
                         "Port",
-                        "Only available in Static mode.",
+                        TooltipKeyAccessor.getValue("available.static.mode"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 customProxy.port = newValue
@@ -144,7 +144,7 @@ class TabProxy : ITab {
                     150.0, ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().customProxy.isAuthenticationRequired,
                         "Enabled",
-                        "Only available in Static mode.",
+                        TooltipKeyAccessor.getValue("available.static.mode"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 customProxy.isAuthenticationRequired = newValue
@@ -182,7 +182,7 @@ class TabProxy : ITab {
                     ElementFilePicker.addTextValue(
                         this@proxyPaneApply,
                         BaseConfigurationFactory.getInstance().customProxy.proxyFilePath,
-                        "This allows you to select a file containing a collection of proxies. The proxies should be in the 'host:port' format.",
+                        TooltipKeyAccessor.getValue("proxy.file.path"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 customProxy.proxyFilePath = newValue
@@ -205,7 +205,7 @@ class TabProxy : ITab {
                     ElementText.addTextValue(
                         BaseConfigurationFactory.getInstance().customProxy.rawContentLinks,
                         "Raw Content Link(s)",
-                        "Links are separated by a comma. Only links pointing to raw content sources are supported.",
+                        TooltipKeyAccessor.getValue("raw.content.description"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 customProxy.rawContentLinks = newValue

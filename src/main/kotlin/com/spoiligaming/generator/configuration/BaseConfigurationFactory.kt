@@ -51,6 +51,12 @@ data class CustomProxy(
     }
 }
 
+@Serializable
+data class AutoClaimSettings(
+    var enabled: Boolean = true,
+    var retryTillSuccess: Boolean = true,
+    var accountToken: String = "dGhpcyBpcyBhIGR1bW15IHRva2Vu"
+)
 
 // experimental and undone.
 @Serializable
@@ -65,8 +71,9 @@ data class Theme(
 @Serializable
 data class BaseConfigurationFactory(
     @SerialName("General") var generalSettings: General = General(),
-    @SerialName("Multi Threading") var multithreading: Multithreading = Multithreading(),
     @SerialName("Custom Proxy") var customProxy: CustomProxy = CustomProxy(),
+    @SerialName("Multi Threading") var multithreading: Multithreading = Multithreading(),
+    @SerialName("Auto Claim") var autoClaimSettings: AutoClaimSettings = AutoClaimSettings(),
     @SerialName("Theme") var themeSettings: Theme = Theme()
 ) {
     companion object {

@@ -64,7 +64,7 @@ class TabGeneral : ITab {
                     ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().generalSettings.generatePromotionalGiftCode,
                         "Promotional Nitro",
-                        "Enables the generator to produce a promotional gift code of 24 alphanumeric characters in length.",
+                        TooltipKeyAccessor.getValue("promotional.nitro"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 generalSettings.generatePromotionalGiftCode = newValue

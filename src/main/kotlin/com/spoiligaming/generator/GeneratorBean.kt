@@ -6,6 +6,7 @@ import com.spoiligaming.logging.Logger
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import kotlinx.coroutines.*
+import java.util.concurrent.Semaphore
 import kotlin.concurrent.timer
 
 object GeneratorBean {
@@ -27,7 +28,7 @@ object GeneratorBean {
                 true -> {
                     Logger.printSuccess("The code $nitroCode is valid.")
                     SessionStatistics.validNitroCodes += 1
-                    NitroValidationWrapper.alertWebhook(nitroCode)
+                    NitroValidationWrapper.alertWebhook(nitroCode, null)
                 }
                 false -> {
                     val proxy = config.customProxy
@@ -46,22 +47,30 @@ object GeneratorBean {
     }
 
     private fun handleConcurrentValidation(initialNitroCode: String, config: BaseConfigurationFactory) {
+        val semaphore = Semaphore(config.multithreading.threadLimit)
+
         runBlocking {
-            List(config.multithreading.threadLimit) { index ->
-                val nitroCode =
-                    if (index == 0) initialNitroCode else generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
+            repeat(config.multithreading.threadLimit) {
                 launch(Dispatchers.IO) {
-                    when (config.customProxy.mode) {
-                        1 -> {
-                            NitroValidatorSimpleMt.validateNitro(nitroCode, config, 0, "${index + 1}")
+                    var index = 0
+                    while (true) {
+                        semaphore.acquire()
+                        val nitroCode = if (index++ == 0) initialNitroCode else generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
+                        launch {
+                            validateNitro(nitroCode, config, coroutineContext[Job]?.toString()?.substringAfter('@') ?: "UnknownThread".substringBefore(']'))
+                            semaphore.release()
                         }
-                        2, 3 -> {
-                            NitroValidatorAdvancedMt.validateNitro(nitroCode, config, 0, "${index + 1}")
-                        }
+                        delay(config.multithreading.threadLaunchDelay)
                     }
                 }
-                delay(config.multithreading.threadLaunchDelay)
-            }.run { joinAll() }
+            }
+        }
+    }
+
+    private fun validateNitro(nitroCode: String, config: BaseConfigurationFactory, threadIdentifier: String) {
+        when (config.customProxy.mode) {
+            1 -> NitroValidatorSimpleMt.validateNitro(nitroCode, config, 0, threadIdentifier)
+            in 2..3 -> NitroValidatorAdvancedMt.validateNitro(nitroCode, config, 0, threadIdentifier)
         }
     }
 

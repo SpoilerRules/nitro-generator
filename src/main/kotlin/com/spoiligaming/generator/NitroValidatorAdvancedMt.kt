@@ -28,39 +28,16 @@ object NitroValidatorAdvancedMt {
                 NitroValidationWrapper.disableProxySecurity()
                 NitroValidationWrapper.setProperties(this, config)
 
-                val responseMessage = when (responseCode) {
-                    200, 204 -> {
-                        SessionStatistics.validNitroCodes += 1
-                        if (config.generalSettings.alertWebhook) {
-                            NitroValidationWrapper.alertWebhook(nitroCode)
-                        }
-                        "The code $nitroCode is valid. " + if (nitroValidationRetries > 0) "Took $retryCount retries." else ""
-                    }
-
-                    404 -> {
-                        SessionStatistics.invalidNitroCodes += 1
-                        "The code $nitroCode is invalid. " + if (nitroValidationRetries > 0) "Took $nitroValidationRetries retries." else ""
-                    }
-
-                    429 -> "The request for code $nitroCode was rate limited."
-
-                    else -> "Unexpected response while validating the code $nitroCode: $responseCode"
-                }
-
-                if (config.generalSettings.logGenerationInfo) {
-                    Logger.printSuccess(
-                        "[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] $responseMessage",
-                        true
-                    )
-                }
-
-                // explicitly disconnect to free resources as soon as possible
-                disconnect()
-
-                if (responseCode !in listOf(200, 204, 404) && config.generalSettings.retryTillValid) {
+                NitroValidationWrapper.reactToResponseCode(
+                    responseCode,
+                    nitroCode,
+                    nitroValidationRetries,
+                    config,
+                    threadIdentity
+                ) {
                     nitroValidationRetries++
-                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount) { code, _, count ->
-                        NitroValidatorSimpleMt.validateNitro(
+                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, threadIdentity) { code, _, count ->
+                        validateNitro(
                             code,
                             BaseConfigurationFactory.getInstance(),
                             count,
@@ -68,14 +45,17 @@ object NitroValidatorAdvancedMt {
                         )
                     }
                 }
+
+                // explicitly disconnect to free resources as soon as possible
+                disconnect()
             }
         }.onFailure {
             Logger.printError("[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] Occurred while validating a nitro code: ${it.message}")
 
             if (config.generalSettings.retryTillValid) {
                 nitroValidationRetries++
-                NitroValidationWrapper.retryValidation(nitroCode, config, retryCount) { code, _, count ->
-                    NitroValidatorSimpleMt.validateNitro(
+                NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, threadIdentity) { code, _, count ->
+                    validateNitro(
                         code,
                         BaseConfigurationFactory.getInstance(),
                         count,
@@ -83,8 +63,6 @@ object NitroValidatorAdvancedMt {
                     )
                 }
             }
-        }.onSuccess {
-            Logger.printDebug("[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] Safely exiting the thread.")
         }
     }
 
@@ -96,6 +74,7 @@ object NitroValidatorAdvancedMt {
         val proxy = when {
             !config.customProxy.enabled -> Proxy.NO_PROXY
             else -> when (config.customProxy.mode) {
+                // keeping 1 case, we might merge advanced and simple mt validators.
                 1 -> Proxy(
                     config.customProxy.getProxyType(config.customProxy.protocol).also {
                         if (it == Proxy.Type.SOCKS && config.customProxy.isAuthenticationRequired) {
@@ -113,7 +92,7 @@ object NitroValidatorAdvancedMt {
                 )
 
                 else -> ProxyHandler.getNextProxy()?.let { proxyInfo ->
-                    Logger.printDebug("Using proxy: ${CEnum.CYAN}${proxyInfo.first}:${proxyInfo.second}${CEnum.RESET}")
+                    Logger.printDebug("[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] Using proxy: ${CEnum.CYAN}${proxyInfo.first}:${proxyInfo.second}${CEnum.RESET}")
                     Proxy(
                         config.customProxy.getProxyType(config.customProxy.protocol),
                         InetSocketAddress(proxyInfo.first, proxyInfo.second)
