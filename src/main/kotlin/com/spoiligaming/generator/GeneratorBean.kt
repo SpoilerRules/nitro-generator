@@ -12,10 +12,16 @@ import kotlin.concurrent.timer
 object GeneratorBean {
     var isGenerationPaused: BooleanProperty = SimpleBooleanProperty(false)
     var fakeValidation = false
+    var isMtInterrupted = false
 
     fun startGeneratingNitro() {
-        timer(initialDelay = 0, period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay.takeIf { it != 0L } ?: 1) {
+        timer(
+            initialDelay = 0,
+            period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay.takeIf { it != 0L } ?: 1) {
             val config = BaseConfigurationFactory.getInstance()
+
+            config.isAnythingChanged = false
+
             if (isGenerationPaused.get()) return@timer
 
             val nitroCode = generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
@@ -30,12 +36,18 @@ object GeneratorBean {
                     SessionStatistics.validNitroCodes += 1
                     NitroValidationWrapper.alertWebhook(nitroCode, null)
                 }
+
                 false -> {
                     val proxy = config.customProxy
                     val multithreading = config.multithreading.enabled
                     if ((proxy.proxyFilePath.isNotEmpty() && proxy.mode == 2 && proxy.enabled) || proxy.enabled && proxy.mode != 2 || !proxy.enabled) {
                         when {
-                            proxy.mode in 1..3 && !multithreading -> NitroValidatorOrdinary.validateNitro(nitroCode, config, 0)
+                            proxy.mode in 1..3 && !multithreading -> NitroValidatorOrdinary.validateNitro(
+                                nitroCode,
+                                config,
+                                0
+                            )
+
                             else -> handleConcurrentValidation(nitroCode, config)
                         }
                     } else if (proxy.proxyFilePath.isEmpty() && proxy.mode == 2 && proxy.enabled) {
@@ -53,11 +65,17 @@ object GeneratorBean {
             repeat(config.multithreading.threadLimit) {
                 launch(Dispatchers.IO) {
                     var index = 0
-                    while (true) {
+                    while (isActive && !config.isAnythingChanged && !isGenerationPaused.get()) {
                         semaphore.acquire()
-                        val nitroCode = if (index++ == 0) initialNitroCode else generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
+                        val nitroCode =
+                            if (index++ == 0) initialNitroCode else generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
                         launch {
-                            validateNitro(nitroCode, config, coroutineContext[Job]?.toString()?.substringAfter('@') ?: "UnknownThread".substringBefore(']'))
+                            validateNitro(
+                                nitroCode,
+                                config,
+                                coroutineContext[Job]?.toString()?.substringAfter('@')
+                                    ?: "UnknownThread".substringBefore(']')
+                            )
                             semaphore.release()
                         }
                         delay(config.multithreading.threadLaunchDelay)
@@ -74,5 +92,8 @@ object GeneratorBean {
         }
     }
 
-    private fun generateNitroCode(promotionalGiftCode: Boolean): String = List(if (!promotionalGiftCode) 16 else 24) { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".random() }.joinToString("")
+    private fun generateNitroCode(promotionalGiftCode: Boolean): String =
+        List(if (!promotionalGiftCode) 16 else 24) { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".random() }.joinToString(
+            ""
+        )
 }

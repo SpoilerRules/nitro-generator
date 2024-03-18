@@ -76,6 +76,9 @@ data class BaseConfigurationFactory(
     @SerialName("Auto Claim") var autoClaimSettings: AutoClaimSettings = AutoClaimSettings(),
     @SerialName("Theme") var themeSettings: Theme = Theme()
 ) {
+
+    var isAnythingChanged: Boolean = false
+
     companion object {
         private var pcFactoryInstance: BaseConfigurationFactory? = null
         private val configFile = File("configuration.json")
@@ -109,7 +112,10 @@ data class BaseConfigurationFactory(
         }
 
         fun updateValue(updateFunction: BaseConfigurationFactory.() -> Unit) {
-            getInstance().apply(updateFunction)
+            val configInstance = getInstance()
+
+            configInstance.apply(updateFunction)
+            configInstance.isAnythingChanged = true
             configFile.run {
                 if (exists()) {
                     writeText(jsonFormatter.encodeToString(serializer(), getInstance()))
