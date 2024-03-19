@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-  This Nitro generator is created with the user's experience as the top priority, establishing it as a standout application with a comprehensive range of features. It is equipped with a dependable and easy-to-navigate graphical user interface, simplifying the setup process for users. Although the probability of acquiring Nitro for free through this generator is quite low, the application itself is a testament to the dedication to quality and user satisfaction. The project was initially developed to kill time and spend more time with Kotlin/JVM while providing a valuable tool for the Discordian community.
+  This Nitro generator is created with the user's experience as the top priority, making it an exceptional application with a wide variety of features. It is equipped with a dependable and easy-to-navigate graphical user interface, simplifying the setup process for users. Although the chances of getting Nitro for free through this generator are quite low, the application itself is a clear indication of the commitment to quality and user satisfaction. The project was initially developed to kill time and spend more time with Kotlin/JVM while providing a valuable tool for the Discordian community.
 </p>
 
 <p align="center">
