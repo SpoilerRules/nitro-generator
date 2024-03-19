@@ -12,7 +12,6 @@ import kotlin.concurrent.timer
 object GeneratorBean {
     var isGenerationPaused: BooleanProperty = SimpleBooleanProperty(false)
     var fakeValidation = false
-    var isMtInterrupted = false
 
     fun startGeneratingNitro() {
         timer(
