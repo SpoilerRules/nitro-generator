@@ -46,8 +46,7 @@ tasks.register<Copy>("copyDependencies") {
 tasks.shadowJar {
     mergeServiceFiles()
     duplicatesStrategy = DuplicatesStrategy.FAIL
-   // archiveFileName.set("NitroGenerator-$version.jar")
-    archiveFileName.set("nrg.jar")
+    archiveFileName.set("NitroGenerator.jar")
     manifest {
         attributes["Main-Class"] = "${group}.generator.MainKt"
     }
@@ -55,7 +54,7 @@ tasks.shadowJar {
 
 tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.FAIL
-    archiveFileName.set("NitroGenerator-$version-thin.jar")
+    archiveFileName.set("NitroGenerator-thin.jar")
     manifest {
         attributes["Main-Class"] = "com.spoiligaming.generator.MainKt"
     }
