@@ -111,9 +111,7 @@ data class BaseConfigurationFactory(
         }
 
         fun updateValue(updateFunction: BaseConfigurationFactory.() -> Unit) {
-            val configInstance = getInstance()
-
-            configInstance.apply(updateFunction)
+            getInstance().apply(updateFunction)
             isAnythingChanged = true
             configFile.run {
                 if (exists()) {
