@@ -56,8 +56,8 @@ Our user interface is a tribute to the exceptional design of [Maple Lite](https:
 
 ## GUI Preview
 <div style="display: flex; justify-content: center;">
-  <img src="https://i.ibb.co/WKW2nqx/java-s-WThqpo-Fj-Y.png" alt="GUI Preview 1" width="450" style="margin-right: 10px;">
-  <img src="https://i.ibb.co/1mdb39k/java-nm-Rg90t4q-D.png" alt="GUI Preview 2" width="450">
+  <img src="https://i.ibb.co/WKW2nqx/java-s-WThqpo-Fj-Y.png" alt="GUI Preview 1" width="420" style="margin-right: 10px;">
+  <img src="https://i.ibb.co/1mdb39k/java-nm-Rg90t4q-D.png" alt="GUI Preview 2" width="420">
 </div>
 
 ### Building the Project
