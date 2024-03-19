@@ -61,7 +61,7 @@ Our user interface is a tribute to the exceptional design of [Maple Lite](https:
 
 ### Building the Project
 
-Building this project is a breeze, even if you're new to development or just a casual user. Here's how to do it:
+Building this project is no sweat, even if you're new to development or just a casual user. Here's how to do it:
 
 1. Open your terminal or command prompt.
 2. Navigate to the project's root directory.
