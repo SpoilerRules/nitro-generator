@@ -1,3 +1,4 @@
+<!--suppress HtmlDeprecatedAttribute -->
 <h1 align="center">
   <b>Spoili's Nitro Generator</b>
 </h1>
@@ -54,7 +55,10 @@ To use this Nitro generator, you'll need Java 11 or newer. We suggest the latest
 Our user interface is a tribute to the exceptional design of [Maple Lite](https://maple.software/), known for its dependability and user-friendly approach. As a dedicated fan of [Maple Lite](https://maple.software/), I was inspired to model our GUI on its organized, visually pleasing, and straightforward design, which aligns perfectly with our program's spirit. For those who play osu! or simply appreciate thoughtful design, I enthusiastically recommend exploring [Maple Lite](https://maple.software/).
 
 ## GUI Preview
-<img src="https://i.ibb.co/WKW2nqx/java-s-WThqpo-Fj-Y.png" alt="GUI Preview 1" width="400">
+<div style="display: flex; justify-content: center;">
+  <img src="https://i.ibb.co/WKW2nqx/java-s-WThqpo-Fj-Y.png" alt="GUI Preview 1" width="300" style="margin-right: 10px;">
+  <img src="https://i.ibb.co/1mdb39k/java-nm-Rg90t4q-D.png" alt="GUI Preview 2" width="300">
+</div>
 
 ### Building the Project
 
