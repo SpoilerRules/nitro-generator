@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpoilerRules/nitro-generator"><img src="https://img.shields.io/github/stars/SpoilerRules/nitro-generator?style=for-the-badge&color=slategray" alt="Stars"></a>
+  <a><img src="https://img.shields.io/github/stars/SpoilerRules/nitro-generator?style=for-the-badge&color=slategray" alt="Stars"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg?style=for-the-badge&color=pink" alt="GPL-3.0 License"></a>
 </p>
 
