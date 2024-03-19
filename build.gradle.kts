@@ -16,7 +16,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
    // implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.3") {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-common")
     }
