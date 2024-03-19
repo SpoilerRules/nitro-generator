@@ -8,8 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpoilerRules/nitro-generator"><img src="https://img.shields.io/github/stars/your-repository.svg?style=for-the-badge&color=slategray" alt="GitHub Stars"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg?style=for-the-badge&color=pink" alt="GPL-3.0 License"></a>
+<a href="https://github.com/SpoilerRules/nitro-generator"><img src="https://img.shields.io/github/stars/SpoilerRules/nitro-generator?style=for-the-badge&color=slategray" alt="Stars"></a>  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg?style=for-the-badge&color=pink" alt="GPL-3.0 License"></a>
 </p>
 
 <p align="center">
@@ -47,8 +46,7 @@
 
 To use this Nitro generator, you'll need Java 11 or newer. We suggest the latest version that's supported for a long time (LTS version) for the best experience. Don't worry, setting up Java is straightforward:
 1. Search online for "Java LTS version download".
-2. Follow the instructions to install it on your computer.
-   Once Java is set up, you're all set to start using the Nitro generator!
+2. Follow the instructions to install it on your computer. Once Java is set up, you're all set to start using the Nitro generator!
 
 ## GUI Inspiration
 
@@ -77,7 +75,6 @@ When you build the project, you may notice two types of `.jar` files in the `bui
 - **NitroGenerator-thin.jar (Thin Jar)**: Think of this as an empty suitcase. It's just the core of the project and doesn't include the extra dependencies. It's smaller, but you'll need to gather and add the required dependencies yourself before you can use it.
 
 Both files serve the same purpose but cater to different needs. Choose the fat jar for convenience or the thin jar if you prefer to manage dependencies manually.
-
 
 ### Contributor Assistance Required
 
