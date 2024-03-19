@@ -74,12 +74,11 @@ data class BaseConfigurationFactory(
     @SerialName("Custom Proxy") var customProxy: CustomProxy = CustomProxy(),
     @SerialName("Multi Threading") var multithreading: Multithreading = Multithreading(),
     @SerialName("Auto Claim") var autoClaimSettings: AutoClaimSettings = AutoClaimSettings(),
-    @SerialName("Theme") var themeSettings: Theme = Theme()
+    @SerialName("Theme (unstable, do not modify)") var themeSettings: Theme = Theme()
 ) {
-
-    var isAnythingChanged: Boolean = false
-
     companion object {
+        var isAnythingChanged: Boolean = false
+
         private var pcFactoryInstance: BaseConfigurationFactory? = null
         private val configFile = File("configuration.json")
         private val jsonFormatter = Json {
@@ -115,7 +114,7 @@ data class BaseConfigurationFactory(
             val configInstance = getInstance()
 
             configInstance.apply(updateFunction)
-            configInstance.isAnythingChanged = true
+            isAnythingChanged = true
             configFile.run {
                 if (exists()) {
                     writeText(jsonFormatter.encodeToString(serializer(), getInstance()))

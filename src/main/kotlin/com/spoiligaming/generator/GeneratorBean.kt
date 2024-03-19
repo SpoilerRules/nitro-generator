@@ -19,7 +19,8 @@ object GeneratorBean {
             period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay.takeIf { it != 0L } ?: 1) {
             val config = BaseConfigurationFactory.getInstance()
 
-            config.isAnythingChanged = false
+            // reset isAnythingChanged to ensure concurrent operations work
+            BaseConfigurationFactory.isAnythingChanged = false
 
             if (isGenerationPaused.get()) return@timer
 
@@ -65,7 +66,7 @@ object GeneratorBean {
                 launch(Dispatchers.IO) {
                     var index = 0
 
-                    while (isActive && !config.isAnythingChanged && !isGenerationPaused.get()) {
+                    while (isActive && !BaseConfigurationFactory.isAnythingChanged && !isGenerationPaused.get()) {
                         semaphore.acquire()
                         val nitroCode =
                             if (index++ == 0) initialNitroCode else generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
