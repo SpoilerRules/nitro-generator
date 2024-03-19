@@ -25,7 +25,7 @@ This Nitro generator is created with the user's experience as the top priority, 
 - **Nitro Code Retry Mechanism**: If a nitro code fails to be validated, the system will retry it automatically.
 - **Auto-Claim for Valid Codes**: When a valid nitro code is detected, it's claimed on your behalf.
   - **Retry Mechanism**: If the claim fails, the system will retry until successful.
-- **Discord Webhook Notifications**: Get instant alerts via Discord webhooks when a valid nitro code is found.
+- **Discord Webhook Notifications**: Get instant alerts via Discord webhook when a valid nitro code is found.
 - **Concurrent Nitro Code Generation and Validation**: Generate and validate nitro codes simultaneously, maximizing efficiency. We achieve this using the Kotlin Coroutines Core library, which sets up a dedicated thread pool.
 - **Advanced Proxy Support**:
     - **Proxy Modes**: Depending on your proxy list, choose from "Static", "One File" or "Online API" modes.
