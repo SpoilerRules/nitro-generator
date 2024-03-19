@@ -1,6 +1,6 @@
 # Spoili's Nitro Generator
 
-[![GPL-3 License](https://img.shields.io/badge/license-GPL--3-blue.svg)](LICENSE)
+[![GPL-3.0 License](https://img.shields.io/badge/license-GPL--3-blue.svg)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/your-repository.svg?style=social)](https://github.com/SpoilerRules/nitro-generator)
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.9.23-blue.svg?logo=kotlin)](https://kotlinlang.org/)
 [![Java](https://img.shields.io/badge/Java-11-blue.svg?logo=java&logoColor=white)](https://www.oracle.com/java/technologies/javase-downloads.html)
