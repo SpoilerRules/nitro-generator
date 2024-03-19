@@ -60,7 +60,7 @@ When you build the project, you may notice two types of `.jar` files in the `bui
 
 - **NitroGenerator-1.0.0.jar (Fat Jar)**: This file is like a packed suitcase, it has everything you need inside. It includes all the necessary dependencies, so you can run the project right away without worrying about adding anything else.
 
-- **NitroGenerator-1.0.0-thin.jar (Thin Jar)**: Think of this as an empty suitcase. It's just the core of the project and doesn't include the extra dependencies. It's smaller in size, but you'll need to gather and add the required dependencies yourself before you can use it.
+- **NitroGenerator-1.0.0-thin.jar (Thin Jar)**: Think of this as an empty suitcase. It's just the core of the project and doesn't include the extra dependencies. It's smaller, but you'll need to gather and add the required dependencies yourself before you can use it.
 
 Both files serve the same purpose but cater to different needs. Choose the fat jar for convenience or the thin jar if you prefer to manage dependencies manually.
 
