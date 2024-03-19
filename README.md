@@ -58,9 +58,9 @@ That's it! After the process completes, you'll find the build output in the `bui
 
 When you build the project, you may notice two types of `.jar` files in the `build/libs` folder:
 
-- **NitroGenerator-1.0.0.jar (Fat Jar)**: This file is like a packed suitcase, it has everything you need inside. It includes all the necessary dependencies, so you can run the project right away without worrying about adding anything else.
+- **NitroGenerator.jar (Fat Jar)**: This file is like a packed suitcase, it has everything you need inside. It includes all the necessary dependencies, so you can run the project right away without worrying about adding anything else.
 
-- **NitroGenerator-1.0.0-thin.jar (Thin Jar)**: Think of this as an empty suitcase. It's just the core of the project and doesn't include the extra dependencies. It's smaller, but you'll need to gather and add the required dependencies yourself before you can use it.
+- **NitroGenerator-thin.jar (Thin Jar)**: Think of this as an empty suitcase. It's just the core of the project and doesn't include the extra dependencies. It's smaller, but you'll need to gather and add the required dependencies yourself before you can use it.
 
 Both files serve the same purpose but cater to different needs. Choose the fat jar for convenience or the thin jar if you prefer to manage dependencies manually.
 
@@ -71,7 +71,7 @@ We're seeking skilled contributors to improve this project with the following fe
 
 - **SVG Icons**: Integrate SVG icons adjacent to tab labels, akin to those in Maple Lite, to enrich the UI's visual appeal.
 - **ComboBox Styling**: Implement a ComboBox popup that mirrors the aesthetic and functionality of Maple Lite's design.
-- **Major Bug Fix**: Address the `NullPointerException` (`NPE`) triggered by `this.runs` within the TextArea of the Console Output tab.
+- **Major Bug Fix**: Implement a fix for the `NullPointerException` (`NPE`) triggered by `this.runs` within the TextArea of the Console Output tab.
 - **UI Element Replacement**: Swap out the CheckBox for a toggle switch element, styled after Maple Lite's interface.
 - **Value Slider Addition**: Add a value slider next to text fields, modeled after Maple Lite's design. Reference implementation can be found in [ElementValue.kt](https://github.com/SpoilerRules/nitro-generator/blob/borderpane-ver/src/main/kotlin/com/spoiligaming/generator/gui/element/ElementValue.kt).
 
