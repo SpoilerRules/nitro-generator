@@ -65,6 +65,7 @@ object GeneratorBean {
             repeat(config.multithreading.threadLimit) {
                 launch(Dispatchers.IO) {
                     var index = 0
+
                     while (isActive && !config.isAnythingChanged && !isGenerationPaused.get()) {
                         semaphore.acquire()
                         val nitroCode =
