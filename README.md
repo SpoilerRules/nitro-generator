@@ -1,17 +1,21 @@
-<div style="text-align: center;">
+<h1 style="text-align: center;">
+  <b>Spoili's Nitro Generator</b>
+</h1>
 
-# Spoili's Nitro Generator
+<p style="text-align: center;">
+  This Nitro generator is created with the user's experience as the top priority, establishing it as a standout application with a comprehensive range of features. It is equipped with a dependable and easy-to-navigate graphical user interface, simplifying the setup process for users. Although the probability of acquiring Nitro for free through this generator is quite low, the application itself is a testament to the dedication to quality and user satisfaction. The project was initially developed to kill time and spend more time with Kotlin/JVM while providing a valuable tool for the Discordian community.
+</p>
 
-This Nitro generator is created with the user's experience as the top priority, establishing it as a standout application with a comprehensive range of features. It is equipped with a dependable and easy-to-navigate graphical user interface, simplifying the setup process for users. Although the probability of acquiring Nitro for free through this generator is quite low, the application itself is a testament to the dedication to quality and user satisfaction. The project was initially developed to kill time and spend more time with Kotlin/JVM while providing a valuable tool for the Discordian community.
+<p style="text-align: center;">
+  <a href="https://github.com/SpoilerRules/nitro-generator"><img src="https://img.shields.io/github/stars/your-repository.svg?style=for-the-badge&color=slategray" alt="GitHub Stars"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg?style=for-the-badge&color=pink" alt="GPL-3.0 License"></a>
+</p>
 
-[![GitHub Stars](https://img.shields.io/github/stars/your-repository.svg?style=for-the-badge&color=slategray)](https://github.com/SpoilerRules/nitro-generator)
-[![GPL-3.0 License](https://img.shields.io/badge/license-GPL--3.0-blue.svg?style=for-the-badge&color=pink)](LICENSE)
-
-[![Build Status](https://img.shields.io/github/workflow/status/SpoilerRules/nitro-generator/Build?style=flat-square)](https://github.com/SpoilerRules/nitro-generator/actions)
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.23-blue.svg?style=flat-square&logo=kotlin)](https://kotlinlang.org/)
-[![Java](https://img.shields.io/badge/Java-11-blue.svg?style=flat-square&logo=java&logoColor=white)](https://www.oracle.com/java/technologies/javase-downloads.html)
-[![Gradle](https://img.shields.io/badge/Gradle-8.6-blue.svg?style=flat-square&logo=gradle&logoColor=white)](https://gradle.org/)
-</div>
+<p style="text-align: center;">
+  <a href="https://kotlinlang.org/"><img src="https://img.shields.io/badge/Kotlin-1.9.23-blue.svg?style=flat-square&logo=kotlin" alt="Kotlin"></a>
+  <a href="https://www.oracle.com/java/technologies/javase-downloads.html"><img src="https://img.shields.io/badge/Java-11-blue.svg?style=flat-square&logo=java&logoColor=white" alt="Java"></a>
+  <a href="https://gradle.org/"><img src="https://img.shields.io/badge/Gradle-8.6-blue.svg?style=flat-square&logo=gradle&logoColor=white" alt="Gradle"></a>
+</p>
 
 ## Table of Contents
 - [Key Features](#key-features)
