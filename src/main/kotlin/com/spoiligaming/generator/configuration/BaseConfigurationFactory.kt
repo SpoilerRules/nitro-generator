@@ -52,7 +52,7 @@ data class CustomProxy(
 }
 
 @Serializable
-data class AutoCl(
+data class AutoClaim(
     var enabled: Boolean = true,
     var retryTillSuccess: Boolean = true,
     var accountToken: String = "dGhpcyBpcyBhIGR1bW15IHRva2Vu"
@@ -73,7 +73,7 @@ data class BaseConfigurationFactory(
     @SerialName("General") var generalSettings: General = General(),
     @SerialName("Custom Proxy") var proxySettings: CustomProxy = CustomProxy(),
     @SerialName("Multi Threading") var multithreadingSettings: Multithreading = Multithreading(),
-    @SerialName("Auto Claim") var autoClaimSettings: AutoCl = AutoCl(),
+    @SerialName("Auto Claim") var autoClaimSettings: AutoClaim = AutoClaim(),
     @SerialName("Theme (unstable, do not modify)") var themeSettings: Theme = Theme()
 ) {
     companion object {
