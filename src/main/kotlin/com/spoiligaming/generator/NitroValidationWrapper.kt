@@ -32,17 +32,21 @@ object NitroValidationWrapper {
         }
     }
 
-    fun reactToResponseCode(responseCode: Int, nitroCode: String, nitroValidationRetries: Int, config: BaseConfigurationFactory, threadIdentity: String?, retryBehaviour: () -> Unit) {
+    fun reactToResponseCode(
+        responseCode: Int,
+        nitroCode: String,
+        nitroValidationRetries: Int,
+        config: BaseConfigurationFactory,
+        threadIdentity: String?,
+        retryBehaviour: () -> Unit
+    ) {
         val responseMessage = when (responseCode) {
             200, 204 -> {
                 SessionStatistics.validNitroCodes += 1
                 if (config.autoClaimSettings.enabled) {
-                    runCatching {
-                        claimValidNitro(nitroCode)
-                    }.onFailure {
-                        alertWebhook(nitroCode, false)
-                    }.onSuccess {
-                        alertWebhook(nitroCode, true)
+                    when (claimValidNitro(nitroCode, false, config)) {
+                        0 -> alertWebhook(nitroCode, false)
+                        else -> alertWebhook(nitroCode, true)
                     }
                 } else if (config.generalSettings.alertWebhook) {
                     alertWebhook(nitroCode, null)
@@ -89,8 +93,9 @@ object NitroValidationWrapper {
             }
 
             with(connection!!.outputStream) {
-                this.write(if (isAutoclaimSucceeded != null) {
-                    """
+                this.write(
+                    if (isAutoclaimSucceeded != null) {
+                        """
         {
           "embeds": [
             {
@@ -103,9 +108,10 @@ object NitroValidationWrapper {
           ]
         }
         """.trimIndent()
-                } else {
-                    "{\"content\":\"Valid nitro code: $nitroCode | [Claim here](https://discord.gift/$nitroCode>)\"}"
-                }.toByteArray())
+                    } else {
+                        "{\"content\":\"Valid nitro code: $nitroCode | [Claim here](https://discord.gift/$nitroCode>)\"}"
+                    }.toByteArray()
+                )
                 this.flush()
             }
 
@@ -130,26 +136,72 @@ object NitroValidationWrapper {
         }.socketFactory)
     }
 
-    private fun claimValidNitro(nitroCode: String) {
-        with(URI("https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode/redeem").toURL().openConnection() as HttpURLConnection) {
-            requestMethod = "POST"
-            setRequestProperty(
+    fun claimValidNitro(nitroCode: String, isTokenValidated: Boolean, config: BaseConfigurationFactory): Int {
+        val setProperties: (HttpURLConnection, BaseConfigurationFactory) -> Unit = { connection, configReference ->
+            connection.setRequestProperty(
                 "User-Agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
             )
-            setRequestProperty(
+            connection.setRequestProperty(
                 "Authorization",
-                BaseConfigurationFactory.getInstance().autoClaimSettings.accountToken
+                configReference.autoClaimSettings.accountToken
             )
+        }
 
-            responseCode.takeIf { it != HttpURLConnection.HTTP_OK && it != HttpURLConnection.HTTP_NO_CONTENT }?.let {
-                Logger.printError("Failed to send Discord webhook. Server responded with code $it: ${responseMessage ?: "No response message"}")
+        if (!isTokenValidated) {
+            with(URI("https://discordapp.com/api/v9/users/@me").toURL().openConnection() as HttpURLConnection) {
+                setRequestProperty("Content-Type", "application/json")
+                setProperties(this, config)
+
                 disconnect()
-                claimValidNitro(nitroCode)
+                when (responseCode) {
+                    HttpURLConnection.HTTP_OK, HttpURLConnection.HTTP_NO_CONTENT -> {
+                        val jsonResponse = inputStream.bufferedReader().use { it.readText() }.split("[{},]".toRegex())
+                            .filter { it.contains(":") }
+                            .map { it.split(":", limit = 2) }
+                            .associate { (key, value) -> key.trim(' ', '"') to value.trim(' ', '"') }
+                        Logger.printDebug("Successfully authenticated on Discord as ${jsonResponse["global_name"]} (${jsonResponse["username"]}) using the provided token for Auto-Claim.")
+                    }
+
+                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
+                        Logger.printWarning("The token you entered for Auto-Claim is invalid. Auto-Claim functionality will be disrupted until a valid token is provided.")
+                        return 1
+                    }
+
+                    else -> {
+                        Logger.printError("Failed to log in using the provided account token for Auto-Claim.")
+                        return 1
+                    }
+                }
             }
+        }
+
+        with(
+            URI("https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode/redeem").toURL()
+                .openConnection() as HttpURLConnection
+        ) {
+            requestMethod = "POST"
+            setProperties(this, config)
 
             disconnect()
+            responseCode.takeIf { it != HttpURLConnection.HTTP_OK && it != HttpURLConnection.HTTP_NO_CONTENT }
+                ?.let {
+                    return when (it) {
+                        HttpURLConnection.HTTP_UNAUTHORIZED -> { // should not be reachable but added, just in case
+                            Logger.printWarning("The token you entered for Auto-Claim is potentially incorrect.")
+                            1
+                        }
+
+                        HttpURLConnection.HTTP_NOT_FOUND -> {
+                            Logger.printError("The Nitro code ($nitroCode) that was attempted to be claimed has already been claimed.")
+                            1
+                        }
+
+                        else -> claimValidNitro(nitroCode, true, config)
+                    }
+                }
         }
+        return 0
     }
 
     inline fun retryValidation(
@@ -165,7 +217,7 @@ object NitroValidationWrapper {
                 Logger.printWarning("${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of $nitroCode in ${CEnum.ORANGE}${index + 1}${CEnum.RESET} seconds.")
                 Thread.sleep(1000)
             }
-        } else if (configuration.proxySettings.mode in 2..3 && configuration.proxySettings.enabled  || configuration.generalSettings.retryDelay <= 0) {
+        } else if (configuration.proxySettings.mode in 2..3 && configuration.proxySettings.enabled || configuration.generalSettings.retryDelay <= 0) {
             Logger.printWarning("${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of nitro code: $nitroCode.")
         }
 

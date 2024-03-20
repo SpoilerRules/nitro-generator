@@ -11,7 +11,6 @@ import kotlin.concurrent.timer
 
 object GeneratorBean {
     var isGenerationPaused: BooleanProperty = SimpleBooleanProperty(false)
-    var fakeValidation = false
 
     fun startGeneratingNitro() {
         timer(
@@ -30,35 +29,29 @@ object GeneratorBean {
                 return@timer Logger.printSuccess("Generated nitro code: $nitroCode")
             }
 
-            when (fakeValidation) {
-                true -> {
-                    Logger.printSuccess("The code $nitroCode is valid.")
-                    SessionStatistics.validNitroCodes += 1
-                    NitroValidationWrapper.alertWebhook(nitroCode, null)
+            if ((config.proxySettings.proxyFilePath.isNotEmpty() && config.proxySettings.mode == 2 && config.proxySettings.enabled) || config.proxySettings.enabled && config.proxySettings.mode != 2 || !config.proxySettings.enabled) { // very fragile, please do not touch this
+                when {
+                    config.proxySettings.mode in 1..3 && !config.multithreadingSettings.enabled -> NitroValidatorOrdinary.validateNitro(
+                        nitroCode,
+                        config,
+                        0
+                    )
+                    else -> handleConcurrentValidation(nitroCode, config)
                 }
-
-                false -> {
-                    val proxy = config.proxySettings
-                    val multithreading = config.multithreadingSettings.enabled
-                    if ((proxy.proxyFilePath.isNotEmpty() && proxy.mode == 2 && proxy.enabled) || proxy.enabled && proxy.mode != 2 || !proxy.enabled) {
-                        when {
-                            proxy.mode in 1..3 && !multithreading -> NitroValidatorOrdinary.validateNitro(
-                                nitroCode,
-                                config,
-                                0
-                            )
-
-                            else -> handleConcurrentValidation(nitroCode, config)
-                        }
-                    } else if (proxy.proxyFilePath.isEmpty() && proxy.mode == 2 && proxy.enabled) {
-                        Logger.printWarning("Nitro generation was skipped because ${CEnum.UNDERLINE}the Proxy File path was empty${CEnum.RESET}, even though Custom Proxy mode was set to 'One File' and enabled. Please check your proxy settings.")
-                    }
-                }
+            } else if (config.proxySettings.proxyFilePath.isEmpty() && config.proxySettings.mode == 2 && config.proxySettings.enabled) {
+                Logger.printWarning("Nitro generation was skipped because ${CEnum.UNDERLINE}the Proxy File path was empty${CEnum.RESET}, even though Custom Proxy mode was set to 'One File' and enabled. Please check your proxy settings.")
             }
         }
     }
 
     private fun handleConcurrentValidation(initialNitroCode: String, config: BaseConfigurationFactory) {
+        val validateNitro: (String, BaseConfigurationFactory, String) -> Unit = { nitroCode, configReference, threadIdentifier ->
+            when (configReference.proxySettings.mode) {
+                1 -> NitroValidatorSimpleMt.validateNitro(nitroCode, configReference, 0, threadIdentifier)
+                in 2..3 -> NitroValidatorAdvancedMt.validateNitro(nitroCode, configReference, 0, threadIdentifier)
+            }
+        }
+
         val semaphore = Semaphore(config.multithreadingSettings.threadLimit)
 
         runBlocking {
@@ -83,13 +76,6 @@ object GeneratorBean {
                     }
                 }
             }
-        }
-    }
-
-    private fun validateNitro(nitroCode: String, config: BaseConfigurationFactory, threadIdentifier: String) {
-        when (config.proxySettings.mode) {
-            1 -> NitroValidatorSimpleMt.validateNitro(nitroCode, config, 0, threadIdentifier)
-            in 2..3 -> NitroValidatorAdvancedMt.validateNitro(nitroCode, config, 0, threadIdentifier)
         }
     }
 

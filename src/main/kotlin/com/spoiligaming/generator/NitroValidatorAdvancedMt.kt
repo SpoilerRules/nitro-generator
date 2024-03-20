@@ -28,6 +28,7 @@ object NitroValidatorAdvancedMt {
                 NitroValidationWrapper.disableProxySecurity()
                 NitroValidationWrapper.setProperties(this, config)
 
+                disconnect()
                 NitroValidationWrapper.reactToResponseCode(
                     responseCode,
                     nitroCode,
@@ -45,9 +46,6 @@ object NitroValidatorAdvancedMt {
                         )
                     }
                 }
-
-                // explicitly disconnect to free resources as soon as possible
-                disconnect()
             }
         }.onFailure {
             Logger.printError("[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] Occurred while validating a nitro code: ${it.message}")

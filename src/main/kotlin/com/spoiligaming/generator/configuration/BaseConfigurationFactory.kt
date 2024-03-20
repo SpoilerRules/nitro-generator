@@ -87,30 +87,28 @@ data class BaseConfigurationFactory(
         }
 
         @Synchronized
-        fun getInstance(): BaseConfigurationFactory = configFactoryInstance ?: BaseConfigurationFactory().also {
-            configFactoryInstance = it
-            ensureConfigExists(it, false)
-        }
-
-        private fun ensureConfigExists(config: BaseConfigurationFactory, updateOnly: Boolean) {
-            if (!configFile.exists() || updateOnly) {
-                runCatching {
-                    configFile.writeText(jsonFormatter.encodeToString(serializer(), config))
-                }.also { result ->
-                    if (!updateOnly) {
-                        result.onFailure {
-                            Logger.printError("Failed to create configuration file: ${it.message}")
-                        }.onSuccess {
-                            Logger.printSuccess("Created configuration file.")
-                        }
+        fun getInstance(): BaseConfigurationFactory {
+            configFactoryInstance = configFactoryInstance ?: if (configFile.exists()) {
+                jsonFormatter.decodeFromString(serializer(), configFile.readText())
+            } else {
+                BaseConfigurationFactory().also {
+                    runCatching {
+                        configFile.writeText(jsonFormatter.encodeToString(serializer(), it))
+                    }.onFailure {
+                        Logger.printError("Failed to create configuration file: ${it.message}")
+                    }.onSuccess {
+                        Logger.printSuccess("Created configuration file.")
                     }
                 }
             }
+            return configFactoryInstance!!
         }
 
         fun updateValue(updateFunction: BaseConfigurationFactory.() -> Unit) {
             isConfigUpdated = true
-            getInstance().apply(updateFunction).also { ensureConfigExists(it, true) }
+            getInstance().apply(updateFunction).also {
+                configFile.writeText(jsonFormatter.encodeToString(serializer(), it))
+            }
         }
     }
 }

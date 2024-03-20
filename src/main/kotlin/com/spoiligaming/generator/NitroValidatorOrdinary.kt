@@ -41,6 +41,7 @@ object NitroValidatorOrdinary {
             with(getConnection(nitroCode, config)) {
                 NitroValidationWrapper.setProperties(this, config)
 
+                disconnect()
                 NitroValidationWrapper.reactToResponseCode(
                     responseCode,
                     nitroCode,
@@ -57,9 +58,6 @@ object NitroValidatorOrdinary {
                         )
                     }
                 }
-
-                // explicitly disconnect to free resources as soon as possible
-                disconnect()
             }
         }.onFailure {
             Logger.printError("Occurred while validating a nitro code: ${it.message}")
