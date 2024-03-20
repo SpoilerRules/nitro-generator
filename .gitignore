@@ -8,6 +8,8 @@ workspace/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+configuration.json
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
