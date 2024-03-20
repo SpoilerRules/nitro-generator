@@ -20,13 +20,10 @@ object NitroValidatorOrdinary {
      * Validates a nitro code against the Discord API.
      *
      * @param nitroCode The nitro code to validate.
-     * @param config The base configuration factory containing configuration settings.
      * @param retryCount The number of retry attempts for validation.
+     * @param config The base configuration factory containing configuration settings.
      */
-    fun validateNitro(nitroCode: String, config: BaseConfigurationFactory, retryCount: Int) {
-       /* Exception("Debugging Stack Trace").apply {
-            stackTrace.forEach { println(it) }
-        }*/
+    fun validateNitro(nitroCode: String, retryCount: Int, config: BaseConfigurationFactory) {
         if (GeneratorBean.isGenerationPaused.get()) {
             return
         }
@@ -50,11 +47,12 @@ object NitroValidatorOrdinary {
                     null
                 ) {
                     nitroValidationRetries++
+                    // KNOWN ISSUE: instantly starts validating another nitro code after current validation has completed
                     NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { code, _, _ ->
                         validateNitro(
                             code,
-                            BaseConfigurationFactory.getInstance(),
                             nitroValidationRetries,
+                            BaseConfigurationFactory.getInstance(),
                         )
                     }
                 }
@@ -65,7 +63,7 @@ object NitroValidatorOrdinary {
             if (config.generalSettings.retryTillValid) {
                 NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { code, _, _ ->
                     nitroValidationRetries++
-                    validateNitro(code, BaseConfigurationFactory.getInstance(), nitroValidationRetries)
+                    validateNitro(code, nitroValidationRetries, BaseConfigurationFactory.getInstance())
                 }
             }
         }

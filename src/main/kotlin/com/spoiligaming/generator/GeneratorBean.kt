@@ -3,14 +3,13 @@ package com.spoiligaming.generator
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
-import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import kotlinx.coroutines.*
 import java.util.concurrent.Semaphore
 import kotlin.concurrent.timer
 
 object GeneratorBean {
-    var isGenerationPaused: BooleanProperty = SimpleBooleanProperty(false)
+    var isGenerationPaused = SimpleBooleanProperty(false)
 
     fun startGeneratingNitro() {
         timer(
@@ -32,8 +31,8 @@ object GeneratorBean {
                 when {
                     config.proxySettings.mode in 1..3 && !config.multithreadingSettings.enabled -> NitroValidatorOrdinary.validateNitro(
                         nitroCode,
-                        config,
-                        0
+                        0,
+                        config
                     )
                     else -> handleConcurrentValidation(nitroCode, config)
                 }

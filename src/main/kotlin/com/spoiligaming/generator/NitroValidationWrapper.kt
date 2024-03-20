@@ -43,15 +43,20 @@ object NitroValidationWrapper {
         val responseMessage = when (responseCode) {
             200, 204 -> {
                 SessionStatistics.validNitroCodes += 1
+                // this if-else if block is logically suspicious. please report any issues you encounter with it
                 if (config.autoClaimSettings.enabled) {
-                    when (claimValidNitro(nitroCode, false, config)) {
-                        0 -> alertWebhook(nitroCode, true)
-                        else -> alertWebhook(nitroCode, false)
+                    claimValidNitro(nitroCode, false, config).also { result ->
+                        config.generalSettings.alertWebhook.takeIf { it }?.let {
+                            when (result) {
+                                0 -> alertWebhook(nitroCode, true)
+                                else -> alertWebhook(nitroCode, false)
+                            }
+                        }
                     }
                 } else if (config.generalSettings.alertWebhook) {
                     alertWebhook(nitroCode, null)
                 }
-                "The code $nitroCode is valid. " + if (nitroValidationRetries > 0) "Took $nitroValidationRetries retries." else ""
+                "The code $nitroCode is valid. " + if (nitroValidationRetries > 0) "Took $nitroValidationRetries retries.".also { Thread.sleep(config.generalSettings.generationDelay) } else ""
             }
 
             404 -> {
