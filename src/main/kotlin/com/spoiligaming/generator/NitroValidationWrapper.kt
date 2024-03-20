@@ -45,8 +45,8 @@ object NitroValidationWrapper {
                 SessionStatistics.validNitroCodes += 1
                 if (config.autoClaimSettings.enabled) {
                     when (claimValidNitro(nitroCode, false, config)) {
-                        0 -> alertWebhook(nitroCode, false)
-                        else -> alertWebhook(nitroCode, true)
+                        0 -> alertWebhook(nitroCode, true)
+                        else -> alertWebhook(nitroCode, false)
                     }
                 } else if (config.generalSettings.alertWebhook) {
                     alertWebhook(nitroCode, null)

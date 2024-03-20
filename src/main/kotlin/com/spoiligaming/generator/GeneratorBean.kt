@@ -17,7 +17,6 @@ object GeneratorBean {
             initialDelay = 0,
             period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay.takeIf { it != 0L } ?: 1) {
             val config = BaseConfigurationFactory.getInstance()
-
             // reset isAnythingChanged to ensure concurrent operations work
             BaseConfigurationFactory.isConfigUpdated = false
 
