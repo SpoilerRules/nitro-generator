@@ -28,7 +28,7 @@ object ElementFilePicker {
     ): VBox {
         val selectedFileLabel = Label().apply {
             style = "-fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
-            text = if (BaseConfigurationFactory.getInstance().customProxy.proxyFilePath.isEmpty()) "No proxy file is selected." else "Selected proxy file: ${File(initialValue).name}"
+            text = if (BaseConfigurationFactory.getInstance().proxySettings.proxyFilePath.isEmpty()) "No proxy file is selected." else "Selected proxy file: ${File(initialValue).name}"
         }
 
         return VBox().apply {

@@ -57,7 +57,7 @@ object ElementList {
             setOnAction {
                 val selectedValue = this.value
                 BaseConfigurationFactory.updateValue {
-                    customProxy.updateAction(selectedValue)
+                    proxySettings.updateAction(selectedValue)
                 }
             }
             buttonCell = object : ListCell<String>() {

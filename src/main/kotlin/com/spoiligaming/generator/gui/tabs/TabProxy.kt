@@ -44,26 +44,26 @@ class TabProxy : ITab {
                     "Custom Proxy",
                     257.0,
                     ElementBoolean.addBooleanValue(
-                        BaseConfigurationFactory.getInstance().customProxy.enabled,
+                        BaseConfigurationFactory.getInstance().proxySettings.enabled,
                         "Enabled",
                         null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                customProxy.enabled = newValue
+                                proxySettings.enabled = newValue
                             }
                             // explicitly load proxies only when multi threading is enabled. the non-mt-supported simple validators will automatically load proxies on validation.
-                            if (newValue && BaseConfigurationFactory.getInstance().multithreading.enabled && BaseConfigurationFactory.getInstance().customProxy.mode in 2..3) ProxyHandler.loadProxies()
-                            if (newValue && BaseConfigurationFactory.getInstance().customProxy.mode == 1) ProxyHandler.unloadProxies()
+                            if (newValue && BaseConfigurationFactory.getInstance().multithreadingSettings.enabled && BaseConfigurationFactory.getInstance().proxySettings.mode in 2..3) ProxyHandler.loadProxies()
+                            if (newValue && BaseConfigurationFactory.getInstance().proxySettings.mode == 1) ProxyHandler.unloadProxies()
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
                     ),
                     ElementBoolean.addBooleanValue(
-                        BaseConfigurationFactory.getInstance().customProxy.recursiveUsaqe,
+                        BaseConfigurationFactory.getInstance().proxySettings.recursiveUsaqe,
                         "Recursive Usage",
                         TooltipKeyAccessor.getValue("recursive.usage"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                customProxy.recursiveUsaqe = newValue
+                                proxySettings.recursiveUsaqe = newValue
                             }
                             if (newValue) NitroValidatorAdvancedMt.isNextProxyAvailable.set(true)
                         },
@@ -71,14 +71,14 @@ class TabProxy : ITab {
                     ),
                     ElementList.addListValue(
                         FXCollections.observableArrayList("Static", "One File", "Online API"),
-                        when (BaseConfigurationFactory.getInstance().customProxy.mode) {
+                        when (BaseConfigurationFactory.getInstance().proxySettings.mode) {
                             1 -> "Static"
                             2 -> "One File"
                             3 -> "Online API"
                             else -> "Static"
                         },
                         { newValue: String ->
-                            val previousMode = BaseConfigurationFactory.getInstance().customProxy.mode
+                            val previousMode = BaseConfigurationFactory.getInstance().proxySettings.mode
                             val mode = when (newValue) {
                                 "Static" -> 1
                                 "One File" -> 2
@@ -86,8 +86,8 @@ class TabProxy : ITab {
                                 else -> 1
                             }
 
-                            BaseConfigurationFactory.getInstance().customProxy.mode = mode
-                            if (previousMode != mode && mode != 1 && BaseConfigurationFactory.getInstance().multithreading.enabled && BaseConfigurationFactory.getInstance().customProxy.enabled) {
+                            BaseConfigurationFactory.getInstance().proxySettings.mode = mode
+                            if (previousMode != mode && mode != 1 && BaseConfigurationFactory.getInstance().multithreadingSettings.enabled && BaseConfigurationFactory.getInstance().proxySettings.enabled) {
                                 ProxyHandler.loadProxies()
                             }
                             // free resources when the new mode is static
@@ -100,39 +100,39 @@ class TabProxy : ITab {
                     ),
                     ElementList.addListValue(
                         FXCollections.observableArrayList("HTTP", "SOCKS"),
-                        when (BaseConfigurationFactory.getInstance().customProxy.protocol) {
+                        when (BaseConfigurationFactory.getInstance().proxySettings.protocol) {
                             1 -> "HTTP"
                             2 -> "SOCKS"
                             else -> "HTTP"
                         },
                         { newValue: String ->
                             when (newValue) {
-                                "HTTP" -> BaseConfigurationFactory.getInstance().customProxy.protocol = 1
-                                "SOCKS" -> BaseConfigurationFactory.getInstance().customProxy.protocol = 2
-                                else -> BaseConfigurationFactory.getInstance().customProxy.protocol = 1
+                                "HTTP" -> BaseConfigurationFactory.getInstance().proxySettings.protocol = 1
+                                "SOCKS" -> BaseConfigurationFactory.getInstance().proxySettings.protocol = 2
+                                else -> BaseConfigurationFactory.getInstance().proxySettings.protocol = 1
                             }
                         },
                         "Protocol",
                         Insets(10.0, 0.0, 0.0, 10.0)
                     ),
                     ElementText.addTextValue(
-                        BaseConfigurationFactory.getInstance().customProxy.host,
+                        BaseConfigurationFactory.getInstance().proxySettings.host,
                         "Host",
                         TooltipKeyAccessor.getValue("available.static.mode"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                customProxy.host = newValue
+                                proxySettings.host = newValue
                             }
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
                     ),
                     ElementText.addTextValue(
-                        BaseConfigurationFactory.getInstance().customProxy.port,
+                        BaseConfigurationFactory.getInstance().proxySettings.port,
                         "Port",
                         TooltipKeyAccessor.getValue("available.static.mode"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                customProxy.port = newValue
+                                proxySettings.port = newValue
                             }
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
@@ -142,34 +142,34 @@ class TabProxy : ITab {
                     this@proxyPaneApply,
                     "Additional Authentication",
                     150.0, ElementBoolean.addBooleanValue(
-                        BaseConfigurationFactory.getInstance().customProxy.isAuthenticationRequired,
+                        BaseConfigurationFactory.getInstance().proxySettings.isAuthenticationRequired,
                         "Enabled",
                         TooltipKeyAccessor.getValue("available.static.mode"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                customProxy.isAuthenticationRequired = newValue
+                                proxySettings.isAuthenticationRequired = newValue
                             }
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
                     ),
                     ElementText.addTextValue(
-                        BaseConfigurationFactory.getInstance().customProxy.username,
+                        BaseConfigurationFactory.getInstance().proxySettings.username,
                         "Username",
                         null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                customProxy.username = newValue
+                                proxySettings.username = newValue
                             }
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
                     ),
                     ElementText.addTextValue(
-                        BaseConfigurationFactory.getInstance().customProxy.password,
+                        BaseConfigurationFactory.getInstance().proxySettings.password,
                         "Password",
                         null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                customProxy.password = newValue
+                                proxySettings.password = newValue
                             }
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
@@ -181,34 +181,34 @@ class TabProxy : ITab {
                     195.0,
                     ElementFilePicker.addTextValue(
                         this@proxyPaneApply,
-                        BaseConfigurationFactory.getInstance().customProxy.proxyFilePath,
+                        BaseConfigurationFactory.getInstance().proxySettings.proxyFilePath,
                         TooltipKeyAccessor.getValue("proxy.file.path"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                customProxy.proxyFilePath = newValue
+                                proxySettings.proxyFilePath = newValue
                             }
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
                     ),
                     ElementNote.addNote("Settings below will not take effect dynamically.", "13"),
                     ElementText.addTextValue(
-                        if (BaseConfigurationFactory.getInstance().customProxy.rawContentSeparator == "\n") "\\n" else BaseConfigurationFactory.getInstance().customProxy.rawContentSeparator,
+                        if (BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator == "\n") "\\n" else BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator,
                         "Content Separator",
                         null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                customProxy.rawContentSeparator = newValue
+                                proxySettings.rawContentSeparator = newValue
                             }
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
                     ),
                     ElementText.addTextValue(
-                        BaseConfigurationFactory.getInstance().customProxy.rawContentLinks,
+                        BaseConfigurationFactory.getInstance().proxySettings.rawContentLinks,
                         "Raw Content Link(s)",
                         TooltipKeyAccessor.getValue("raw.content.description"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                customProxy.rawContentLinks = newValue
+                                proxySettings.rawContentLinks = newValue
                             }
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)

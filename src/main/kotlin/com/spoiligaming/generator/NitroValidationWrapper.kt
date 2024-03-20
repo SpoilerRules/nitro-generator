@@ -20,12 +20,12 @@ object NitroValidationWrapper {
                 "User-Agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
             )
-            if (config.customProxy.isAuthenticationRequired && config.customProxy.enabled && config.customProxy.mode == 1) {
+            if (config.proxySettings.isAuthenticationRequired && config.proxySettings.enabled && config.proxySettings.mode == 1) {
                 setRequestProperty(
                     "Proxy-Authorization",
                     "Basic ${
                         Base64.getEncoder()
-                            .encodeToString("${config.customProxy.username}:${config.customProxy.password}".toByteArray())
+                            .encodeToString("${config.proxySettings.username}:${config.proxySettings.password}".toByteArray())
                     }"
                 )
             }
@@ -160,12 +160,12 @@ object NitroValidationWrapper {
         crossinline validateFunction: (String, BaseConfigurationFactory, Int) -> Unit
     ) {
         // no need for delay between retries when retry delay is <= 0 or custom proxy is enabled and custom proxy mode is in the range 2 to 3.
-        if (configuration.generalSettings.retryDelay > 0 && !(configuration.customProxy.enabled && configuration.customProxy.mode in 2..3)) {
+        if (configuration.generalSettings.retryDelay > 0 && !(configuration.proxySettings.enabled && configuration.proxySettings.mode in 2..3)) {
             for (index in (configuration.generalSettings.retryDelay - 1) downTo 0) {
                 Logger.printWarning("${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of $nitroCode in ${CEnum.ORANGE}${index + 1}${CEnum.RESET} seconds.")
                 Thread.sleep(1000)
             }
-        } else if (configuration.customProxy.mode in 2..3 && configuration.customProxy.enabled  || configuration.generalSettings.retryDelay <= 0) {
+        } else if (configuration.proxySettings.mode in 2..3 && configuration.proxySettings.enabled  || configuration.generalSettings.retryDelay <= 0) {
             Logger.printWarning("${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of nitro code: $nitroCode.")
         }
 

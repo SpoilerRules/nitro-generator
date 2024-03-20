@@ -72,29 +72,29 @@ object NitroValidatorAdvancedMt {
         config: BaseConfigurationFactory
     ): HttpURLConnection {
         val proxy = when {
-            !config.customProxy.enabled -> Proxy.NO_PROXY
-            else -> when (config.customProxy.mode) {
+            !config.proxySettings.enabled -> Proxy.NO_PROXY
+            else -> when (config.proxySettings.mode) {
                 // keeping 1 case, we might merge advanced and simple mt validators.
                 1 -> Proxy(
-                    config.customProxy.getProxyType(config.customProxy.protocol).also {
-                        if (it == Proxy.Type.SOCKS && config.customProxy.isAuthenticationRequired) {
+                    config.proxySettings.getProxyType(config.proxySettings.protocol).also {
+                        if (it == Proxy.Type.SOCKS && config.proxySettings.isAuthenticationRequired) {
                             Authenticator.setDefault(object : Authenticator() {
                                 override fun getPasswordAuthentication(): PasswordAuthentication {
                                     return PasswordAuthentication(
-                                        config.customProxy.username,
-                                        config.customProxy.password.toCharArray()
+                                        config.proxySettings.username,
+                                        config.proxySettings.password.toCharArray()
                                     )
                                 }
                             })
                         }
                     },
-                    InetSocketAddress(config.customProxy.host, config.customProxy.port.toInt())
+                    InetSocketAddress(config.proxySettings.host, config.proxySettings.port.toInt())
                 )
 
                 else -> ProxyHandler.getNextProxy()?.let { proxyInfo ->
                     Logger.printDebug("[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] Using proxy: ${CEnum.CYAN}${proxyInfo.first}:${proxyInfo.second}${CEnum.RESET}")
                     Proxy(
-                        config.customProxy.getProxyType(config.customProxy.protocol),
+                        config.proxySettings.getProxyType(config.proxySettings.protocol),
                         InetSocketAddress(proxyInfo.first, proxyInfo.second)
                     )
                 }

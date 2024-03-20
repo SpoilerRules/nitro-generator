@@ -24,21 +24,21 @@ object NitroValidatorSimpleMt {
             with(
                 URI("https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode?with_application=false&with_subscription_plan=true").toURL()
                     .openConnection(
-                        if (config.customProxy.enabled && config.customProxy.mode == 1) {
+                        if (config.proxySettings.enabled && config.proxySettings.mode == 1) {
                             Proxy(
-                                config.customProxy.getProxyType(config.customProxy.protocol).also {
-                                    if (it == Proxy.Type.SOCKS && config.customProxy.isAuthenticationRequired) {
+                                config.proxySettings.getProxyType(config.proxySettings.protocol).also {
+                                    if (it == Proxy.Type.SOCKS && config.proxySettings.isAuthenticationRequired) {
                                         Authenticator.setDefault(object : Authenticator() {
                                             override fun getPasswordAuthentication(): PasswordAuthentication {
                                                 return PasswordAuthentication(
-                                                    config.customProxy.username,
-                                                    config.customProxy.password.toCharArray()
+                                                    config.proxySettings.username,
+                                                    config.proxySettings.password.toCharArray()
                                                 )
                                             }
                                         })
                                     }
                                 },
-                                InetSocketAddress(config.customProxy.host, config.customProxy.port.toInt())
+                                InetSocketAddress(config.proxySettings.host, config.proxySettings.port.toInt())
                             )
                         } else {
                             Proxy.NO_PROXY

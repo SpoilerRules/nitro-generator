@@ -85,15 +85,15 @@ object ProxyHandler {
             stackTrace.forEach { println(it) }
         }*/
 
-        when (BaseConfigurationFactory.getInstance().customProxy.mode) {
+        when (BaseConfigurationFactory.getInstance().proxySettings.mode) {
             1 -> {
                 "Proxy Mode was set to 'Static', and ProxyHandler class cannot be used for Static mode. Please contact your developer for assistance.".run {
                     Logger.printError(this)
                     throw UnsupportedOperationException(this)
                 }
             }
-            2 -> loadProxiesFromFile(BaseConfigurationFactory.getInstance().customProxy.proxyFilePath)
-            3 -> loadProxiesFromURL(BaseConfigurationFactory.getInstance().customProxy.rawContentLinks.split(",").map { it.trim() }, BaseConfigurationFactory.getInstance().customProxy.rawContentSeparator)
+            2 -> loadProxiesFromFile(BaseConfigurationFactory.getInstance().proxySettings.proxyFilePath)
+            3 -> loadProxiesFromURL(BaseConfigurationFactory.getInstance().proxySettings.rawContentLinks.split(",").map { it.trim() }, BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator)
         }
     }
 
@@ -105,7 +105,7 @@ object ProxyHandler {
         }
 
         if (proxyIndex.get() >= proxies.size) {
-            if (BaseConfigurationFactory.getInstance().customProxy.recursiveUsaqe) {
+            if (BaseConfigurationFactory.getInstance().proxySettings.recursiveUsaqe) {
                 Logger.printWarning("All proxies are exhausted. Starting from the beginning of the proxy list.")
                 proxyIndex.set(0)
             } else {

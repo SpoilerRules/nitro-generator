@@ -1,7 +1,6 @@
 package com.spoiligaming.generator.gui
 
 import com.spoiligaming.generator.GeneratorBean
-import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.Logger
 import javafx.application.Application
 import javafx.beans.binding.Bindings
@@ -22,8 +21,8 @@ class Initializer : Application() {
     private var yOffset = 0.0
 
     override fun start(primaryStage: Stage) {
-        System.setProperty("prism.lcdtext", "false");
-        System.setProperty("prism.text", "t2k");
+        System.setProperty("prism.lcdtext", "false")
+        System.setProperty("prism.text", "t2k")
         val borderPane = BorderPane()
 
         borderPane.left = TabContainer()
@@ -66,7 +65,6 @@ class Initializer : Application() {
         borderPane.bottom = addFundamentalButtons(primaryStage)
 
         primaryStage.show()
-        BaseConfigurationFactory.createConfig()
         GeneratorBean.startGeneratingNitro()
     }
 

@@ -16,7 +16,7 @@ data class General(
     @SerialName("alertWebhookForValidNitroCode") var alertWebhook: Boolean = true,
     var discordWebhookURL: String = "https://dummylink.com/suspicious-webhook/",
     @SerialName("retry") var retryTillValid: Boolean = true,
-    var retryDelay: Int = 3
+    var retryDelay: Int = 5
 )
 
 @Serializable
@@ -52,7 +52,7 @@ data class CustomProxy(
 }
 
 @Serializable
-data class AutoClaimSettings(
+data class AutoCl(
     var enabled: Boolean = true,
     var retryTillSuccess: Boolean = true,
     var accountToken: String = "dGhpcyBpcyBhIGR1bW15IHRva2Vu"
@@ -71,15 +71,15 @@ data class Theme(
 @Serializable
 data class BaseConfigurationFactory(
     @SerialName("General") var generalSettings: General = General(),
-    @SerialName("Custom Proxy") var customProxy: CustomProxy = CustomProxy(),
-    @SerialName("Multi Threading") var multithreading: Multithreading = Multithreading(),
-    @SerialName("Auto Claim") var autoClaimSettings: AutoClaimSettings = AutoClaimSettings(),
+    @SerialName("Custom Proxy") var proxySettings: CustomProxy = CustomProxy(),
+    @SerialName("Multi Threading") var multithreadingSettings: Multithreading = Multithreading(),
+    @SerialName("Auto Claim") var autoClaimSettings: AutoCl = AutoCl(),
     @SerialName("Theme (unstable, do not modify)") var themeSettings: Theme = Theme()
 ) {
     companion object {
-        var isAnythingChanged: Boolean = false
+        var isConfigUpdated: Boolean = false
 
-        private var pcFactoryInstance: BaseConfigurationFactory? = null
+        private var configFactoryInstance: BaseConfigurationFactory? = null
         private val configFile = File("configuration.json")
         private val jsonFormatter = Json {
             encodeDefaults = true
@@ -87,37 +87,30 @@ data class BaseConfigurationFactory(
         }
 
         @Synchronized
-        fun getInstance(): BaseConfigurationFactory {
-            pcFactoryInstance = pcFactoryInstance ?: if (configFile.exists()) {
-                jsonFormatter.decodeFromString(serializer(), configFile.readText())
-            } else {
-                BaseConfigurationFactory().also {
-                    configFile.writeText(jsonFormatter.encodeToString(serializer(), it))
-                }
-            }
-            return pcFactoryInstance!!
+        fun getInstance(): BaseConfigurationFactory = configFactoryInstance ?: BaseConfigurationFactory().also {
+            configFactoryInstance = it
+            ensureConfigExists(it, false)
         }
 
-        fun createConfig() {
-            if (!configFile.exists()) {
+        private fun ensureConfigExists(config: BaseConfigurationFactory, updateOnly: Boolean) {
+            if (!configFile.exists() || updateOnly) {
                 runCatching {
-                    configFile.writeText(jsonFormatter.encodeToString(serializer(), getInstance()))
-                }.onFailure {
-                    Logger.printError("Failed to create configuration file: ${it.message}")
-                }.onSuccess {
-                    Logger.printSuccess("Created configuration file.")
+                    configFile.writeText(jsonFormatter.encodeToString(serializer(), config))
+                }.also { result ->
+                    if (!updateOnly) {
+                        result.onFailure {
+                            Logger.printError("Failed to create configuration file: ${it.message}")
+                        }.onSuccess {
+                            Logger.printSuccess("Created configuration file.")
+                        }
+                    }
                 }
             }
         }
 
         fun updateValue(updateFunction: BaseConfigurationFactory.() -> Unit) {
-            getInstance().apply(updateFunction)
-            isAnythingChanged = true
-            configFile.run {
-                if (exists()) {
-                    writeText(jsonFormatter.encodeToString(serializer(), getInstance()))
-                } else createConfig()
-            }
+            isConfigUpdated = true
+            getInstance().apply(updateFunction).also { ensureConfigExists(it, true) }
         }
     }
 }

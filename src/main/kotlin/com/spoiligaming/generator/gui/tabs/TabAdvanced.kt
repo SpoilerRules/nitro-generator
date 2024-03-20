@@ -32,12 +32,12 @@ class TabAdvanced : ITab {
             CommonElement().run {
                 createContentField(
                     this@apply, "Multi Threading", 150.0, ElementBoolean.addBooleanValue(
-                        BaseConfigurationFactory.getInstance().multithreading.enabled,
+                        BaseConfigurationFactory.getInstance().multithreadingSettings.enabled,
                         "Enabled",
                         null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                multithreading.enabled = newValue
+                                multithreadingSettings.enabled = newValue
                             }
                             if (newValue) {
                                 NitroValidatorAdvancedMt.isNextProxyAvailable.set(true)
@@ -46,22 +46,22 @@ class TabAdvanced : ITab {
                         Insets(10.0, 0.0, 0.0, 10.0)
                     ),
                     ElementValue.addUnitValue(
-                        BaseConfigurationFactory.getInstance().multithreading.threadLimit,
+                        BaseConfigurationFactory.getInstance().multithreadingSettings.threadLimit,
                         "Thread Amount",
                         null,
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                multithreading.threadLimit = newValue
+                                multithreadingSettings.threadLimit = newValue
                             }
                         }
                     ),
                     ElementValue.addUnitValue(
-                        BaseConfigurationFactory.getInstance().multithreading.threadLaunchDelay,
+                        BaseConfigurationFactory.getInstance().multithreadingSettings.threadLaunchDelay,
                         "Start Delay (ms)",
                         TooltipKeyAccessor.getValue("thread.start.delay"),
                         { newValue ->
                             BaseConfigurationFactory.updateValue {
-                                multithreading.threadLaunchDelay = newValue
+                                multithreadingSettings.threadLaunchDelay = newValue
                             }
                         }
                     )

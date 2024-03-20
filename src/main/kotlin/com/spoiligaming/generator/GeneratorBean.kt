@@ -20,7 +20,7 @@ object GeneratorBean {
             val config = BaseConfigurationFactory.getInstance()
 
             // reset isAnythingChanged to ensure concurrent operations work
-            BaseConfigurationFactory.isAnythingChanged = false
+            BaseConfigurationFactory.isConfigUpdated = false
 
             if (isGenerationPaused.get()) return@timer
 
@@ -38,8 +38,8 @@ object GeneratorBean {
                 }
 
                 false -> {
-                    val proxy = config.customProxy
-                    val multithreading = config.multithreading.enabled
+                    val proxy = config.proxySettings
+                    val multithreading = config.multithreadingSettings.enabled
                     if ((proxy.proxyFilePath.isNotEmpty() && proxy.mode == 2 && proxy.enabled) || proxy.enabled && proxy.mode != 2 || !proxy.enabled) {
                         when {
                             proxy.mode in 1..3 && !multithreading -> NitroValidatorOrdinary.validateNitro(
@@ -59,14 +59,14 @@ object GeneratorBean {
     }
 
     private fun handleConcurrentValidation(initialNitroCode: String, config: BaseConfigurationFactory) {
-        val semaphore = Semaphore(config.multithreading.threadLimit)
+        val semaphore = Semaphore(config.multithreadingSettings.threadLimit)
 
         runBlocking {
-            repeat(config.multithreading.threadLimit) {
+            repeat(config.multithreadingSettings.threadLimit) {
                 launch(Dispatchers.IO) {
                     var index = 0
 
-                    while (isActive && !BaseConfigurationFactory.isAnythingChanged && !isGenerationPaused.get()) {
+                    while (isActive && !BaseConfigurationFactory.isConfigUpdated && !isGenerationPaused.get()) {
                         semaphore.acquire()
                         val nitroCode =
                             if (index++ == 0) initialNitroCode else generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
@@ -79,7 +79,7 @@ object GeneratorBean {
                             )
                             semaphore.release()
                         }
-                        delay(config.multithreading.threadLaunchDelay)
+                        delay(config.multithreadingSettings.threadLaunchDelay)
                     }
                 }
             }
@@ -87,7 +87,7 @@ object GeneratorBean {
     }
 
     private fun validateNitro(nitroCode: String, config: BaseConfigurationFactory, threadIdentifier: String) {
-        when (config.customProxy.mode) {
+        when (config.proxySettings.mode) {
             1 -> NitroValidatorSimpleMt.validateNitro(nitroCode, config, 0, threadIdentifier)
             in 2..3 -> NitroValidatorAdvancedMt.validateNitro(nitroCode, config, 0, threadIdentifier)
         }
