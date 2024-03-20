@@ -49,11 +49,11 @@ object NitroValidatorOrdinary {
                     null
                 ) {
                     nitroValidationRetries++
-                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { code, _, count ->
+                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { code, _, _ ->
                         validateNitro(
                             code,
                             BaseConfigurationFactory.getInstance(),
-                            count,
+                            nitroValidationRetries,
                         )
                     }
                 }
@@ -65,9 +65,9 @@ object NitroValidatorOrdinary {
             Logger.printError("Occurred while validating a nitro code: ${it.message}")
 
             if (config.generalSettings.retryTillValid) {
-                nitroValidationRetries++
-                NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { code, _, count ->
-                    validateNitro(code, BaseConfigurationFactory.getInstance(), count)
+                NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { code, _, _ ->
+                    nitroValidationRetries++
+                    validateNitro(code, BaseConfigurationFactory.getInstance(), nitroValidationRetries)
                 }
             }
         }

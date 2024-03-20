@@ -56,11 +56,11 @@ object NitroValidatorSimpleMt {
                     threadIdentity
                 ) {
                     nitroValidationRetries++
-                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, threadIdentity) { code, _, count ->
+                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, threadIdentity) { code, _, _ ->
                         validateNitro(
                             code,
                             BaseConfigurationFactory.getInstance(),
-                            count,
+                            nitroValidationRetries,
                             threadIdentity
                         )
                     }
@@ -74,8 +74,8 @@ object NitroValidatorSimpleMt {
 
             if (config.generalSettings.retryTillValid) {
                 nitroValidationRetries++
-                NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, threadIdentity) { code, _, count ->
-                    validateNitro(code, BaseConfigurationFactory.getInstance(), count, threadIdentity)
+                NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, threadIdentity) { code, _, _ ->
+                    validateNitro(code, BaseConfigurationFactory.getInstance(), nitroValidationRetries, threadIdentity)
                 }
             }
         }.onSuccess {
