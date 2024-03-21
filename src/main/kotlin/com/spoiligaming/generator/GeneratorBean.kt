@@ -14,6 +14,7 @@ object GeneratorBean {
     fun startGeneratingNitro() {
         timer(
             initialDelay = 0,
+            daemon = true,
             period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay.takeIf { it != 0L } ?: 1) {
             val config = BaseConfigurationFactory.getInstance()
             // reset isAnythingChanged to ensure concurrent operations work
@@ -53,15 +54,13 @@ object GeneratorBean {
         val semaphore = Semaphore(config.multithreadingSettings.threadLimit)
 
         runBlocking {
+            var index = 0
             repeat(config.multithreadingSettings.threadLimit) {
                 launch(Dispatchers.IO) {
-                    var index = 0
-
                     while (isActive && !BaseConfigurationFactory.isConfigUpdated && !isGenerationPaused.get()) {
                         semaphore.acquire()
                         val nitroCode =
                             if (index++ == 0) initialNitroCode else generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
-                        launch {
                             validateNitro(
                                 nitroCode,
                                 config,
@@ -69,10 +68,9 @@ object GeneratorBean {
                                     ?: "UnknownThread".substringBefore(']')
                             )
                             semaphore.release()
-                        }
-                        delay(config.multithreadingSettings.threadLaunchDelay)
                     }
                 }
+                delay(config.multithreadingSettings.threadLaunchDelay)
             }
         }
     }
