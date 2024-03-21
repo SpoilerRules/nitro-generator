@@ -87,7 +87,7 @@ class TabProxy : ITab {
                             }
 
                             BaseConfigurationFactory.getInstance().proxySettings.mode = mode
-                            if (previousMode != mode && mode != 1 && BaseConfigurationFactory.getInstance().multithreadingSettings.enabled && BaseConfigurationFactory.getInstance().proxySettings.enabled) {
+                            if (previousMode != mode && newValue != "Static" && BaseConfigurationFactory.getInstance().multithreadingSettings.enabled && BaseConfigurationFactory.getInstance().proxySettings.enabled) {
                                 ProxyHandler.loadProxies()
                             }
                             // free resources when the new mode is static

@@ -56,7 +56,7 @@ object NitroValidationWrapper {
                 } else if (config.generalSettings.alertWebhook) {
                     alertWebhook(nitroCode, null)
                 }
-                "The code $nitroCode is valid. " + if (nitroValidationRetries > 0) "Took $nitroValidationRetries retries.".also { Thread.sleep(config.generalSettings.generationDelay) } else ""
+                "The code $nitroCode is valid. " + if (nitroValidationRetries > 0) "Took $nitroValidationRetries retries." else ""
             }
 
             404 -> {
