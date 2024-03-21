@@ -52,7 +52,7 @@ object NitroValidatorOrdinary {
                         validateNitro(
                             code,
                             nitroValidationRetries,
-                            BaseConfigurationFactory.getInstance(),
+                            BaseConfigurationFactory.getInstance()
                         )
                     }
                 }
