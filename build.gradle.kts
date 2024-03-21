@@ -31,7 +31,7 @@ dependencies {
 
 javafx {
     version = "11"
-    modules("javafx.controls", "javafx.fxml", "javafx.graphics", "javafx.base")
+    modules("javafx.controls", "javafx.graphics", "javafx.base")
 }
 
 tasks.test {
