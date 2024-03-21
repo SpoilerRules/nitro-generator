@@ -26,7 +26,7 @@ private fun checkForUpdate() = runBlocking(Dispatchers.IO) {
             .map { it.trim() }
             .firstOrNull { it.startsWith("version =") }
             ?.split("\"")?.get(1)
-    } ?: return@runBlocking Logger.printDebug("Failed to fetch remote version to check update")
+    } ?: return@runBlocking Logger.printDebug("Failed to retrieve the remote version for the update check")
 
     Logger.printDebug("Remote version of the software: ${CEnum.BRIGHT_PURPLE}$remoteVersion${CEnum.RESET}")
 
