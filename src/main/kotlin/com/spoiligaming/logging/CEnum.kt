@@ -16,6 +16,7 @@ package com.spoiligaming.logging
  * - `ORANGE`: Represents the color orange.
  * - `BLUE`: Represents the color blue.
  * - `CYAN`: Represents the color cyan.
+ * - `RED`: Represents the color red.
  * - `BOLD`: Represents bold text.
  * - `UNDERLINE`: Represents underlined text.
  *
@@ -34,6 +35,7 @@ enum class CEnum(private val escapeCode: String) {
     ORANGE("\u001B[38;5;208m"),
     BLUE("\u001B[34m"),
     CYAN("\u001B[36m"),
+    RED("\u001B[91m"),
     BOLD("\u001B[1m"),
     UNDERLINE("\u001B[4m");
 
