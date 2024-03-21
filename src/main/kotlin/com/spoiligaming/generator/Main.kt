@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
 
 private fun checkForUpdate() = runBlocking(Dispatchers.IO) {
     val localVersion = Thread.currentThread().contextClassLoader.getResourceAsStream("version")?.bufferedReader()?.use { it.readText().trim() }
-    Logger.printDebug("Local version of the software: $localVersion")
+    Logger.printDebug("Local version of the software: ${CEnum.BRIGHT_PURPLE}$localVersion${CEnum.RESET}")
 
     val remoteVersion = withTimeoutOrNull(10000) {
         URI("https://raw.githubusercontent.com/SpoilerRules/nitro-generator/master/build.gradle.kts").toURL()
@@ -28,7 +28,7 @@ private fun checkForUpdate() = runBlocking(Dispatchers.IO) {
             ?.split("\"")?.get(1)
     } ?: return@runBlocking Logger.printDebug("Failed to fetch remote version to check update")
 
-    Logger.printDebug("Remote version of the software: $remoteVersion")
+    Logger.printDebug("Remote version of the software: ${CEnum.BRIGHT_PURPLE}$remoteVersion${CEnum.RESET}")
 
     when {
         localVersion != remoteVersion -> Logger.printWarning("${CEnum.RED}An update is available!${CEnum.RESET} Please visit https://github.com/SpoilerRules/nitro-generator/releases/latest to download the latest version (${CEnum.BRIGHT_PURPLE}$remoteVersion${CEnum.RESET}).")
