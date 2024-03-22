@@ -5,4 +5,12 @@
 /httpRequests/
 # Datasource local storage ignored files
 /dataSources/
+/inspectionProfiles/
 /dataSources.local.xml
+/jarRepositories.xml
+/uiDesigner.xml
+/modules.xml
+/detekt.xml
+/vcs.xml
+/discord.xml
+/gradle.xml

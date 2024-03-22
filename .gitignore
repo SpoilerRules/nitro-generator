@@ -2,21 +2,11 @@
 build/
 logs/
 libs/
-buildlibs/
 workspace/
-!gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 configuration.json
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-.idea/discord.xml
-.idea/uiDesigner.xml
-.idea/detekt.xml
 *.iws
 *.iml
 *.ipr
