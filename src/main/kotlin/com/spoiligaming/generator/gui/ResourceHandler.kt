@@ -1,7 +1,6 @@
 package com.spoiligaming.generator.gui
 
 import javafx.scene.text.Font
-import java.io.InputStream
 
 object ResourceHandler {
     private fun loadFont(fontPath: String, weight: Double): Font =

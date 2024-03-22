@@ -23,7 +23,8 @@ object ElementText {
         children.addAll(TextField().apply {
             setMaxSize(142.0, 25.0)
             setMinSize(142.0, 25.0)
-            style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR}; -fx-padding: 0 5 0 5;"
+            style =
+                "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR}; -fx-padding: 0 5 0 5;"
             text = initialValue
 
             focusedProperty().addListener { _, _, isFocused ->

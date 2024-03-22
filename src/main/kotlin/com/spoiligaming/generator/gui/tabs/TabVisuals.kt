@@ -2,7 +2,8 @@ package com.spoiligaming.generator.gui.tabs
 
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.TabContainer
-import com.spoiligaming.generator.gui.element.*
+import com.spoiligaming.generator.gui.element.CommonElement
+import com.spoiligaming.generator.gui.element.ElementColorPicker
 import com.spoiligaming.logging.Logger
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -27,7 +28,8 @@ class TabVisuals : ITab {
             if (Logger.showDebug) {
                 CommonElement().run {
                     createContentField(
-                        this@apply, "Theme", 225.0, ElementColorPicker.addColorPickerValue(
+                        this@apply, "Theme", 225.0,
+                        ElementColorPicker.addColorPickerValue(
                             BaseConfigurationFactory.getInstance().themeSettings.accentColor,
                             "Accent Color",
                             { newValue ->

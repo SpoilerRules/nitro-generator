@@ -81,7 +81,7 @@ object NitroValidationWrapper {
         }
     }
 
-    fun alertWebhook(nitroCode: String, isAutoclaimSucceeded: Boolean?) {
+    private fun alertWebhook(nitroCode: String, isAutoclaimSucceeded: Boolean?) {
         var connection: HttpURLConnection? = null
 
         runCatching {
@@ -131,6 +131,7 @@ object NitroValidationWrapper {
         }
     }
 
+    @Suppress("EmptyFunctionBlock")
     fun disableProxySecurity() {
         HttpsURLConnection.setDefaultSSLSocketFactory(SSLContext.getInstance("SSL").apply {
             init(null, arrayOf<TrustManager>(object : X509TrustManager {
@@ -141,7 +142,7 @@ object NitroValidationWrapper {
         }.socketFactory)
     }
 
-    fun claimValidNitro(nitroCode: String, isTokenValidated: Boolean, config: BaseConfigurationFactory): Int {
+    private fun claimValidNitro(nitroCode: String, isTokenValidated: Boolean, config: BaseConfigurationFactory): Int {
         val setProperties: (HttpURLConnection, BaseConfigurationFactory) -> Unit = { connection, configReference ->
             connection.setRequestProperty(
                 "User-Agent",

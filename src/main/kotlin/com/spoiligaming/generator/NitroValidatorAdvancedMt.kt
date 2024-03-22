@@ -3,7 +3,13 @@ package com.spoiligaming.generator
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
-import java.net.*
+import java.net.Authenticator
+import java.net.ConnectException
+import java.net.HttpURLConnection
+import java.net.InetSocketAddress
+import java.net.PasswordAuthentication
+import java.net.Proxy
+import java.net.URI
 import java.util.concurrent.atomic.AtomicBoolean
 
 object NitroValidatorAdvancedMt {
@@ -37,7 +43,12 @@ object NitroValidatorAdvancedMt {
                     threadIdentity
                 ) {
                     nitroValidationRetries++
-                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, threadIdentity) { code, _, _ ->
+                    NitroValidationWrapper.retryValidation(
+                        nitroCode,
+                        config,
+                        retryCount,
+                        threadIdentity
+                    ) { code, _, _ ->
                         validateNitro(
                             code,
                             BaseConfigurationFactory.getInstance(),
@@ -100,7 +111,7 @@ object NitroValidatorAdvancedMt {
                         // stop other threads from executing when next proxy is null
                         // no need for a check because getNextProxy won't return null when the certain setting (recursive usage) is enabled.
                         isNextProxyAvailable.set(false)
-                        throw RuntimeException("[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] Failed to establish a connection to validate the nitro code because the next proxy is null.")
+                        throw ConnectException("[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] Failed to establish a connection to validate the nitro code because the next proxy is null.")
                     }
             }
         }

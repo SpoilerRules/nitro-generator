@@ -11,12 +11,13 @@ import java.net.URI
 
 fun main(args: Array<String>) {
     Logger.showDebug = "-debug" in args
-    checkForUpdate()
+    if ("-skipupdate" in args) checkForUpdate()
     Application.launch(Initializer::class.java)
 }
 
 private fun checkForUpdate() = runBlocking(Dispatchers.IO) {
-    val localVersion = Thread.currentThread().contextClassLoader.getResourceAsStream("version")?.bufferedReader()?.use { it.readText().trim() }
+    val localVersion = Thread.currentThread().contextClassLoader.getResourceAsStream("version")?.bufferedReader()
+        ?.use { it.readText().trim() }
     Logger.printDebug("Local version of the software: ${CEnum.BRIGHT_PURPLE}$localVersion${CEnum.RESET}")
 
     val remoteVersion = withTimeoutOrNull(10000) {
@@ -26,7 +27,7 @@ private fun checkForUpdate() = runBlocking(Dispatchers.IO) {
             .map { it.trim() }
             .firstOrNull { it.startsWith("version =") }
             ?.split("\"")?.get(1)
-    } ?: return@runBlocking Logger.printDebug("Failed to retrieve the remote version for the update check.")
+    } ?: return@runBlocking Logger.printDebug("Failed to retrieve the remote version for the update check")
 
     Logger.printDebug("Remote version of the software: ${CEnum.BRIGHT_PURPLE}$remoteVersion${CEnum.RESET}")
 

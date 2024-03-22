@@ -18,7 +18,15 @@ object Logger {
 
     fun <V> printError(error: V) = log("ERROR", error, CEnum.ERROR_RED)
 
-    fun <V> printSuccess(message: V, nitroGenerationLog: Boolean = false) = if (!nitroGenerationLog) log("OK", message, CEnum.GREEN) else println("${createStatus(CEnum.GREEN, "OK")} $message")
+    fun <V> printSuccess(message: V, nitroGenerationLog: Boolean = false) =
+        if (!nitroGenerationLog) log("OK", message, CEnum.GREEN) else println(
+            "${
+                createStatus(
+                    CEnum.GREEN,
+                    "OK"
+                )
+            } $message"
+        )
 
     fun <V> printWarning(warning: V) = log("WARNING", warning, CEnum.YELLOW)
 
@@ -40,5 +48,6 @@ object Logger {
         )
     }
 
-    private fun createStatus(primaryColor: CEnum, status: String): String = "${CEnum.RESET}[$primaryColor$status${CEnum.RESET}]${CEnum.RESET}"
+    private fun createStatus(primaryColor: CEnum, status: String): String =
+        "${CEnum.RESET}[$primaryColor$status${CEnum.RESET}]${CEnum.RESET}"
 }

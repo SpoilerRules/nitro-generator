@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.serialization") version "1.9.23"
     id("org.openjfx.javafxplugin") version "0.1.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.5"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     application
 }
@@ -32,6 +33,22 @@ dependencies {
 javafx {
     version = "11"
     modules("javafx.controls", "javafx.graphics", "javafx.base")
+}
+
+detekt {
+    toolVersion = "1.23.5"
+    source.setFrom("src/main/kotlin")
+
+    parallel = true
+
+    config.setFrom("/config/detekt/detekt.yml")
+    baseline = file("/config/detekt/detekt-baseline.xml")
+
+    allRules = false
+    disableDefaultRuleSets = false
+    debug = false
+    ignoreFailures = false
+    basePath = projectDir.absolutePath
 }
 
 tasks.test {

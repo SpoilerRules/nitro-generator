@@ -4,7 +4,12 @@ import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
 import javafx.beans.property.SimpleBooleanProperty
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Semaphore
 import kotlin.concurrent.timer
 
@@ -28,14 +33,16 @@ object GeneratorBean {
                 return@timer Logger.printSuccess("Generated nitro code: $nitroCode")
             }
 
-            if ((config.proxySettings.proxyFilePath.isNotEmpty() && config.proxySettings.mode == 2 && config.proxySettings.enabled) || config.proxySettings.enabled && config.proxySettings.mode != 2 || !config.proxySettings.enabled) { // very fragile, please do not touch this
+            if ((config.proxySettings.proxyFilePath.isNotEmpty() && config.proxySettings.mode == 2 && config.proxySettings.enabled) ||
+                config.proxySettings.enabled && config.proxySettings.mode != 2 ||
+                !config.proxySettings.enabled
+            ) { // very fragile, please do not touch this
                 when {
-                    config.proxySettings.mode in 1..3 && !config.multithreadingSettings.enabled -> NitroValidatorOrdinary.validateNitro(
-                        nitroCode,
-                        0,
-                        config
-                    )
-                    else -> handleConcurrentValidation(nitroCode, config)
+                    config.proxySettings.mode in 1..3 && !config.multithreadingSettings.enabled ->
+                        NitroValidatorOrdinary.validateNitro(nitroCode, 0, config)
+
+                    else ->
+                        handleConcurrentValidation(nitroCode, config)
                 }
             } else if (config.proxySettings.proxyFilePath.isEmpty() && config.proxySettings.mode == 2 && config.proxySettings.enabled) {
                 Logger.printWarning("Nitro generation was skipped because ${CEnum.UNDERLINE}the Proxy File path was empty${CEnum.RESET}, even though Custom Proxy mode was set to 'One File' and enabled. Please check your proxy settings.")
@@ -44,12 +51,13 @@ object GeneratorBean {
     }
 
     private fun handleConcurrentValidation(initialNitroCode: String, config: BaseConfigurationFactory) {
-        val validateNitro: (String, BaseConfigurationFactory, String) -> Unit = { nitroCode, configReference, threadIdentifier ->
-            when (configReference.proxySettings.mode) {
-                1 -> NitroValidatorSimpleMt.validateNitro(nitroCode, configReference, 0, threadIdentifier)
-                in 2..3 -> NitroValidatorAdvancedMt.validateNitro(nitroCode, configReference, 0, threadIdentifier)
+        val validateNitro: (String, BaseConfigurationFactory, String) -> Unit =
+            { nitroCode, configReference, threadIdentifier ->
+                when (configReference.proxySettings.mode) {
+                    1 -> NitroValidatorSimpleMt.validateNitro(nitroCode, configReference, 0, threadIdentifier)
+                    in 2..3 -> NitroValidatorAdvancedMt.validateNitro(nitroCode, configReference, 0, threadIdentifier)
+                }
             }
-        }
 
         val semaphore = Semaphore(config.multithreadingSettings.threadLimit)
 
@@ -61,13 +69,13 @@ object GeneratorBean {
                         semaphore.acquire()
                         val nitroCode =
                             if (index++ == 0) initialNitroCode else generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
-                            validateNitro(
-                                nitroCode,
-                                config,
-                                coroutineContext[Job]?.toString()?.substringAfter('@')
-                                    ?: "UnknownThread".substringBefore(']')
-                            )
-                            semaphore.release()
+                        validateNitro(
+                            nitroCode,
+                            config,
+                            coroutineContext[Job]?.toString()?.substringAfter('@')
+                                ?: "UnknownThread".substringBefore(']')
+                        )
+                        semaphore.release()
                     }
                 }
                 delay(config.multithreadingSettings.threadLaunchDelay)

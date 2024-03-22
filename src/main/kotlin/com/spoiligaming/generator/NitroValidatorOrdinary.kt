@@ -5,7 +5,13 @@ import com.spoiligaming.generator.NitroValidatorOrdinary.validateNitro
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
-import java.net.*
+import java.net.Authenticator
+import java.net.ConnectException
+import java.net.HttpURLConnection
+import java.net.InetSocketAddress
+import java.net.PasswordAuthentication
+import java.net.Proxy
+import java.net.URI
 
 /**
  * The standard nitro validator. This validator does not support multithreading
@@ -103,7 +109,7 @@ object NitroValidatorOrdinary {
                         InetSocketAddress(proxyInfo.first, proxyInfo.second)
                     )
                 }
-                    ?: throw RuntimeException("Failed to establish a connection to validate the nitro code because the next proxy is null.")
+                    ?: throw ConnectException("Failed to establish a connection to validate the nitro code because the next proxy is null.")
             }
         }
 

@@ -21,12 +21,12 @@ data class General(
 
 @Serializable
 data class Multithreading(
-   // var mode: String = "Normal",
+    // var mode: String = "Normal",
     var enabled: Boolean = false,
     var threadLimit: Int = 3,
     var threadLaunchDelay: Long = 3000,
 
-   // var waitDelay: Long = 10000
+    // var waitDelay: Long = 10000
 )
 
 @Serializable

@@ -49,7 +49,13 @@ object ProxyHandler {
                     runCatching {
                         URI(url).toURL().readText()
                     }.onSuccess { content ->
-                        Logger.printDebug("Successfully read proxy content from $url in ${CEnum.BRIGHT_PINK}${System.currentTimeMillis() - startTime}ms${CEnum.RESET}. The size of the raw content is ${CEnum.BRIGHT_PINK}${"%.2f".format(content.toByteArray().size / 1024.0)}KB${CEnum.RESET}.")
+                        Logger.printDebug(
+                            "Successfully read proxy content from $url in ${CEnum.BRIGHT_PINK}${System.currentTimeMillis() - startTime}ms${CEnum.RESET}. The size of the raw content is ${CEnum.BRIGHT_PINK}${
+                                "%.2f".format(
+                                    content.toByteArray().size / 1024.0
+                                )
+                            }KB${CEnum.RESET}."
+                        )
                         writer.write(content)
                         writer.write(rawContentSeparator)
                     }.onFailure {
@@ -81,9 +87,9 @@ object ProxyHandler {
 
     @Synchronized
     fun loadProxies() {
-       /* Exception("Debugging Stack Trace").apply {
-            stackTrace.forEach { println(it) }
-        }*/
+        /* Exception("Debugging Stack Trace").apply {
+             stackTrace.forEach { println(it) }
+         }*/
 
         when (BaseConfigurationFactory.getInstance().proxySettings.mode) {
             1 -> {
@@ -92,8 +98,12 @@ object ProxyHandler {
                     throw UnsupportedOperationException(this)
                 }
             }
+
             2 -> loadProxiesFromFile(BaseConfigurationFactory.getInstance().proxySettings.proxyFilePath)
-            3 -> loadProxiesFromURL(BaseConfigurationFactory.getInstance().proxySettings.rawContentLinks.split(",").map { it.trim() }, BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator)
+            3 -> loadProxiesFromURL(
+                BaseConfigurationFactory.getInstance().proxySettings.rawContentLinks.split(",").map { it.trim() },
+                BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator
+            )
         }
     }
 

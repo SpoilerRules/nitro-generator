@@ -8,7 +8,12 @@ import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.Tooltip
-import javafx.scene.layout.*
+import javafx.scene.layout.Background
+import javafx.scene.layout.BackgroundFill
+import javafx.scene.layout.CornerRadii
+import javafx.scene.layout.GridPane
+import javafx.scene.layout.HBox
+import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.util.Duration
 
@@ -72,7 +77,7 @@ class CommonElement {
             setMaxSize(15.0, 25.0)
             setMinSize(15.0, 25.0)
             alignment = Pos.CENTER
-            children.add(Button("?").apply buttonNode@ {
+            children.add(Button("?").apply buttonNode@{
                 setMaxSize(18.0, 20.0)
                 setMinSize(18.0, 20.0)
                 alignment = Pos.CENTER

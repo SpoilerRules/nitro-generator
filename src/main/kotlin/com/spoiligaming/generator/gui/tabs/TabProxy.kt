@@ -5,7 +5,12 @@ import com.spoiligaming.generator.ProxyHandler
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.TabContainer
 import com.spoiligaming.generator.gui.TooltipKeyAccessor
-import com.spoiligaming.generator.gui.element.*
+import com.spoiligaming.generator.gui.element.CommonElement
+import com.spoiligaming.generator.gui.element.ElementBoolean
+import com.spoiligaming.generator.gui.element.ElementFilePicker
+import com.spoiligaming.generator.gui.element.ElementList
+import com.spoiligaming.generator.gui.element.ElementNote
+import com.spoiligaming.generator.gui.element.ElementText
 import com.spoiligaming.logging.Logger
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
@@ -34,7 +39,7 @@ class TabProxy : ITab {
         padding = Insets(-0.5, 0.0, 0.0, 0.0)
         style = "-fx-background-color: transparent; -fx-background: transparent; -fx-border-width: 0;"
 
-        content = proxyPane.apply proxyPaneApply@ {
+        content = proxyPane.apply proxyPaneApply@{
             alignment = Pos.TOP_CENTER
             hgap = 20.0
             vgap = 7.5
@@ -52,7 +57,11 @@ class TabProxy : ITab {
                                 proxySettings.enabled = newValue
                             }
                             // explicitly load proxies only when multi threading is enabled. the non-mt-supported simple validators will automatically load proxies on validation.
-                            if (newValue && BaseConfigurationFactory.getInstance().multithreadingSettings.enabled && BaseConfigurationFactory.getInstance().proxySettings.mode in 2..3) ProxyHandler.loadProxies()
+                            if (newValue &&
+                                BaseConfigurationFactory.getInstance().multithreadingSettings.enabled &&
+                                BaseConfigurationFactory.getInstance().proxySettings.mode in 2..3) {
+                                ProxyHandler.loadProxies()
+                            }
                             if (newValue && BaseConfigurationFactory.getInstance().proxySettings.mode == 1) ProxyHandler.unloadProxies()
                         },
                         Insets(10.0, 0.0, 0.0, 10.0)
@@ -87,7 +96,10 @@ class TabProxy : ITab {
                             }
 
                             BaseConfigurationFactory.getInstance().proxySettings.mode = mode
-                            if (previousMode != mode && newValue != "Static" && BaseConfigurationFactory.getInstance().multithreadingSettings.enabled && BaseConfigurationFactory.getInstance().proxySettings.enabled) {
+                            if (previousMode != mode &&
+                                newValue != "Static" &&
+                                BaseConfigurationFactory.getInstance().multithreadingSettings.enabled &&
+                                BaseConfigurationFactory.getInstance().proxySettings.enabled) {
                                 ProxyHandler.loadProxies()
                             }
                             // free resources when the new mode is static

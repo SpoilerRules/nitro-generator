@@ -53,7 +53,8 @@ object ElementValue {
         if (property is SimpleLongProperty || property is SimpleIntegerProperty) {
             textProperty().bindBidirectional(property as Property<out Number>, DecimalFormat("#"))
         }
-        style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR};"
+        style =
+            "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR};"
         alignment = Pos.CENTER
 
         var oldValue: String? = null
@@ -90,7 +91,8 @@ object ElementValue {
         onClick: () -> Unit
     ) = Button(text).apply {
         alignment = Pos.CENTER
-        style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 15; -fx-background-radius: 12;"
+        style =
+            "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 15; -fx-background-radius: 12;"
         setMaxSize(maxWidth, maxHeight)
         setMinSize(maxWidth, maxHeight)
 
@@ -110,11 +112,13 @@ object ElementValue {
                 property.set(newValue.toInt())
                 valueUpdater(newValue.toInt())
             }
+
             is SimpleLongProperty -> {
                 val newValue = property.get() + increment
                 property.set(newValue)
                 valueUpdater(newValue)
             }
+
             else -> throw IllegalArgumentException("Unsupported property type")
         }
     }

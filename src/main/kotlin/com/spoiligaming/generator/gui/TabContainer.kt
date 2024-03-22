@@ -7,7 +7,12 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.Label
-import javafx.scene.layout.*
+import javafx.scene.layout.Background
+import javafx.scene.layout.BackgroundFill
+import javafx.scene.layout.CornerRadii
+import javafx.scene.layout.GridPane
+import javafx.scene.layout.Region
+import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 
 class TabContainer : GridPane() {
@@ -22,7 +27,13 @@ class TabContainer : GridPane() {
     }
 
     init {
-        background = Background(BackgroundFill(Color.web(ColorPalette.SECONDARY_COLOR), CornerRadii(16.0, 0.0, 16.0, 16.0, false), null))
+        background = Background(
+            BackgroundFill(
+                Color.web(ColorPalette.SECONDARY_COLOR),
+                CornerRadii(16.0, 0.0, 16.0, 16.0, false),
+                null
+            )
+        )
 
         setMaxSize(175.0, 425.0)
         setMinSize(175.0, 425.0)
@@ -77,7 +88,8 @@ class TabContainer : GridPane() {
         setMinSize(145.0, 35.0)
 
         setOnMouseEntered {
-            background = Background(BackgroundFill(Color.web(ColorPalette.CONTROL_COLOR), CornerRadii(8.0, false), null))
+            background =
+                Background(BackgroundFill(Color.web(ColorPalette.CONTROL_COLOR), CornerRadii(8.0, false), null))
         }
 
         setOnMouseExited {
@@ -108,7 +120,8 @@ class TabContainer : GridPane() {
 
         add(Label("Statistics").apply {
             background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY))
-            style = "-fx-text-fill: ${ColorPalette.ACCENT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
+            style =
+                "-fx-text-fill: ${ColorPalette.ACCENT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
             setMaxSize(160.0, 75.0)
             setMinSize(160.0, 75.0)
             alignment = Pos.TOP_CENTER
@@ -117,7 +130,8 @@ class TabContainer : GridPane() {
 
         val validLabel = Label("Valid").apply {
             background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY))
-            style = "-fx-text-fill: ${ColorPalette.CONTROL_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
+            style =
+                "-fx-text-fill: ${ColorPalette.CONTROL_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
             setMaxSize(160.0, 75.0)
             setMinSize(160.0, 75.0)
             alignment = Pos.TOP_CENTER
@@ -125,7 +139,8 @@ class TabContainer : GridPane() {
 
         val validHitsLabel = Label(SessionStatistics.validNitroCodes.toString()).apply {
             background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY))
-            style = "-fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 12;"
+            style =
+                "-fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 12;"
             setMaxSize(160.0, 75.0)
             setMinSize(160.0, 75.0)
             alignment = Pos.TOP_CENTER
@@ -158,7 +173,11 @@ class TabContainer : GridPane() {
         }, 0, 0)
 
         val successRateLabelText = "%.2f".format(successRate) + "%"
-        val defaultPaddingValue = if (successRate != 0f) { 105.0 } else { 93.0 }
+        val defaultPaddingValue = if (successRate != 0f) {
+            105.0
+        } else {
+            93.0
+        }
         val paddingValue = if (successRate < 12 && successRate != 0f) {
             90.0
         } else {
@@ -167,7 +186,8 @@ class TabContainer : GridPane() {
 
         val successRateLabel = Label(successRateLabelText).apply {
             background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY))
-            style = "-fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 12;"
+            style =
+                "-fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 12;"
             setMaxSize(160.0, 75.0)
             setMinSize(160.0, 75.0)
             alignment = Pos.TOP_CENTER
@@ -186,14 +206,15 @@ class TabContainer : GridPane() {
             setMargin(this, Insets(0.0, 0.0, 5.0, 0.0))
         }, 0, 2)
 
-        val createLabel: (String, Pos, Double, String) -> Label = { text, pos, bottomMargin, textColor  ->
+        val createLabel: (String, Pos, Double, String) -> Label = { text, pos, bottomMargin, textColor ->
             Label(text).apply {
                 background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY))
                 setMaxSize(160.0, 40.0)
                 setMinSize(160.0, 40.0)
                 alignment = pos
                 setMargin(this, Insets(0.0, 0.0, bottomMargin, 0.0))
-                style = "-fx-text-fill: $textColor; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 11;"
+                style =
+                    "-fx-text-fill: $textColor; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 11;"
             }
         }
 

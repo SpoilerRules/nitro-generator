@@ -9,7 +9,11 @@ import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.Scene
 import javafx.scene.control.Button
-import javafx.scene.layout.*
+import javafx.scene.layout.Background
+import javafx.scene.layout.BackgroundFill
+import javafx.scene.layout.BorderPane
+import javafx.scene.layout.CornerRadii
+import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
 import javafx.stage.Screen
 import javafx.stage.Stage
@@ -77,12 +81,16 @@ class Initializer : Application() {
         val pauseButton = Button().apply {
             setMaxSize(buttonSize.first, buttonSize.second)
             setMinSize(buttonSize.first, buttonSize.second)
-            styleProperty().bind(Bindings.`when`(GeneratorBean.isGenerationPaused)
-                .then(buttonStyle(ColorPalette.ACCENT_COLOR))
-                .otherwise(buttonStyle(ColorPalette.TEXT_COLOR)))
-            textProperty().bind(Bindings.`when`(GeneratorBean.isGenerationPaused)
-                .then("Resume")
-                .otherwise("Pause"))
+            styleProperty().bind(
+                Bindings.`when`(GeneratorBean.isGenerationPaused)
+                    .then(buttonStyle(ColorPalette.ACCENT_COLOR))
+                    .otherwise(buttonStyle(ColorPalette.TEXT_COLOR))
+            )
+            textProperty().bind(
+                Bindings.`when`(GeneratorBean.isGenerationPaused)
+                    .then("Resume")
+                    .otherwise("Pause")
+            )
             setOnAction {
                 GeneratorBean.isGenerationPaused.set(!GeneratorBean.isGenerationPaused.get())
                 if (GeneratorBean.isGenerationPaused.get()) {
@@ -93,15 +101,19 @@ class Initializer : Application() {
             }
 
             setOnMouseEntered {
-                styleProperty().bind(Bindings.`when`(GeneratorBean.isGenerationPaused)
-                    .then(buttonStyle(toRgba(ColorPalette.ACCENT_COLOR, 0.8)))
-                    .otherwise(buttonStyle(toRgba(ColorPalette.TEXT_COLOR, 0.8))))
+                styleProperty().bind(
+                    Bindings.`when`(GeneratorBean.isGenerationPaused)
+                        .then(buttonStyle(toRgba(ColorPalette.ACCENT_COLOR, 0.8)))
+                        .otherwise(buttonStyle(toRgba(ColorPalette.TEXT_COLOR, 0.8)))
+                )
                 scene.cursor = Cursor.HAND
             }
             setOnMouseExited {
-                styleProperty().bind(Bindings.`when`(GeneratorBean.isGenerationPaused)
-                    .then(buttonStyle(ColorPalette.ACCENT_COLOR))
-                    .otherwise(buttonStyle(ColorPalette.TEXT_COLOR)))
+                styleProperty().bind(
+                    Bindings.`when`(GeneratorBean.isGenerationPaused)
+                        .then(buttonStyle(ColorPalette.ACCENT_COLOR))
+                        .otherwise(buttonStyle(ColorPalette.TEXT_COLOR))
+                )
                 scene.cursor = Cursor.DEFAULT
             }
         }
@@ -109,12 +121,16 @@ class Initializer : Application() {
         val minimizeButton = Button().apply {
             setMaxSize(buttonSize.first, buttonSize.second)
             setMinSize(buttonSize.first, buttonSize.second)
-            styleProperty().bind(Bindings.`when`(stage.iconifiedProperty())
-                .then(buttonStyle(ColorPalette.ACCENT_COLOR))
-                .otherwise(buttonStyle(ColorPalette.TEXT_COLOR)))
-            textProperty().bind(Bindings.`when`(stage.iconifiedProperty())
-                .then("Restore")
-                .otherwise("Minimize"))
+            styleProperty().bind(
+                Bindings.`when`(stage.iconifiedProperty())
+                    .then(buttonStyle(ColorPalette.ACCENT_COLOR))
+                    .otherwise(buttonStyle(ColorPalette.TEXT_COLOR))
+            )
+            textProperty().bind(
+                Bindings.`when`(stage.iconifiedProperty())
+                    .then("Restore")
+                    .otherwise("Minimize")
+            )
             setOnAction {
                 if (stage.isIconified) {
                     stage.isIconified = false
@@ -126,15 +142,19 @@ class Initializer : Application() {
             }
 
             setOnMouseEntered {
-                styleProperty().bind(Bindings.`when`(stage.iconifiedProperty())
-                    .then(buttonStyle(toRgba(ColorPalette.ACCENT_COLOR, 0.8)))
-                    .otherwise(buttonStyle(toRgba(ColorPalette.TEXT_COLOR, 0.8))))
+                styleProperty().bind(
+                    Bindings.`when`(stage.iconifiedProperty())
+                        .then(buttonStyle(toRgba(ColorPalette.ACCENT_COLOR, 0.8)))
+                        .otherwise(buttonStyle(toRgba(ColorPalette.TEXT_COLOR, 0.8)))
+                )
                 scene.cursor = Cursor.HAND
             }
             setOnMouseExited {
-                styleProperty().bind(Bindings.`when`(stage.iconifiedProperty())
-                    .then(buttonStyle(ColorPalette.ACCENT_COLOR))
-                    .otherwise(buttonStyle(ColorPalette.TEXT_COLOR)))
+                styleProperty().bind(
+                    Bindings.`when`(stage.iconifiedProperty())
+                        .then(buttonStyle(ColorPalette.ACCENT_COLOR))
+                        .otherwise(buttonStyle(ColorPalette.TEXT_COLOR))
+                )
                 scene.cursor = Cursor.DEFAULT
             }
         }
@@ -165,7 +185,8 @@ class Initializer : Application() {
             style = "-fx-background-color: transparent;"
 
             children.add(BorderPane().apply {
-                background = Background(BackgroundFill(Color.web(ColorPalette.SECONDARY_COLOR), CornerRadii(16.0), Insets.EMPTY))
+                background =
+                    Background(BackgroundFill(Color.web(ColorPalette.SECONDARY_COLOR), CornerRadii(16.0), Insets.EMPTY))
                 setMaxSize(325.0, 40.0)
                 setMinSize(325.0, 40.0)
 
@@ -177,5 +198,6 @@ class Initializer : Application() {
         }
     }
 
-    private fun toRgba(color: String, opacity: Double) = "rgba(${color.removePrefix("#").chunked(2).joinToString { it.toInt(16).toString() }}, $opacity)"
+    private fun toRgba(color: String, opacity: Double) =
+        "rgba(${color.removePrefix("#").chunked(2).joinToString { it.toInt(16).toString() }}, $opacity)"
 }

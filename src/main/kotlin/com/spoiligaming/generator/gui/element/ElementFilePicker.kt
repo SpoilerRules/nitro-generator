@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox
 import javafx.stage.FileChooser
 import java.io.File
 
-
 //TODO: make this more flexible and scalable.
 object ElementFilePicker {
     fun addTextValue(
@@ -27,8 +26,12 @@ object ElementFilePicker {
         padding: Insets = Insets(10.0, 0.0, 0.0, 10.0)
     ): VBox {
         val selectedFileLabel = Label().apply {
-            style = "-fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
-            text = if (BaseConfigurationFactory.getInstance().proxySettings.proxyFilePath.isEmpty()) "No proxy file is selected." else "Selected proxy file: ${File(initialValue).name}"
+            style =
+                "-fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 13;"
+            text =
+                if (BaseConfigurationFactory.getInstance().proxySettings.proxyFilePath.isEmpty()) "No proxy file is selected." else "Selected proxy file: ${
+                    File(initialValue).name
+                }"
         }
 
         return VBox().apply {
@@ -43,7 +46,8 @@ object ElementFilePicker {
                         alignment = Pos.CENTER
                         setMaxSize(142.0, 25.0)
                         setMinSize(142.0, 25.0)
-                        style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR}; -fx-padding: 0;"
+                        style =
+                            "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR}; -fx-padding: 0;"
                         setOnAction {
                             FileChooser().apply {
                                 extensionFilters.add(FileChooser.ExtensionFilter("Text Files", "*.txt"))

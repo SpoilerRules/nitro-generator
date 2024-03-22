@@ -3,7 +3,12 @@ package com.spoiligaming.generator
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
-import java.net.*
+import java.net.Authenticator
+import java.net.HttpURLConnection
+import java.net.InetSocketAddress
+import java.net.PasswordAuthentication
+import java.net.Proxy
+import java.net.URI
 
 object NitroValidatorSimpleMt {
     fun validateNitro(nitroCode: String, config: BaseConfigurationFactory, retryCount: Int, threadIdentity: String) {
@@ -57,7 +62,12 @@ object NitroValidatorSimpleMt {
                     threadIdentity
                 ) {
                     nitroValidationRetries++
-                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, threadIdentity) { code, _, _ ->
+                    NitroValidationWrapper.retryValidation(
+                        nitroCode,
+                        config,
+                        retryCount,
+                        threadIdentity
+                    ) { code, _, _ ->
                         validateNitro(
                             code,
                             BaseConfigurationFactory.getInstance(),

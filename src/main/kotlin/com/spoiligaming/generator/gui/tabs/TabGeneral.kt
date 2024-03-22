@@ -33,7 +33,7 @@ class TabGeneral : ITab {
         padding = Insets(-0.5, 0.0, 0.0, 0.0)
         style = "-fx-background-color: transparent; -fx-background: transparent; -fx-border-width: 0;"
 
-        content = generalPane.apply generalPaneApply@ {
+        content = generalPane.apply generalPaneApply@{
             alignment = Pos.TOP_CENTER
             hgap = 20.0
             vgap = 7.5
