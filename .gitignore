@@ -14,6 +14,9 @@ configuration.json
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea/discord.xml
+.idea/uiDesigner.xml
+.idea/detekt.xml
 *.iws
 *.iml
 *.ipr
