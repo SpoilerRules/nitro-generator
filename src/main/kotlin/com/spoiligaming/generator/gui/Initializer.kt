@@ -59,7 +59,7 @@ class Initializer : Application() {
         scene.stylesheets.add(javaClass.getResource("/combobox-style.css")!!.toExternalForm())
         scene.stylesheets.add(javaClass.getResource("/textarea-style.css")!!.toExternalForm())
 
-        primaryStage.title = "Spoili's Nitro Generator - 1.0.0"
+        primaryStage.title = "Spoili's Nitro Generator - 1.0.1"
         primaryStage.isResizable = false
 
         primaryStage.setOnCloseRequest {

@@ -1,5 +1,3 @@
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 plugins {
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.serialization") version "1.9.23"
@@ -11,7 +9,7 @@ plugins {
 }
 
 group = "com.spoiligaming"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
@@ -63,7 +61,7 @@ ktlint {
     baseline.set(file("config/klint/baseline.xml"))
 
     reporters {
-        reporter(ReporterType.CHECKSTYLE)
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
     }
 
     filter {
