@@ -23,7 +23,7 @@ object GeneratorBean {
             period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay.takeIf { it != 0L } ?: 1,
         ) {
             val config = BaseConfigurationFactory.getInstance()
-            // reset isAnythingChanged to ensure concurrent operations work
+            // reset isConfigUpdated to ensure concurrent operations work
             BaseConfigurationFactory.isConfigUpdated = false
 
             if (isGenerationPaused.get()) return@timer
@@ -41,7 +41,6 @@ object GeneratorBean {
                 when {
                     config.proxySettings.mode in 1..3 && !config.multithreadingSettings.enabled ->
                         NitroValidatorOrdinary.validateNitro(nitroCode, 0, config)
-
                     else ->
                         handleConcurrentValidation(nitroCode, config)
                 }

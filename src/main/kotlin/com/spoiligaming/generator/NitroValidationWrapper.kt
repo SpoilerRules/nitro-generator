@@ -164,12 +164,14 @@ object NitroValidationWrapper {
                             override fun checkClientTrusted(
                                 chain: Array<X509Certificate>,
                                 authType: String,
-                            ) {}
+                            ) {
+                            }
 
                             override fun checkServerTrusted(
                                 chain: Array<X509Certificate>,
                                 authType: String,
-                            ) {}
+                            ) {
+                            }
 
                             override fun getAcceptedIssuers(): Array<X509Certificate>? = null
                         },
@@ -264,20 +266,26 @@ object NitroValidationWrapper {
         threadIdentity: String?,
         crossinline validateFunction: (String, BaseConfigurationFactory, Int) -> Unit,
     ) {
-        // no need for delay between retries when retry delay is <= 0 or custom proxy is enabled and custom proxy mode is in the range 2 to 3.
-        if (configuration.generalSettings.retryDelay > 0 && !(configuration.proxySettings.enabled && configuration.proxySettings.mode in 2..3)) {
-            for (index in (configuration.generalSettings.retryDelay - 1) downTo 0) {
-                Logger.printWarning(
-                    "${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of $nitroCode in ${CEnum.ORANGE}${index + 1}${CEnum.RESET} seconds.",
-                )
-                Thread.sleep(1000)
+        val shouldDelay = configuration.generalSettings.retryDelay > 0 && !(configuration.proxySettings.enabled && configuration.proxySettings.mode in 2..3)
+        val shouldRetryWithoutDelay = configuration.proxySettings.mode in 2..3 && configuration.proxySettings.enabled || configuration.generalSettings.retryDelay <= 0
+
+        when {
+            shouldDelay -> {
+                repeat(configuration.generalSettings.retryDelay) { index ->
+                    Logger.printWarning(
+                        "${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of $nitroCode in ${CEnum.ORANGE}${configuration.generalSettings.retryDelay - index}${CEnum.RESET} seconds.",
+                    )
+                    Thread.sleep(1000)
+                }
             }
-        } else if (configuration.proxySettings.mode in 2..3 && configuration.proxySettings.enabled || configuration.generalSettings.retryDelay <= 0) {
-            Logger.printWarning(
-                "${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of Nitro code: $nitroCode.",
-            )
+            shouldRetryWithoutDelay -> {
+                Logger.printDebug("retrying without delay")
+                Logger.printWarning(
+                    "${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of Nitro code: $nitroCode.",
+                )
+            }
         }
 
-        validateFunction(nitroCode, configuration, retryCount)
+        threadIdentity?.let { validateFunction(nitroCode, configuration, retryCount) }
     }
 }

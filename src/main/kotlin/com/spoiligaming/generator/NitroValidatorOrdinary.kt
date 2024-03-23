@@ -44,36 +44,40 @@ object NitroValidatorOrdinary {
 
         var nitroValidationRetries = retryCount
 
-        runCatching {
-            with(getConnection(nitroCode, config)) {
-                NitroValidationWrapper.setProperties(this, config)
+        while (true) {
+            try {
+                with(getConnection(nitroCode, config)) {
+                    NitroValidationWrapper.setProperties(this, config)
 
-                disconnect()
-                NitroValidationWrapper.reactToResponseCode(
-                    responseCode,
-                    nitroCode,
-                    nitroValidationRetries,
-                    config,
-                    null,
-                ) {
-                    nitroValidationRetries++
-                    // KNOWN ISSUE: instantly starts validating another nitro code after current validation has completed
-                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { code, _, _ ->
-                        validateNitro(
-                            code,
-                            nitroValidationRetries,
-                            BaseConfigurationFactory.getInstance(),
-                        )
+                    disconnect()
+                    NitroValidationWrapper.reactToResponseCode(
+                        responseCode,
+                        nitroCode,
+                        nitroValidationRetries,
+                        config,
+                        null,
+                    ) {
+                        nitroValidationRetries++
+                        NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { code, _, _ ->
+                            validateNitro(
+                                code,
+                                nitroValidationRetries,
+                                BaseConfigurationFactory.getInstance(),
+                            )
+                        }
                     }
                 }
-            }
-        }.onFailure {
-            Logger.printError("Occurred while validating a nitro code: ${it.message}")
+                break
+            } catch (error: Exception) {
+                Logger.printError("Occurred while validating a nitro code: ${error.message}")
 
-            if (config.generalSettings.retryTillValid) {
-                NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { code, _, _ ->
+                if (config.generalSettings.retryTillValid) {
                     nitroValidationRetries++
-                    validateNitro(code, nitroValidationRetries, BaseConfigurationFactory.getInstance())
+                    NitroValidationWrapper.retryValidation(nitroCode, config, retryCount, null) { _, _, _ ->
+                        nitroValidationRetries++
+                    }
+                } else {
+                    break
                 }
             }
         }
