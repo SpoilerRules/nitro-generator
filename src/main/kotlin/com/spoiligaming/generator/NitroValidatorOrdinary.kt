@@ -29,7 +29,11 @@ object NitroValidatorOrdinary {
      * @param retryCount The number of retry attempts for validation.
      * @param config The base configuration factory containing configuration settings.
      */
-    fun validateNitro(nitroCode: String, retryCount: Int, config: BaseConfigurationFactory) {
+    fun validateNitro(
+        nitroCode: String,
+        retryCount: Int,
+        config: BaseConfigurationFactory,
+    ) {
         if (GeneratorBean.isGenerationPaused.get()) {
             return
         }
@@ -50,7 +54,7 @@ object NitroValidatorOrdinary {
                     nitroCode,
                     nitroValidationRetries,
                     config,
-                    null
+                    null,
                 ) {
                     nitroValidationRetries++
                     // KNOWN ISSUE: instantly starts validating another nitro code after current validation has completed
@@ -58,7 +62,7 @@ object NitroValidatorOrdinary {
                         validateNitro(
                             code,
                             nitroValidationRetries,
-                            BaseConfigurationFactory.getInstance()
+                            BaseConfigurationFactory.getInstance(),
                         )
                     }
                 }
@@ -82,40 +86,51 @@ object NitroValidatorOrdinary {
      * @param config The base configuration factory containing configuration settings.
      * @return An HttpURLConnection object representing the connection to the Discord API.
      */
-    private fun getConnection(nitroCode: String, config: BaseConfigurationFactory): HttpURLConnection {
-        val proxy = when {
-            !config.proxySettings.enabled -> Proxy.NO_PROXY
-            else -> when (config.proxySettings.mode) {
-                1 -> Proxy(
-                    config.proxySettings.getProxyType(config.proxySettings.protocol).also {
-                        if (it == Proxy.Type.SOCKS && config.proxySettings.isAuthenticationRequired) {
-                            Authenticator.setDefault(object : Authenticator() {
-                                override fun getPasswordAuthentication(): PasswordAuthentication {
-                                    return PasswordAuthentication(
-                                        config.proxySettings.username,
-                                        config.proxySettings.password.toCharArray()
-                                    )
-                                }
-                            })
-                        }
-                    },
-                    InetSocketAddress(config.proxySettings.host, config.proxySettings.port.toInt())
-                )
+    private fun getConnection(
+        nitroCode: String,
+        config: BaseConfigurationFactory,
+    ): HttpURLConnection {
+        val proxy =
+            when {
+                !config.proxySettings.enabled -> Proxy.NO_PROXY
+                else ->
+                    when (config.proxySettings.mode) {
+                        1 ->
+                            Proxy(
+                                config.proxySettings.getProxyType(config.proxySettings.protocol).also {
+                                    if (it == Proxy.Type.SOCKS && config.proxySettings.isAuthenticationRequired) {
+                                        Authenticator.setDefault(
+                                            object : Authenticator() {
+                                                override fun getPasswordAuthentication(): PasswordAuthentication {
+                                                    return PasswordAuthentication(
+                                                        config.proxySettings.username,
+                                                        config.proxySettings.password.toCharArray(),
+                                                    )
+                                                }
+                                            },
+                                        )
+                                    }
+                                },
+                                InetSocketAddress(config.proxySettings.host, config.proxySettings.port.toInt()),
+                            )
 
-                else -> ProxyHandler.getNextProxy()?.let { proxyInfo ->
-                    Logger.printDebug("Using proxy: ${CEnum.CYAN}${proxyInfo.first}:${proxyInfo.second}${CEnum.RESET}")
-                    Proxy(
-                        config.proxySettings.getProxyType(config.proxySettings.protocol),
-                        InetSocketAddress(proxyInfo.first, proxyInfo.second)
-                    )
-                }
-                    ?: throw ConnectException("Failed to establish a connection to validate the nitro code because the next proxy is null.")
+                        else ->
+                            ProxyHandler.getNextProxy()?.let { proxyInfo ->
+                                Logger.printDebug("Using proxy: ${CEnum.CYAN}${proxyInfo.first}:${proxyInfo.second}${CEnum.RESET}")
+                                Proxy(
+                                    config.proxySettings.getProxyType(config.proxySettings.protocol),
+                                    InetSocketAddress(proxyInfo.first, proxyInfo.second),
+                                )
+                            }
+                                ?: throw ConnectException("Failed to establish a connection to validate the nitro code because the next proxy is null.")
+                    }
             }
-        }
 
         NitroValidationWrapper.disableProxySecurity()
 
-        return URI("https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode?with_application=false&with_subscription_plan=true").toURL()
+        return URI(
+            "https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode?with_application=false&with_subscription_plan=true",
+        ).toURL()
             .openConnection(proxy) as HttpURLConnection
     }
 }

@@ -29,19 +29,25 @@ object ProxyHandler {
             return
         }
 
-        proxies = file.readLines().mapNotNull { line ->
-            line.split(":").takeIf { it.size == 2 }?.let { (host, port) ->
-                runCatching {
-                    Pair(host, port.trim().replace(numericRegex, "").toInt())
-                }.onFailure {
-                    Logger.printError("Invalid port number in proxy file: $line due to $it.message")
-                }.getOrNull()
+        proxies =
+            file.readLines().mapNotNull { line ->
+                line.split(":").takeIf { it.size == 2 }?.let { (host, port) ->
+                    runCatching {
+                        Pair(host, port.trim().replace(numericRegex, "").toInt())
+                    }.onFailure {
+                        Logger.printError("Invalid port number in proxy file: $line due to $it.message")
+                    }.getOrNull()
+                }
             }
-        }
-        Logger.printDebug("Loaded ${CEnum.BRIGHT_PINK}${proxies.size} proxies${CEnum.RESET} from file: ${CEnum.BRIGHT_PURPLE}$fileName${CEnum.RESET}")
+        Logger.printDebug(
+            "Loaded ${CEnum.BRIGHT_PINK}${proxies.size} proxies${CEnum.RESET} from file: ${CEnum.BRIGHT_PURPLE}$fileName${CEnum.RESET}",
+        )
     }
 
-    private fun loadProxiesFromURL(rawContentLink: List<String>, rawContentSeparator: String) {
+    private fun loadProxiesFromURL(
+        rawContentLink: List<String>,
+        rawContentSeparator: String,
+    ) {
         Files.createTempFile("temp_proxies", ".txt").also { tempFile ->
             tempFile.bufferedWriter().use { writer ->
                 rawContentLink.forEach { url ->
@@ -52,9 +58,9 @@ object ProxyHandler {
                         Logger.printDebug(
                             "Successfully read proxy content from $url in ${CEnum.BRIGHT_PINK}${System.currentTimeMillis() - startTime}ms${CEnum.RESET}. The size of the raw content is ${CEnum.BRIGHT_PINK}${
                                 "%.2f".format(
-                                    content.toByteArray().size / 1024.0
+                                    content.toByteArray().size / 1024.0,
                                 )
-                            }KB${CEnum.RESET}."
+                            }KB${CEnum.RESET}.",
                         )
                         writer.write(content)
                         writer.write(rawContentSeparator)
@@ -69,14 +75,16 @@ object ProxyHandler {
             runCatching {
                 tempFile.deleteIfExists()
             }.onFailure {
-                Logger.printError("Failed to delete temporary proxy file located at ${tempFile.absolutePathString()} due to ${it::class.simpleName}: ${it.message}")
+                Logger.printError(
+                    "Failed to delete temporary proxy file located at ${tempFile.absolutePathString()} due to ${it::class.simpleName}: ${it.message}",
+                )
             }.onSuccess {
                 Logger.printDebug("Temporary proxy file deleted after saving the content to random access memory.")
             }
         }
     }
 
-    //use when new mode is static or custom proxy is disabled
+    // use when new mode is static or custom proxy is disabled
     fun unloadProxies() {
         if (proxies.isNotEmpty()) {
             proxies = emptyList()
@@ -100,10 +108,11 @@ object ProxyHandler {
             }
 
             2 -> loadProxiesFromFile(BaseConfigurationFactory.getInstance().proxySettings.proxyFilePath)
-            3 -> loadProxiesFromURL(
-                BaseConfigurationFactory.getInstance().proxySettings.rawContentLinks.split(",").map { it.trim() },
-                BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator
-            )
+            3 ->
+                loadProxiesFromURL(
+                    BaseConfigurationFactory.getInstance().proxySettings.rawContentLinks.split(",").map { it.trim() },
+                    BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator,
+                )
         }
     }
 

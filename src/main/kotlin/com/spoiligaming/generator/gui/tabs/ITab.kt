@@ -5,7 +5,7 @@ import javafx.scene.Node
 sealed interface ITab {
     enum class TabVisibility {
         VISIBLE,
-        INVISIBLE
+        INVISIBLE,
     }
 
     fun getContent(): Node

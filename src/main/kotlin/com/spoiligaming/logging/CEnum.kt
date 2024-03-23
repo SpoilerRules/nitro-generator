@@ -37,7 +37,8 @@ enum class CEnum(private val escapeCode: String) {
     CYAN("\u001B[36m"),
     RED("\u001B[91m"),
     BOLD("\u001B[1m"),
-    UNDERLINE("\u001B[4m");
+    UNDERLINE("\u001B[4m"),
+    ;
 
     override fun toString(): String = escapeCode
 }

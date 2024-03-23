@@ -28,7 +28,9 @@ class TabVisuals : ITab {
             if (Logger.showDebug) {
                 CommonElement().run {
                     createContentField(
-                        this@apply, "Theme", 225.0,
+                        this@apply,
+                        "Theme",
+                        225.0,
                         ElementColorPicker.addColorPickerValue(
                             BaseConfigurationFactory.getInstance().themeSettings.accentColor,
                             "Accent Color",
@@ -37,7 +39,7 @@ class TabVisuals : ITab {
                                     themeSettings.accentColor = newValue
                                 }
                             },
-                            Insets(10.0, 0.0, 0.0, 10.0)
+                            Insets(10.0, 0.0, 0.0, 10.0),
                         ),
                     )
                 }

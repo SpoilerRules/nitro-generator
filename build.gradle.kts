@@ -1,8 +1,11 @@
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+
 plugins {
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.serialization") version "1.9.23"
     id("org.openjfx.javafxplugin") version "0.1.0"
     id("io.gitlab.arturbosch.detekt") version "1.23.5"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     application
 }
@@ -16,7 +19,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-   // implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
+    // implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.3") {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-common")
@@ -25,7 +28,7 @@ dependencies {
     implementation("org.openjfx:javafx-controls:11.0.2")
     implementation("org.openjfx:javafx-graphics:11.0.2")
     implementation("org.openjfx:javafx-base:11.0.2")
- //   implementation("org.controlsfx:controlsfx:11.2.0")
+    //   implementation("org.controlsfx:controlsfx:11.2.0")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
@@ -51,6 +54,24 @@ detekt {
     basePath = projectDir.absolutePath
 }
 
+ktlint {
+    debug.set(false)
+    verbose.set(false)
+    android.set(false)
+    ignoreFailures.set(true)
+    enableExperimentalRules.set(true)
+    baseline.set(file("config/klint/baseline.xml"))
+
+    reporters {
+        reporter(ReporterType.CHECKSTYLE)
+    }
+
+    filter {
+        exclude("**/generated/**")
+        include("**/kotlin/**")
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
 }
@@ -65,7 +86,7 @@ tasks.shadowJar {
     duplicatesStrategy = DuplicatesStrategy.FAIL
     archiveFileName.set("NitroGenerator.jar")
     manifest {
-        attributes["Main-Class"] = "${group}.generator.MainKt"
+        attributes["Main-Class"] = "$group.generator.MainKt"
     }
 }
 
@@ -79,7 +100,7 @@ tasks.jar {
 }
 
 application {
-    mainClass.set("${group}.generator.MainKt")
+    mainClass.set("$group.generator.MainKt")
 }
 
 kotlin {

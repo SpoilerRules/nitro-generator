@@ -14,29 +14,32 @@ object ElementBoolean {
         labelText: String,
         tooltipText: String? = null,
         valueUpdater: (Boolean) -> Unit,
-        padding: Insets = Insets(10.0, 0.0, 0.0, 10.0)
-    ): HBox = HBox().apply {
-        alignment = Pos.TOP_LEFT
-        spacing = 5.0
-        this.padding = padding
+        padding: Insets = Insets(10.0, 0.0, 0.0, 10.0),
+    ): HBox =
+        HBox().apply {
+            alignment = Pos.TOP_LEFT
+            spacing = 5.0
+            this.padding = padding
 
-        children.addAll(CheckBox().apply {
-            alignment = Pos.CENTER
-            styleClass.add("check-box")
-            style =
-                "-fx-text-fill: ${ColorPalette.ACCENT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-mark-color: ${ColorPalette.ACCENT_COLOR};"
-            isSelected = initialValue
+            children.addAll(
+                CheckBox().apply {
+                    alignment = Pos.CENTER
+                    styleClass.add("check-box")
+                    style =
+                        "-fx-text-fill: ${ColorPalette.accentColor}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-mark-color: ${ColorPalette.accentColor};"
+                    isSelected = initialValue
 
+                    setOnMouseEntered { cursor = Cursor.HAND }
+                    setOnMouseExited { cursor = Cursor.DEFAULT }
 
-            setOnMouseEntered { cursor = Cursor.HAND }
-            setOnMouseExited { cursor = Cursor.DEFAULT }
-
-            selectedProperty().addListener { _, _, newValue ->
-                valueUpdater(newValue)
+                    selectedProperty().addListener { _, _, newValue ->
+                        valueUpdater(newValue)
+                    }
+                },
+                CommonElement.createLabel(labelText),
+            )
+            tooltipText?.let {
+                children.add(CommonElement.createTooltip(it))
             }
-        }, CommonElement.createLabel(labelText))
-        tooltipText?.let {
-            children.add(CommonElement.createTooltip(it))
         }
-    }
 }

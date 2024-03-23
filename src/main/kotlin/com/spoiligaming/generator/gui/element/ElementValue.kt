@@ -21,7 +21,7 @@ object ElementValue {
         labelText: String,
         tooltipText: String? = null,
         valueUpdater: (T) -> Unit,
-        padding: Insets = Insets(10.0, 0.0, 0.0, 10.0)
+        padding: Insets = Insets(10.0, 0.0, 0.0, 10.0),
     ): HBox {
         val property = initialValue.toSimpleProperty()
 
@@ -34,7 +34,7 @@ object ElementValue {
                 createTextField(property, valueUpdater),
                 createButton("-", 30.0, 25.0) { updateValue(property, -1, valueUpdater as (Number) -> Unit) },
                 createButton("+", 30.0, 25.0) { updateValue(property, 1, valueUpdater as (Number) -> Unit) },
-                CommonElement.createLabel(labelText)
+                CommonElement.createLabel(labelText),
             )
             tooltipText?.let {
                 children.add(CommonElement.createTooltip(it))
@@ -46,7 +46,7 @@ object ElementValue {
 
     private fun <T : Number> createTextField(
         property: Any,
-        valueUpdater: (T) -> Unit
+        valueUpdater: (T) -> Unit,
     ) = TextField().apply {
         setMaxSize(70.0, 25.0)
         setMinSize(70.0, 25.0)
@@ -54,7 +54,7 @@ object ElementValue {
             textProperty().bindBidirectional(property as Property<out Number>, DecimalFormat("#"))
         }
         style =
-            "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.ACCENT_COLOR};"
+            "-fx-background-color: ${ColorPalette.controlColor}; -fx-text-fill: ${ColorPalette.textColor}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 12; -fx-highlight-fill: ${ColorPalette.accentColor};"
         alignment = Pos.CENTER
 
         var oldValue: String? = null
@@ -88,11 +88,11 @@ object ElementValue {
         text: String,
         maxWidth: Double,
         maxHeight: Double,
-        onClick: () -> Unit
+        onClick: () -> Unit,
     ) = Button(text).apply {
         alignment = Pos.CENTER
         style =
-            "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-text-fill: ${ColorPalette.TEXT_COLOR}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 15; -fx-background-radius: 12;"
+            "-fx-background-color: ${ColorPalette.controlColor}; -fx-text-fill: ${ColorPalette.textColor}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 15; -fx-background-radius: 12;"
         setMaxSize(maxWidth, maxHeight)
         setMinSize(maxWidth, maxHeight)
 
@@ -104,7 +104,7 @@ object ElementValue {
     private fun updateValue(
         property: Any,
         increment: Long,
-        valueUpdater: (Number) -> Unit
+        valueUpdater: (Number) -> Unit,
     ) {
         when (property) {
             is SimpleIntegerProperty -> {
@@ -123,9 +123,10 @@ object ElementValue {
         }
     }
 
-    private fun <T : Number> T.toSimpleProperty(): Any = when (this) {
-        is Long -> SimpleLongProperty(this)
-        is Int -> SimpleIntegerProperty(this)
-        else -> throw IllegalArgumentException("Unsupported type")
-    }
+    private fun <T : Number> T.toSimpleProperty(): Any =
+        when (this) {
+            is Long -> SimpleLongProperty(this)
+            is Int -> SimpleIntegerProperty(this)
+            else -> throw IllegalArgumentException("Unsupported type")
+        }
 }

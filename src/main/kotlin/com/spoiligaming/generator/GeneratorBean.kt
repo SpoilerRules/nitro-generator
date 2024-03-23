@@ -20,7 +20,8 @@ object GeneratorBean {
         timer(
             initialDelay = 0,
             daemon = true,
-            period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay.takeIf { it != 0L } ?: 1) {
+            period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay.takeIf { it != 0L } ?: 1,
+        ) {
             val config = BaseConfigurationFactory.getInstance()
             // reset isAnythingChanged to ensure concurrent operations work
             BaseConfigurationFactory.isConfigUpdated = false
@@ -45,12 +46,17 @@ object GeneratorBean {
                         handleConcurrentValidation(nitroCode, config)
                 }
             } else if (config.proxySettings.proxyFilePath.isEmpty() && config.proxySettings.mode == 2 && config.proxySettings.enabled) {
-                Logger.printWarning("Nitro generation was skipped because ${CEnum.UNDERLINE}the Proxy File path was empty${CEnum.RESET}, even though Custom Proxy mode was set to 'One File' and enabled. Please check your proxy settings.")
+                Logger.printWarning(
+                    "Nitro generation was skipped because ${CEnum.UNDERLINE}the Proxy File path was empty${CEnum.RESET}, even though Custom Proxy mode was set to 'One File' and enabled. Please check your proxy settings.",
+                )
             }
         }
     }
 
-    private fun handleConcurrentValidation(initialNitroCode: String, config: BaseConfigurationFactory) {
+    private fun handleConcurrentValidation(
+        initialNitroCode: String,
+        config: BaseConfigurationFactory,
+    ) {
         val validateNitro: (String, BaseConfigurationFactory, String) -> Unit =
             { nitroCode, configReference, threadIdentifier ->
                 when (configReference.proxySettings.mode) {
@@ -73,7 +79,7 @@ object GeneratorBean {
                             nitroCode,
                             config,
                             coroutineContext[Job]?.toString()?.substringAfter('@')
-                                ?: "UnknownThread".substringBefore(']')
+                                ?: "UnknownThread".substringBefore(']'),
                         )
                         semaphore.release()
                     }
@@ -84,7 +90,9 @@ object GeneratorBean {
     }
 
     private fun generateNitroCode(promotionalGiftCode: Boolean): String =
-        List(if (!promotionalGiftCode) 16 else 24) { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".random() }.joinToString(
-            ""
+        List(
+            if (!promotionalGiftCode) 16 else 24,
+        ) { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".random() }.joinToString(
+            "",
         )
 }

@@ -3,8 +3,10 @@ package com.spoiligaming.generator.gui
 import javafx.scene.text.Font
 
 object ResourceHandler {
-    private fun loadFont(fontPath: String, weight: Double): Font =
-        Font.loadFont(this::class.java.getResourceAsStream(fontPath), weight)
+    private fun loadFont(
+        fontPath: String,
+        weight: Double,
+    ): Font = Font.loadFont(this::class.java.getResourceAsStream(fontPath), weight)
 
     val comfortaaLight by lazy { loadFont("/fonts/Comfortaa-Light.ttf", 300.0) }
     val comfortaaRegular by lazy { loadFont("/fonts/Comfortaa-Regular.ttf", 400.0) }

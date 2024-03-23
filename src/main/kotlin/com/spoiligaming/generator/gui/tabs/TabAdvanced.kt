@@ -31,7 +31,10 @@ class TabAdvanced : ITab {
             vgap = 7.5
             CommonElement().run {
                 createContentField(
-                    this@apply, "Multi Threading", 150.0, ElementBoolean.addBooleanValue(
+                    this@apply,
+                    "Multi Threading",
+                    150.0,
+                    ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().multithreadingSettings.enabled,
                         "Enabled",
                         null,
@@ -43,7 +46,7 @@ class TabAdvanced : ITab {
                                 NitroValidatorAdvancedMt.isNextProxyAvailable.set(true)
                             }
                         },
-                        Insets(10.0, 0.0, 0.0, 10.0)
+                        Insets(10.0, 0.0, 0.0, 10.0),
                     ),
                     ElementValue.addUnitValue(
                         BaseConfigurationFactory.getInstance().multithreadingSettings.threadLimit,
@@ -53,7 +56,7 @@ class TabAdvanced : ITab {
                             BaseConfigurationFactory.updateValue {
                                 multithreadingSettings.threadLimit = newValue
                             }
-                        }
+                        },
                     ),
                     ElementValue.addUnitValue(
                         BaseConfigurationFactory.getInstance().multithreadingSettings.threadLaunchDelay,
@@ -63,12 +66,13 @@ class TabAdvanced : ITab {
                             BaseConfigurationFactory.updateValue {
                                 multithreadingSettings.threadLaunchDelay = newValue
                             }
-                        }
-                    )
+                        },
+                    ),
                 )
                 createContentField(
                     this@apply,
-                    "Auto Claim", 152.0,
+                    "Auto Claim",
+                    152.0,
                     ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().autoClaimSettings.enabled,
                         "Enabled",
@@ -77,7 +81,7 @@ class TabAdvanced : ITab {
                             BaseConfigurationFactory.updateValue {
                                 autoClaimSettings.enabled = newValue
                             }
-                        }
+                        },
                     ),
                     ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().autoClaimSettings.retryTillSuccess,
@@ -87,7 +91,7 @@ class TabAdvanced : ITab {
                             BaseConfigurationFactory.updateValue {
                                 autoClaimSettings.retryTillSuccess = newValue
                             }
-                        }
+                        },
                     ),
                     ElementText.addTextValue(
                         BaseConfigurationFactory.getInstance().autoClaimSettings.accountToken,
@@ -97,8 +101,8 @@ class TabAdvanced : ITab {
                             BaseConfigurationFactory.updateValue {
                                 autoClaimSettings.accountToken = newValue
                             }
-                        }
-                    )
+                        },
+                    ),
                 )
             }
         }

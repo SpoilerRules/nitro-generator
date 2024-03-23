@@ -32,7 +32,7 @@ class Initializer : Application() {
         borderPane.left = TabContainer()
         TabHandler.allocatePane()
         borderPane.center = TabHandler.tabContentPane
-        borderPane.style = "-fx-background-color: ${ColorPalette.CONTROL_COLOR}; -fx-background-radius: 16;"
+        borderPane.style = "-fx-background-color: ${ColorPalette.controlColor}; -fx-background-radius: 16;"
         val scene = Scene(borderPane, 600.0, 425.0)
         scene.fill = Color.TRANSPARENT
 
@@ -75,129 +75,137 @@ class Initializer : Application() {
     private fun addFundamentalButtons(stage: Stage): HBox {
         val buttonSize = 100.0 to 25.0
         val buttonStyle = { color: String ->
-            "-fx-background-color: ${ColorPalette.MENU_COLOR}; -fx-text-fill: $color; -fx-background-radius: 16px; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 13;"
+            "-fx-background-color: ${ColorPalette.menuColor}; -fx-text-fill: $color; -fx-background-radius: 16px; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 13;"
         }
 
-        val pauseButton = Button().apply {
-            setMaxSize(buttonSize.first, buttonSize.second)
-            setMinSize(buttonSize.first, buttonSize.second)
-            styleProperty().bind(
-                Bindings.`when`(GeneratorBean.isGenerationPaused)
-                    .then(buttonStyle(ColorPalette.ACCENT_COLOR))
-                    .otherwise(buttonStyle(ColorPalette.TEXT_COLOR))
-            )
-            textProperty().bind(
-                Bindings.`when`(GeneratorBean.isGenerationPaused)
-                    .then("Resume")
-                    .otherwise("Pause")
-            )
-            setOnAction {
-                GeneratorBean.isGenerationPaused.set(!GeneratorBean.isGenerationPaused.get())
-                if (GeneratorBean.isGenerationPaused.get()) {
-                    Logger.printSuccess("Nitro generation has been paused. Any ongoing nitro validation process will now exit.")
-                } else {
-                    Logger.printSuccess("Nitro generation has resumed.")
+        val pauseButton =
+            Button().apply {
+                setMaxSize(buttonSize.first, buttonSize.second)
+                setMinSize(buttonSize.first, buttonSize.second)
+                styleProperty().bind(
+                    Bindings.`when`(GeneratorBean.isGenerationPaused)
+                        .then(buttonStyle(ColorPalette.accentColor))
+                        .otherwise(buttonStyle(ColorPalette.textColor)),
+                )
+                textProperty().bind(
+                    Bindings.`when`(GeneratorBean.isGenerationPaused)
+                        .then("Resume")
+                        .otherwise("Pause"),
+                )
+                setOnAction {
+                    GeneratorBean.isGenerationPaused.set(!GeneratorBean.isGenerationPaused.get())
+                    if (GeneratorBean.isGenerationPaused.get()) {
+                        Logger.printSuccess("Nitro generation has been paused. Any ongoing nitro validation process will now exit.")
+                    } else {
+                        Logger.printSuccess("Nitro generation has resumed.")
+                    }
+                }
+
+                setOnMouseEntered {
+                    styleProperty().bind(
+                        Bindings.`when`(GeneratorBean.isGenerationPaused)
+                            .then(buttonStyle(toRgba(ColorPalette.accentColor, 0.8)))
+                            .otherwise(buttonStyle(toRgba(ColorPalette.textColor, 0.8))),
+                    )
+                    scene.cursor = Cursor.HAND
+                }
+                setOnMouseExited {
+                    styleProperty().bind(
+                        Bindings.`when`(GeneratorBean.isGenerationPaused)
+                            .then(buttonStyle(ColorPalette.accentColor))
+                            .otherwise(buttonStyle(ColorPalette.textColor)),
+                    )
+                    scene.cursor = Cursor.DEFAULT
                 }
             }
 
-            setOnMouseEntered {
+        val minimizeButton =
+            Button().apply {
+                setMaxSize(buttonSize.first, buttonSize.second)
+                setMinSize(buttonSize.first, buttonSize.second)
                 styleProperty().bind(
-                    Bindings.`when`(GeneratorBean.isGenerationPaused)
-                        .then(buttonStyle(toRgba(ColorPalette.ACCENT_COLOR, 0.8)))
-                        .otherwise(buttonStyle(toRgba(ColorPalette.TEXT_COLOR, 0.8)))
+                    Bindings.`when`(stage.iconifiedProperty())
+                        .then(buttonStyle(ColorPalette.accentColor))
+                        .otherwise(buttonStyle(ColorPalette.textColor)),
                 )
-                scene.cursor = Cursor.HAND
-            }
-            setOnMouseExited {
-                styleProperty().bind(
-                    Bindings.`when`(GeneratorBean.isGenerationPaused)
-                        .then(buttonStyle(ColorPalette.ACCENT_COLOR))
-                        .otherwise(buttonStyle(ColorPalette.TEXT_COLOR))
+                textProperty().bind(
+                    Bindings.`when`(stage.iconifiedProperty())
+                        .then("Restore")
+                        .otherwise("Minimize"),
                 )
-                scene.cursor = Cursor.DEFAULT
-            }
-        }
+                setOnAction {
+                    if (stage.isIconified) {
+                        stage.isIconified = false
+                        Logger.printSuccess("Application has been restored.")
+                    } else {
+                        stage.isIconified = true
+                        Logger.printSuccess("Application has been minimized.")
+                    }
+                }
 
-        val minimizeButton = Button().apply {
-            setMaxSize(buttonSize.first, buttonSize.second)
-            setMinSize(buttonSize.first, buttonSize.second)
-            styleProperty().bind(
-                Bindings.`when`(stage.iconifiedProperty())
-                    .then(buttonStyle(ColorPalette.ACCENT_COLOR))
-                    .otherwise(buttonStyle(ColorPalette.TEXT_COLOR))
-            )
-            textProperty().bind(
-                Bindings.`when`(stage.iconifiedProperty())
-                    .then("Restore")
-                    .otherwise("Minimize")
-            )
-            setOnAction {
-                if (stage.isIconified) {
-                    stage.isIconified = false
-                    Logger.printSuccess("Application has been restored.")
-                } else {
-                    stage.isIconified = true
-                    Logger.printSuccess("Application has been minimized.")
+                setOnMouseEntered {
+                    styleProperty().bind(
+                        Bindings.`when`(stage.iconifiedProperty())
+                            .then(buttonStyle(toRgba(ColorPalette.accentColor, 0.8)))
+                            .otherwise(buttonStyle(toRgba(ColorPalette.textColor, 0.8))),
+                    )
+                    scene.cursor = Cursor.HAND
+                }
+                setOnMouseExited {
+                    styleProperty().bind(
+                        Bindings.`when`(stage.iconifiedProperty())
+                            .then(buttonStyle(ColorPalette.accentColor))
+                            .otherwise(buttonStyle(ColorPalette.textColor)),
+                    )
+                    scene.cursor = Cursor.DEFAULT
                 }
             }
 
-            setOnMouseEntered {
-                styleProperty().bind(
-                    Bindings.`when`(stage.iconifiedProperty())
-                        .then(buttonStyle(toRgba(ColorPalette.ACCENT_COLOR, 0.8)))
-                        .otherwise(buttonStyle(toRgba(ColorPalette.TEXT_COLOR, 0.8)))
-                )
-                scene.cursor = Cursor.HAND
-            }
-            setOnMouseExited {
-                styleProperty().bind(
-                    Bindings.`when`(stage.iconifiedProperty())
-                        .then(buttonStyle(ColorPalette.ACCENT_COLOR))
-                        .otherwise(buttonStyle(ColorPalette.TEXT_COLOR))
-                )
-                scene.cursor = Cursor.DEFAULT
-            }
-        }
+        val exitButton =
+            Button("Exit").apply {
+                setMaxSize(buttonSize.first, buttonSize.second)
+                setMinSize(buttonSize.first, buttonSize.second)
+                style = buttonStyle(ColorPalette.textColor)
 
-        val exitButton = Button("Exit").apply {
-            setMaxSize(buttonSize.first, buttonSize.second)
-            setMinSize(buttonSize.first, buttonSize.second)
-            style = buttonStyle(ColorPalette.TEXT_COLOR)
+                setOnAction {
+                    exitProcess(0)
+                }
 
-            setOnAction {
-                exitProcess(0)
-            }
+                setOnMouseEntered {
+                    style = buttonStyle("rgba(255, 255, 255, 0.8)")
+                    scene.cursor = Cursor.HAND
+                }
 
-            setOnMouseEntered {
-                style = buttonStyle("rgba(255, 255, 255, 0.8)")
-                scene.cursor = Cursor.HAND
+                setOnMouseExited {
+                    style = buttonStyle("#FFFFFF")
+                    scene.cursor = Cursor.DEFAULT
+                }
             }
-
-            setOnMouseExited {
-                style = buttonStyle("#FFFFFF")
-                scene.cursor = Cursor.DEFAULT
-            }
-        }
 
         return HBox().apply {
             alignment = Pos.BOTTOM_RIGHT
             padding = Insets(-55.0, 10.0, 10.0, 0.0)
             style = "-fx-background-color: transparent;"
 
-            children.add(BorderPane().apply {
-                background =
-                    Background(BackgroundFill(Color.web(ColorPalette.SECONDARY_COLOR), CornerRadii(16.0), Insets.EMPTY))
-                setMaxSize(325.0, 40.0)
-                setMinSize(325.0, 40.0)
+            children.add(
+                BorderPane().apply {
+                    background =
+                        Background(BackgroundFill(Color.web(ColorPalette.secondaryColor), CornerRadii(16.0), Insets.EMPTY))
+                    setMaxSize(325.0, 40.0)
+                    setMinSize(325.0, 40.0)
 
-                center = HBox(pauseButton, minimizeButton, exitButton).apply {
-                    alignment = Pos.CENTER
-                    spacing = 5.0
-                }
-            })
+                    center =
+                        HBox(pauseButton, minimizeButton, exitButton).apply {
+                            alignment = Pos.CENTER
+                            spacing = 5.0
+                        }
+                },
+            )
         }
     }
 
-    private fun toRgba(color: String, opacity: Double) =
-        "rgba(${color.removePrefix("#").chunked(2).joinToString { it.toInt(16).toString() }}, $opacity)"
+    private fun toRgba(
+        color: String,
+        opacity: Double,
+    ) = "rgba(${color.removePrefix("#").chunked(2).joinToString { it.toInt(16).toString() }}, $opacity)"
 }

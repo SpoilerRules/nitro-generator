@@ -16,7 +16,7 @@ data class General(
     @SerialName("alertWebhookForValidNitroCode") var alertWebhook: Boolean = true,
     var discordWebhookURL: String = "https://dummylink.com/suspicious-webhook/",
     @SerialName("retry") var retryTillValid: Boolean = true,
-    var retryDelay: Int = 5
+    var retryDelay: Int = 5,
 )
 
 @Serializable
@@ -25,7 +25,6 @@ data class Multithreading(
     var enabled: Boolean = false,
     var threadLimit: Int = 3,
     var threadLaunchDelay: Long = 3000,
-
     // var waitDelay: Long = 10000
 )
 
@@ -42,20 +41,21 @@ data class CustomProxy(
     var password: String = "123Dummy\$Password!",
     var proxyFilePath: String = "",
     var rawContentLinks: String = "https://my-epic-proxy-api/proxies.txt, https://dummy-proxy-api/suspicious-http/proxies.txt",
-    var rawContentSeparator: String = "\n"
+    var rawContentSeparator: String = "\n",
 ) {
-    fun getProxyType(protocol: Int): Proxy.Type = when (protocol) {
-        1 -> Proxy.Type.HTTP
-        2 -> Proxy.Type.SOCKS
-        else -> throw IllegalArgumentException("Invalid protocol type")
-    }
+    fun getProxyType(protocol: Int): Proxy.Type =
+        when (protocol) {
+            1 -> Proxy.Type.HTTP
+            2 -> Proxy.Type.SOCKS
+            else -> throw IllegalArgumentException("Invalid protocol type")
+        }
 }
 
 @Serializable
 data class AutoClaim(
     var enabled: Boolean = true,
     var retryTillSuccess: Boolean = true,
-    var accountToken: String = "dGhpcyBpcyBhIGR1bW15IHRva2Vu"
+    var accountToken: String = "dGhpcyBpcyBhIGR1bW15IHRva2Vu",
 )
 
 // experimental and undone.
@@ -65,7 +65,7 @@ data class Theme(
     var menuColor: String = "#282828",
     var controlColor: String = "#4C4C4C",
     var secondaryColor: String = "#414141",
-    var textColor: String = "#FFFFFF"
+    var textColor: String = "#FFFFFF",
 )
 
 @Serializable
@@ -74,17 +74,18 @@ data class BaseConfigurationFactory(
     @SerialName("Custom Proxy") var proxySettings: CustomProxy = CustomProxy(),
     @SerialName("Multi Threading") var multithreadingSettings: Multithreading = Multithreading(),
     @SerialName("Auto Claim") var autoClaimSettings: AutoClaim = AutoClaim(),
-    @SerialName("Theme (unstable, do not modify)") var themeSettings: Theme = Theme()
+    @SerialName("Theme (unstable, do not modify)") var themeSettings: Theme = Theme(),
 ) {
     companion object {
         var isConfigUpdated: Boolean = false
 
         private var configFactoryInstance: BaseConfigurationFactory? = null
         private val configFile = File("configuration.json")
-        private val jsonFormatter = Json {
-            encodeDefaults = true
-            prettyPrint = true
-        }
+        private val jsonFormatter =
+            Json {
+                encodeDefaults = true
+                prettyPrint = true
+            }
 
         @Synchronized
         fun getInstance(): BaseConfigurationFactory {

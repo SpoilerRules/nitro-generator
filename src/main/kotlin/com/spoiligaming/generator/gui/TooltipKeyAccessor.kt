@@ -2,7 +2,7 @@ package com.spoiligaming.generator.gui
 
 import com.spoiligaming.generator.gui.TooltipKeyAccessor.properties
 import com.spoiligaming.logging.Logger
-import java.util.*
+import java.util.Properties
 
 /**
  * `TooltipKeyAccessor` is a singleton object that provides an interface to access tooltip descriptions.
@@ -15,13 +15,14 @@ import java.util.*
  * @property properties The loaded properties from the `tooltip_descriptions.properties` file. It's nullable and would be null if the properties file failed to load.
  */
 object TooltipKeyAccessor {
-    private val properties: Properties? = runCatching {
-        Properties().apply {
-            load(TooltipKeyAccessor::class.java.getResourceAsStream("/tooltip_descriptions.properties"))
-        }
-    }.onFailure {
-        Logger.printError("Failed to load properties file: ${it.message}. Tooltips won't be available.")
-    }.getOrNull()
+    private val properties: Properties? =
+        runCatching {
+            Properties().apply {
+                load(TooltipKeyAccessor::class.java.getResourceAsStream("/tooltip_descriptions.properties"))
+            }
+        }.onFailure {
+            Logger.printError("Failed to load properties file: ${it.message}. Tooltips won't be available.")
+        }.getOrNull()
 
     /**
      * Retrieves the tooltip description corresponding to the provided key.

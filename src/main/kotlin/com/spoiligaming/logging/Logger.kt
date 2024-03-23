@@ -18,21 +18,31 @@ object Logger {
 
     fun <V> printError(error: V) = log("ERROR", error, CEnum.ERROR_RED)
 
-    fun <V> printSuccess(message: V, nitroGenerationLog: Boolean = false) =
-        if (!nitroGenerationLog) log("OK", message, CEnum.GREEN) else println(
+    fun <V> printSuccess(
+        message: V,
+        nitroGenerationLog: Boolean = false,
+    ) = if (!nitroGenerationLog) {
+        log("OK", message, CEnum.GREEN)
+    } else {
+        println(
             "${
                 createStatus(
                     CEnum.GREEN,
-                    "OK"
+                    "OK",
                 )
-            } $message"
+            } $message",
         )
+    }
 
     fun <V> printWarning(warning: V) = log("WARNING", warning, CEnum.YELLOW)
 
     fun <V> printDebug(information: V) = log("DEBUG", information, CEnum.ORANGE)
 
-    private fun <V> log(level: String, message: V, color: CEnum) {
+    private fun <V> log(
+        level: String,
+        message: V,
+        color: CEnum,
+    ) {
         if (level != "DEBUG" || showDebug) {
             println("${createStatus(color, level)} $message")
         }
@@ -41,13 +51,15 @@ object Logger {
                 "[${LocalDateTime.now().format(dateTimeFormatter)}] ${
                     createStatus(
                         color,
-                        level
+                        level,
                     )
                 } $message".replace("\u001B\\[[;\\d]*m".toRegex(), "")
-            }\n"
+            }\n",
         )
     }
 
-    private fun createStatus(primaryColor: CEnum, status: String): String =
-        "${CEnum.RESET}[$primaryColor$status${CEnum.RESET}]${CEnum.RESET}"
+    private fun createStatus(
+        primaryColor: CEnum,
+        status: String,
+    ): String = "${CEnum.RESET}[$primaryColor$status${CEnum.RESET}]${CEnum.RESET}"
 }
