@@ -117,7 +117,7 @@ object NitroValidationWrapper {
                               "description": "${
                         when {
                             isAutoclaimSucceeded == null -> ""
-                            isAutoclaimSucceeded -> "The Nitro code was successfully claimed"
+                            isAutoclaimSucceeded -> "The Nitro code was successfully claimed."
                             else -> "Failed to claim the Nitro code."
                         }
                     }",
