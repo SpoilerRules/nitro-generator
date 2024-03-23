@@ -11,7 +11,7 @@ import java.net.URI
 
 fun main(args: Array<String>) {
     Logger.showDebug = "-debug" in args
-    if ("-skipupdate" in args) checkForUpdate()
+    if ("-skipupdate" !in args) checkForUpdate()
     Application.launch(Initializer::class.java)
 }
 
