@@ -1,29 +1,16 @@
 package com.spoiligaming.generator.gui.tabs
 
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
-import com.spoiligaming.generator.gui.TabContainer
 import com.spoiligaming.generator.gui.TooltipKeyAccessor
 import com.spoiligaming.generator.gui.element.CommonElement
 import com.spoiligaming.generator.gui.element.ElementBoolean
 import com.spoiligaming.generator.gui.element.ElementText
 import com.spoiligaming.generator.gui.element.ElementValue
-import com.spoiligaming.logging.Logger
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.ScrollPane
-import javafx.scene.layout.GridPane
 
-class TabGeneral : ITab {
-    private val generalPane: GridPane = GridPane()
-
-    init {
-        Logger.printDebug("Created an instance of GridPane for General tab.")
-
-        TabContainer.currentTabProperty().addListener { _, _, newValue ->
-            generalPane.isVisible = newValue == 0
-        }
-    }
-
+class TabGeneral : AbstractTab(0, "General") {
     override fun getContent(): ScrollPane =
         ScrollPane().apply {
             maxWidth = 420.0
@@ -35,7 +22,7 @@ class TabGeneral : ITab {
             style = "-fx-background-color: transparent; -fx-background: transparent; -fx-border-width: 0;"
 
             content =
-                generalPane.apply generalPaneApply@{
+                pane.apply generalPaneApply@{
                     alignment = Pos.TOP_CENTER
                     hgap = 20.0
                     vgap = 7.5
@@ -137,8 +124,4 @@ class TabGeneral : ITab {
                     }
                 }
         }
-
-    override fun setVisibility(visibility: ITab.TabVisibility) {
-        generalPane.isVisible = (TabContainer.currentTab == 0 && visibility == ITab.TabVisibility.VISIBLE)
-    }
 }

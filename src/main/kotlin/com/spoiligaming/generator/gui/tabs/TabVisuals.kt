@@ -1,6 +1,6 @@
 package com.spoiligaming.generator.gui.tabs
 
-import com.spoiligaming.generator.configuration.BaseConfigurationFactory
+/*import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.TabContainer
 import com.spoiligaming.generator.gui.element.CommonElement
 import com.spoiligaming.generator.gui.element.ElementColorPicker
@@ -51,4 +51,4 @@ class TabVisuals : ITab {
     override fun setVisibility(visibility: ITab.TabVisibility) {
         visualsPane.isVisible = (TabContainer.currentTab == 4 && visibility == ITab.TabVisibility.VISIBLE)
     }
-}
+}*/

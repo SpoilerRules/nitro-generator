@@ -2,8 +2,6 @@ package com.spoiligaming.generator.gui.tabs
 
 import com.spoiligaming.generator.gui.ColorPalette
 import com.spoiligaming.generator.gui.ResourceHandler
-import com.spoiligaming.generator.gui.TabContainer
-import com.spoiligaming.logging.Logger
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Cursor
@@ -20,17 +18,7 @@ import javafx.scene.paint.Color
 import java.io.OutputStream
 import java.io.PrintStream
 
-class TabConsole : ITab {
-    private val consolePane: GridPane = GridPane()
-
-    init {
-        Logger.printDebug("Created an instance of GridPane for Console tab.")
-
-        TabContainer.currentTabProperty().addListener { _, _, newValue ->
-            consolePane.isVisible = newValue == 4
-        }
-    }
-
+class TabConsole : AbstractTab(3, "Console") {
     override fun getContent(): GridPane {
         val textArea =
             TextArea().apply {
@@ -69,7 +57,7 @@ class TabConsole : ITab {
             ),
         )
 
-        return consolePane.apply {
+        return pane.apply {
             add(
                 VBox().apply {
                     background =
@@ -110,9 +98,5 @@ class TabConsole : ITab {
                 0,
             )
         }
-    }
-
-    override fun setVisibility(visibility: ITab.TabVisibility) {
-        consolePane.isVisible = (TabContainer.currentTab == 4 && visibility == ITab.TabVisibility.VISIBLE)
     }
 }

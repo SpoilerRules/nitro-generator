@@ -3,7 +3,6 @@ package com.spoiligaming.generator.gui.tabs
 import com.spoiligaming.generator.NitroValidatorConcurrent
 import com.spoiligaming.generator.ProxyHandler
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
-import com.spoiligaming.generator.gui.TabContainer
 import com.spoiligaming.generator.gui.TooltipKeyAccessor
 import com.spoiligaming.generator.gui.element.CommonElement
 import com.spoiligaming.generator.gui.element.ElementBoolean
@@ -11,25 +10,13 @@ import com.spoiligaming.generator.gui.element.ElementFilePicker
 import com.spoiligaming.generator.gui.element.ElementList
 import com.spoiligaming.generator.gui.element.ElementNote
 import com.spoiligaming.generator.gui.element.ElementText
-import com.spoiligaming.logging.Logger
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.ScrollPane.ScrollBarPolicy
-import javafx.scene.layout.GridPane
 
-class TabProxy : ITab {
-    private val proxyPane: GridPane = GridPane()
-
-    init {
-        Logger.printDebug("Created an instance of GridPane for Proxy tab.")
-
-        TabContainer.currentTabProperty().addListener { _, _, newValue ->
-            proxyPane.isVisible = newValue == 1
-        }
-    }
-
+class TabProxy : AbstractTab(1, "Proxy") {
     override fun getContent(): ScrollPane =
         ScrollPane().apply {
             maxWidth = 420.0
@@ -41,7 +28,7 @@ class TabProxy : ITab {
             style = "-fx-background-color: transparent; -fx-background: transparent; -fx-border-width: 0;"
 
             content =
-                proxyPane.apply proxyPaneApply@{
+                pane.apply proxyPaneApply@{
                     alignment = Pos.TOP_CENTER
                     hgap = 20.0
                     vgap = 7.5
@@ -235,8 +222,4 @@ class TabProxy : ITab {
                     }
                 }
         }
-
-    override fun setVisibility(visibility: ITab.TabVisibility) {
-        proxyPane.isVisible = (TabContainer.currentTab == 1 && visibility == ITab.TabVisibility.VISIBLE)
-    }
 }

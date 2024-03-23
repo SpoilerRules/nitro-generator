@@ -2,30 +2,18 @@ package com.spoiligaming.generator.gui.tabs
 
 import com.spoiligaming.generator.NitroValidatorConcurrent
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
-import com.spoiligaming.generator.gui.TabContainer
 import com.spoiligaming.generator.gui.TooltipKeyAccessor
 import com.spoiligaming.generator.gui.element.CommonElement
 import com.spoiligaming.generator.gui.element.ElementBoolean
 import com.spoiligaming.generator.gui.element.ElementText
 import com.spoiligaming.generator.gui.element.ElementValue
-import com.spoiligaming.logging.Logger
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.layout.GridPane
 
-class TabAdvanced : ITab {
-    private val advancedPane: GridPane = GridPane()
-
-    init {
-        Logger.printDebug("Created an instance of GridPane for Advanced tab.")
-
-        TabContainer.currentTabProperty().addListener { _, _, newValue ->
-            advancedPane.isVisible = newValue == 3
-        }
-    }
-
+class TabAdvanced : AbstractTab(2, "Advanced") {
     override fun getContent(): GridPane =
-        advancedPane.apply {
+        pane.apply {
             alignment = Pos.TOP_CENTER
             hgap = 20.0
             vgap = 7.5
@@ -106,8 +94,4 @@ class TabAdvanced : ITab {
                 )
             }
         }
-
-    override fun setVisibility(visibility: ITab.TabVisibility) {
-        advancedPane.isVisible = (TabContainer.currentTab == 3 && visibility == ITab.TabVisibility.VISIBLE)
-    }
 }
