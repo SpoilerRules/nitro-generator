@@ -7,6 +7,8 @@ import java.net.HttpURLConnection
 import java.net.URI
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.SSLContext
@@ -81,10 +83,11 @@ object NitroValidationWrapper {
         }
     }
 
-    private fun alertWebhook(nitroCode: String, isAutoclaimSucceeded: Boolean?) {
+    fun alertWebhook(nitroCode: String, isAutoclaimSucceeded: Boolean?) {
         var connection: HttpURLConnection? = null
 
         runCatching {
+            val currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             connection = URI.create(BaseConfigurationFactory.getInstance().generalSettings.discordWebhookURL).toURL()
                 .openConnection() as HttpURLConnection
             connection?.apply {
@@ -99,23 +102,32 @@ object NitroValidationWrapper {
 
             with(connection!!.outputStream) {
                 this.write(
-                    if (isAutoclaimSucceeded != null) {
-                        """
-        {
-          "embeds": [
-            {
-              "title": "Valid nitro code: $nitroCode | <https://discord.gift/$nitroCode>",
-              "color": "${if (isAutoclaimSucceeded == true) 65280 else 16711680}",
-              "footer": {
-                "text": "${if (isAutoclaimSucceeded == true) "The nitro code was successfully claimed." else "Failed to claim the nitro code."}"
-              }
-            }
-          ]
-        }
-        """.trimIndent()
-                    } else {
-                        "{\"content\":\"Valid nitro code: $nitroCode | [Claim here](https://discord.gift/$nitroCode>)\"}"
-                    }.toByteArray()
+                    """
+                        {
+                          "embeds": [
+                            {
+                              "title": "Valid Nitro code: $nitroCode | <https://discord.gift/$nitroCode>",
+                              "color": "${
+                        when {
+                            isAutoclaimSucceeded == null -> 16744192
+                            isAutoclaimSucceeded -> 65280
+                            else -> 16711680
+                        }
+                    }",
+                              "description": "${
+                        when {
+                            isAutoclaimSucceeded == null -> ""
+                            isAutoclaimSucceeded -> "The Nitro code was successfully claimed"
+                            else -> "Failed to claim the Nitro code."
+                        }
+                    }",
+                              "footer": {
+                                "text": "Timestamp: $currentDateTime"
+                              }
+                            }
+                          ]
+                        }
+                    """.trimIndent().toByteArray()
                 )
                 this.flush()
             }
@@ -224,7 +236,7 @@ object NitroValidationWrapper {
                 Thread.sleep(1000)
             }
         } else if (configuration.proxySettings.mode in 2..3 && configuration.proxySettings.enabled || configuration.generalSettings.retryDelay <= 0) {
-            Logger.printWarning("${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of nitro code: $nitroCode.")
+            Logger.printWarning("${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of Nitro code: $nitroCode.")
         }
 
         validateFunction(nitroCode, configuration, retryCount)
