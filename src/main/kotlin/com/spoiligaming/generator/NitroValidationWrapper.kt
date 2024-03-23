@@ -83,7 +83,7 @@ object NitroValidationWrapper {
         }
     }
 
-    fun alertWebhook(nitroCode: String, isAutoclaimSucceeded: Boolean?) {
+    private fun alertWebhook(nitroCode: String, isAutoclaimSucceeded: Boolean?) {
         var connection: HttpURLConnection? = null
 
         runCatching {
