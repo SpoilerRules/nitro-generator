@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <baseline version="1.0">
     <file name="src/main/kotlin/com/spoiligaming/generator/GeneratorBean.kt">
-        <error line="50" column="1" source="standard:max-line-length" />
+        <error line="49" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/Main.kt">
         <error line="40" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/NitroValidationWrapper.kt">
-        <error line="80" column="1" source="standard:max-line-length" />
-        <error line="146" column="1" source="standard:max-line-length" />
-        <error line="213" column="1" source="standard:max-line-length" />
-        <error line="219" column="1" source="standard:max-line-length" />
-        <error line="268" column="1" source="standard:max-line-length" />
-        <error line="271" column="1" source="standard:max-line-length" />
-        <error line="275" column="1" source="standard:max-line-length" />
-        <error line="277" column="1" source="standard:max-line-length" />
+        <error line="84" column="1" source="standard:max-line-length" />
+        <error line="150" column="1" source="standard:max-line-length" />
+        <error line="191" column="1" source="standard:max-line-length" />
+        <error line="192" column="1" source="standard:max-line-length" />
+        <error line="195" column="1" source="standard:max-line-length" />
+        <error line="266" column="1" source="standard:max-line-length" />
+        <error line="272" column="1" source="standard:max-line-length" />
+        <error line="323" column="1" source="standard:max-line-length" />
+        <error line="324" column="1" source="standard:max-line-length" />
+        <error line="330" column="1" source="standard:max-line-length" />
     </file>
-    <file name="src/main/kotlin/com/spoiligaming/generator/NitroValidatorAdvancedMt.kt">
+    <file name="src/main/kotlin/com/spoiligaming/generator/NitroValidatorConcurrent.kt">
         <error line="68" column="1" source="standard:max-line-length" />
         <error line="117" column="1" source="standard:max-line-length" />
         <error line="127" column="1" source="standard:max-line-length" />
-    </file>
-    <file name="src/main/kotlin/com/spoiligaming/generator/NitroValidatorOrdinary.kt">
-        <error line="125" column="1" source="standard:max-line-length" />
-    </file>
-    <file name="src/main/kotlin/com/spoiligaming/generator/NitroValidatorSimpleMt.kt">
-        <error line="91" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/ProxyHandler.kt">
         <error line="59" column="1" source="standard:max-line-length" />

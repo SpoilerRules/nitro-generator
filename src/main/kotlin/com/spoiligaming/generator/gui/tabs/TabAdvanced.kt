@@ -1,6 +1,6 @@
 package com.spoiligaming.generator.gui.tabs
 
-import com.spoiligaming.generator.NitroValidatorAdvancedMt
+import com.spoiligaming.generator.NitroValidatorConcurrent
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.TabContainer
 import com.spoiligaming.generator.gui.TooltipKeyAccessor
@@ -43,7 +43,7 @@ class TabAdvanced : ITab {
                                 multithreadingSettings.enabled = newValue
                             }
                             if (newValue) {
-                                NitroValidatorAdvancedMt.isNextProxyAvailable.set(true)
+                                NitroValidatorConcurrent.isNextProxyAvailable.set(true)
                             }
                         },
                         Insets(10.0, 0.0, 0.0, 10.0),

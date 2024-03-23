@@ -1,6 +1,6 @@
 package com.spoiligaming.generator.gui.tabs
 
-import com.spoiligaming.generator.NitroValidatorAdvancedMt
+import com.spoiligaming.generator.NitroValidatorConcurrent
 import com.spoiligaming.generator.ProxyHandler
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.TabContainer
@@ -77,7 +77,7 @@ class TabProxy : ITab {
                                     BaseConfigurationFactory.updateValue {
                                         proxySettings.recursiveUsaqe = newValue
                                     }
-                                    if (newValue) NitroValidatorAdvancedMt.isNextProxyAvailable.set(true)
+                                    if (newValue) NitroValidatorConcurrent.isNextProxyAvailable.set(true)
                                 },
                                 Insets(10.0, 0.0, 0.0, 10.0),
                             ),

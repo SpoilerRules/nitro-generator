@@ -5,14 +5,14 @@ import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
 import java.net.Authenticator
 import java.net.ConnectException
-import java.net.HttpURLConnection
 import java.net.InetSocketAddress
 import java.net.PasswordAuthentication
 import java.net.Proxy
 import java.net.URI
 import java.util.concurrent.atomic.AtomicBoolean
+import javax.net.ssl.HttpsURLConnection
 
-object NitroValidatorAdvancedMt {
+object NitroValidatorConcurrent {
     var isNextProxyAvailable = AtomicBoolean(true)
 
     fun validateNitro(
@@ -21,7 +21,7 @@ object NitroValidatorAdvancedMt {
         retryCount: Int,
         threadIdentity: String,
     ) {
-        if (!isNextProxyAvailable.get()) {
+        if (!isNextProxyAvailable.get() && config.proxySettings.mode in 2..3) {
             return
         }
 
@@ -86,7 +86,7 @@ object NitroValidatorAdvancedMt {
         nitroCode: String,
         threadIdentity: String,
         config: BaseConfigurationFactory,
-    ): HttpURLConnection {
+    ): HttpsURLConnection {
         val proxy =
             when {
                 !config.proxySettings.enabled -> Proxy.NO_PROXY
@@ -134,6 +134,6 @@ object NitroValidatorAdvancedMt {
         return URI(
             "https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode?with_application=false&with_subscription_plan=true",
         ).toURL()
-            .openConnection(proxy) as HttpURLConnection
+            .openConnection(proxy) as HttpsURLConnection
     }
 }

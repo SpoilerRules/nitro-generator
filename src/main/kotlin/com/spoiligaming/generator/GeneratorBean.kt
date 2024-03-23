@@ -40,7 +40,7 @@ object GeneratorBean {
             ) { // very fragile, please do not touch this
                 when {
                     config.proxySettings.mode in 1..3 && !config.multithreadingSettings.enabled ->
-                        NitroValidatorOrdinary.validateNitro(nitroCode, 0, config)
+                        NitroValidatorSequential.validateNitro(nitroCode, 0, config)
                     else ->
                         handleConcurrentValidation(nitroCode, config)
                 }
@@ -56,14 +56,6 @@ object GeneratorBean {
         initialNitroCode: String,
         config: BaseConfigurationFactory,
     ) {
-        val validateNitro: (String, BaseConfigurationFactory, String) -> Unit =
-            { nitroCode, configReference, threadIdentifier ->
-                when (configReference.proxySettings.mode) {
-                    1 -> NitroValidatorSimpleMt.validateNitro(nitroCode, configReference, 0, threadIdentifier)
-                    in 2..3 -> NitroValidatorAdvancedMt.validateNitro(nitroCode, configReference, 0, threadIdentifier)
-                }
-            }
-
         val semaphore = Semaphore(config.multithreadingSettings.threadLimit)
 
         runBlocking {
@@ -74,9 +66,10 @@ object GeneratorBean {
                         semaphore.acquire()
                         val nitroCode =
                             if (index++ == 0) initialNitroCode else generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
-                        validateNitro(
+                        NitroValidatorConcurrent.validateNitro(
                             nitroCode,
                             config,
+                            0,
                             coroutineContext[Job]?.toString()?.substringAfter('@')
                                 ?: "UnknownThread".substringBefore(']'),
                         )

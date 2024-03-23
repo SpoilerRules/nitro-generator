@@ -3,7 +3,11 @@ package com.spoiligaming.generator
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
-import java.net.HttpURLConnection
+import java.net.Authenticator
+import java.net.ConnectException
+import java.net.InetSocketAddress
+import java.net.PasswordAuthentication
+import java.net.Proxy
 import java.net.URI
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -17,7 +21,7 @@ import javax.net.ssl.X509TrustManager
 
 object NitroValidationWrapper {
     fun setProperties(
-        connectionInstance: HttpURLConnection,
+        connectionInstance: HttpsURLConnection,
         config: BaseConfigurationFactory,
     ) {
         with(connectionInstance) {
@@ -91,13 +95,13 @@ object NitroValidationWrapper {
         nitroCode: String,
         isAutoclaimSucceeded: Boolean?,
     ) {
-        var connection: HttpURLConnection? = null
+        var connection: HttpsURLConnection? = null
 
         runCatching {
             val currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             connection =
                 URI.create(BaseConfigurationFactory.getInstance().generalSettings.discordWebhookURL).toURL()
-                    .openConnection() as HttpURLConnection
+                    .openConnection() as HttpsURLConnection
             connection?.apply {
                 requestMethod = "POST"
                 setRequestProperty("Content-Type", "application/json")
@@ -140,7 +144,7 @@ object NitroValidationWrapper {
                 this.flush()
             }
 
-            connection?.responseCode?.takeIf { it != HttpURLConnection.HTTP_OK && it != HttpURLConnection.HTTP_NO_CONTENT }
+            connection?.responseCode?.takeIf { it != HttpsURLConnection.HTTP_OK && it != HttpsURLConnection.HTTP_NO_CONTENT }
                 ?.let {
                     Logger.printError(
                         "Failed to send Discord webhook. Server responded with code $it: ${connection?.responseMessage ?: "No response message"}",
@@ -151,6 +155,55 @@ object NitroValidationWrapper {
         }.also {
             connection?.disconnect()
         }
+    }
+
+    fun getConnection(
+        nitroCode: String,
+        threadIdentity: String?,
+        config: BaseConfigurationFactory,
+        proxyInavailabilityBehavior: (() -> Unit)? = null,
+    ): HttpsURLConnection {
+        val threadIdentityPrefix =
+            threadIdentity?.let {
+                "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] "
+            } ?: ""
+
+        val proxy =
+            when {
+                !config.proxySettings.enabled -> Proxy.NO_PROXY
+                config.proxySettings.mode == 1 -> {
+                    val proxyType = config.proxySettings.getProxyType(config.proxySettings.protocol)
+                    if (proxyType == Proxy.Type.SOCKS && config.proxySettings.isAuthenticationRequired) {
+                        Authenticator.setDefault(
+                            object : Authenticator() {
+                                override fun getPasswordAuthentication() =
+                                    PasswordAuthentication(
+                                        config.proxySettings.username,
+                                        config.proxySettings.password.toCharArray(),
+                                    )
+                            },
+                        )
+                    }
+                    Proxy(proxyType, InetSocketAddress(config.proxySettings.host, config.proxySettings.port.toInt()))
+                }
+                else ->
+                    ProxyHandler.getNextProxy()?.let { proxyInfo ->
+                        Logger.printDebug("${threadIdentityPrefix}Using proxy: ${CEnum.CYAN}${proxyInfo.first}:${proxyInfo.second}${CEnum.RESET}")
+                        Proxy(
+                            config.proxySettings.getProxyType(config.proxySettings.protocol),
+                            InetSocketAddress(proxyInfo.first, proxyInfo.second),
+                        )
+                    } ?: run {
+                        threadIdentity?.let { proxyInavailabilityBehavior?.invoke() }
+                        throw ConnectException("${threadIdentityPrefix}Failed to establish a connection to validate the nitro code because the next proxy is null.")
+                    }
+            }
+
+        disableProxySecurity()
+
+        return URI(
+            "https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode?with_application=false&with_subscription_plan=true",
+        ).toURL().openConnection(proxy) as HttpsURLConnection
     }
 
     @Suppress("EmptyFunctionBlock")
@@ -180,6 +233,7 @@ object NitroValidationWrapper {
                 )
             }.socketFactory,
         )
+        HttpsURLConnection.setDefaultHostnameVerifier { _, _ -> true }
     }
 
     private fun claimValidNitro(
@@ -187,7 +241,7 @@ object NitroValidationWrapper {
         isTokenValidated: Boolean,
         config: BaseConfigurationFactory,
     ): Int {
-        val setProperties: (HttpURLConnection, BaseConfigurationFactory) -> Unit = { connection, configReference ->
+        val setProperties: (HttpsURLConnection, BaseConfigurationFactory) -> Unit = { connection, configReference ->
             connection.setRequestProperty(
                 "User-Agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
@@ -199,13 +253,13 @@ object NitroValidationWrapper {
         }
 
         if (!isTokenValidated) {
-            with(URI("https://discordapp.com/api/v9/users/@me").toURL().openConnection() as HttpURLConnection) {
+            with(URI("https://discordapp.com/api/v9/users/@me").toURL().openConnection() as HttpsURLConnection) {
                 setRequestProperty("Content-Type", "application/json")
                 setProperties(this, config)
 
                 disconnect()
                 when (responseCode) {
-                    HttpURLConnection.HTTP_OK, HttpURLConnection.HTTP_NO_CONTENT -> {
+                    HttpsURLConnection.HTTP_OK, HttpsURLConnection.HTTP_NO_CONTENT -> {
                         val jsonResponse =
                             inputStream.bufferedReader().use { it.readText() }.split("[{},]".toRegex())
                                 .filter { it.contains(":") }
@@ -216,7 +270,7 @@ object NitroValidationWrapper {
                         )
                     }
 
-                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
+                    HttpsURLConnection.HTTP_UNAUTHORIZED -> {
                         Logger.printWarning(
                             "The token you entered for Auto-Claim is invalid. Auto-Claim functionality will be disrupted until a valid token is provided.",
                         )
@@ -233,25 +287,23 @@ object NitroValidationWrapper {
 
         with(
             URI("https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode/redeem").toURL()
-                .openConnection() as HttpURLConnection,
+                .openConnection() as HttpsURLConnection,
         ) {
             requestMethod = "POST"
             setProperties(this, config)
 
             disconnect()
-            responseCode.takeIf { it != HttpURLConnection.HTTP_OK && it != HttpURLConnection.HTTP_NO_CONTENT }
+            responseCode.takeIf { it != HttpsURLConnection.HTTP_OK && it != HttpsURLConnection.HTTP_NO_CONTENT }
                 ?.let {
                     return when (it) {
-                        HttpURLConnection.HTTP_UNAUTHORIZED -> { // should not be reachable but added, just in case
+                        HttpsURLConnection.HTTP_UNAUTHORIZED -> { // should not be reachable but added, just in case
                             Logger.printWarning("The token you entered for Auto-Claim is potentially incorrect.")
                             1
                         }
-
-                        HttpURLConnection.HTTP_NOT_FOUND -> {
+                        HttpsURLConnection.HTTP_NOT_FOUND -> {
                             Logger.printError("The Nitro code ($nitroCode) that was attempted to be claimed has already been claimed.")
                             1
                         }
-
                         else -> claimValidNitro(nitroCode, true, config)
                     }
                 }
@@ -266,22 +318,28 @@ object NitroValidationWrapper {
         threadIdentity: String?,
         crossinline validateFunction: (String, BaseConfigurationFactory, Int) -> Unit,
     ) {
-        val shouldDelay = configuration.generalSettings.retryDelay > 0 && !(configuration.proxySettings.enabled && configuration.proxySettings.mode in 2..3)
-        val shouldRetryWithoutDelay = configuration.proxySettings.mode in 2..3 && configuration.proxySettings.enabled || configuration.generalSettings.retryDelay <= 0
+        val threadIdentityPrefix =
+            threadIdentity?.let {
+                "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] "
+            } ?: ""
+
+        val shouldDelay =
+            configuration.generalSettings.retryDelay > 0 && !(configuration.proxySettings.enabled && configuration.proxySettings.mode in 2..3)
+        val shouldRetryWithoutDelay =
+            configuration.proxySettings.mode in 2..3 && configuration.proxySettings.enabled || configuration.generalSettings.retryDelay <= 0
 
         when {
             shouldDelay -> {
                 repeat(configuration.generalSettings.retryDelay) { index ->
                     Logger.printWarning(
-                        "${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of $nitroCode in ${CEnum.ORANGE}${configuration.generalSettings.retryDelay - index}${CEnum.RESET} seconds.",
+                        "${threadIdentityPrefix}Retrying validation of $nitroCode in ${CEnum.ORANGE}${configuration.generalSettings.retryDelay - index}${CEnum.RESET} seconds.",
                     )
                     Thread.sleep(1000)
                 }
             }
             shouldRetryWithoutDelay -> {
-                Logger.printDebug("retrying without delay")
                 Logger.printWarning(
-                    "${threadIdentity?.let { "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] " } ?: ""}Retrying validation of Nitro code: $nitroCode.",
+                    "${threadIdentityPrefix}Retrying validation of Nitro code: $nitroCode.",
                 )
             }
         }
