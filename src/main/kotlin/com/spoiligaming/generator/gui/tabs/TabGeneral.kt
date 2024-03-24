@@ -113,8 +113,9 @@ class TabGeneral : AbstractTab(0, "General") {
                             ElementText.addTextValue(
                                 BaseConfigurationFactory.getInstance().generalSettings.discordWebhookURL,
                                 "Webhook Link",
-                                null,
-                                { newValue ->
+                                inputRegex = Regex("^[a-zA-Z0-9:/.\\-_]+\$"),
+                                tooltipText = null,
+                                valueUpdater = { newValue ->
                                     BaseConfigurationFactory.updateValue {
                                         generalSettings.discordWebhookURL = newValue
                                     }

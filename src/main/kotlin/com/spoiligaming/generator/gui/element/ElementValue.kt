@@ -12,6 +12,8 @@ import javafx.scene.Cursor
 import javafx.scene.control.Button
 import javafx.scene.control.TextField
 import javafx.scene.input.ContextMenuEvent
+import javafx.scene.input.KeyCode
+import javafx.scene.input.MouseButton
 import javafx.scene.layout.HBox
 import java.text.DecimalFormat
 
@@ -66,6 +68,28 @@ object ElementValue {
                 }
             } else {
                 text = oldValue
+            }
+        }
+
+        setOnKeyPressed { event ->
+            if (event.code == KeyCode.ENTER) {
+                Platform.runLater {
+                    if (text.isEmpty()) {
+                        text = oldValue
+                    }
+                    scene?.focusOwner?.requestFocus()
+                }
+            }
+        }
+
+        setOnMouseClicked { event ->
+            if (event.button == MouseButton.PRIMARY) {
+                Platform.runLater {
+                    if (text.isEmpty()) {
+                        text = oldValue
+                    }
+                    scene?.focusOwner?.requestFocus()
+                }
             }
         }
 

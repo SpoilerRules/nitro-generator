@@ -84,8 +84,9 @@ class TabAdvanced : AbstractTab(2, "Advanced") {
                     ElementText.addTextValue(
                         BaseConfigurationFactory.getInstance().autoClaimSettings.accountToken,
                         "Discord Account Token",
-                        null,
-                        { newValue ->
+                        inputRegex = Regex("^[a-zA-Z0-9.]*\$"),
+                        tooltipText = null,
+                        valueUpdater = { newValue ->
                             BaseConfigurationFactory.updateValue {
                                 autoClaimSettings.accountToken = newValue
                             }

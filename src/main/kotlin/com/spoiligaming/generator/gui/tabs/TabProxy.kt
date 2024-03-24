@@ -122,24 +122,22 @@ class TabProxy : AbstractTab(1, "Proxy") {
                             ElementText.addTextValue(
                                 BaseConfigurationFactory.getInstance().proxySettings.host,
                                 "Host",
-                                TooltipKeyAccessor.getValue("available.static.mode"),
-                                { newValue ->
+                                tooltipText = TooltipKeyAccessor.getValue("available.static.mode"),
+                                valueUpdater = { newValue ->
                                     BaseConfigurationFactory.updateValue {
                                         proxySettings.host = newValue
                                     }
                                 },
-                                Insets(10.0, 0.0, 0.0, 10.0),
                             ),
                             ElementText.addTextValue(
                                 BaseConfigurationFactory.getInstance().proxySettings.port,
                                 "Port",
-                                TooltipKeyAccessor.getValue("available.static.mode"),
-                                { newValue ->
+                                tooltipText = TooltipKeyAccessor.getValue("available.static.mode"),
+                                valueUpdater = { newValue ->
                                     BaseConfigurationFactory.updateValue {
                                         proxySettings.port = newValue
                                     }
                                 },
-                                Insets(10.0, 0.0, 0.0, 10.0),
                             ),
                         )
                         createContentField(
@@ -160,24 +158,22 @@ class TabProxy : AbstractTab(1, "Proxy") {
                             ElementText.addTextValue(
                                 BaseConfigurationFactory.getInstance().proxySettings.username,
                                 "Username",
-                                null,
-                                { newValue ->
+                                tooltipText = null,
+                                valueUpdater = { newValue ->
                                     BaseConfigurationFactory.updateValue {
                                         proxySettings.username = newValue
                                     }
                                 },
-                                Insets(10.0, 0.0, 0.0, 10.0),
                             ),
                             ElementText.addTextValue(
                                 BaseConfigurationFactory.getInstance().proxySettings.password,
                                 "Password",
-                                null,
-                                { newValue ->
+                                tooltipText = null,
+                                valueUpdater = { newValue ->
                                     BaseConfigurationFactory.updateValue {
                                         proxySettings.password = newValue
                                     }
                                 },
-                                Insets(10.0, 0.0, 0.0, 10.0),
                             ),
                         )
                         createContentField(
@@ -199,24 +195,22 @@ class TabProxy : AbstractTab(1, "Proxy") {
                             ElementText.addTextValue(
                                 if (BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator == "\n") "\\n" else BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator,
                                 "Content Separator",
-                                null,
-                                { newValue ->
+                                tooltipText = null,
+                                valueUpdater = { newValue ->
                                     BaseConfigurationFactory.updateValue {
                                         proxySettings.rawContentSeparator = newValue
                                     }
                                 },
-                                Insets(10.0, 0.0, 0.0, 10.0),
                             ),
                             ElementText.addTextValue(
                                 BaseConfigurationFactory.getInstance().proxySettings.rawContentLinks,
                                 "Raw Content Link(s)",
-                                TooltipKeyAccessor.getValue("raw.content.description"),
-                                { newValue ->
+                                tooltipText = TooltipKeyAccessor.getValue("raw.content.description"),
+                                valueUpdater = { newValue ->
                                     BaseConfigurationFactory.updateValue {
                                         proxySettings.rawContentLinks = newValue
                                     }
                                 },
-                                Insets(10.0, 0.0, 0.0, 10.0),
                             ),
                         )
                     }
