@@ -10,13 +10,11 @@
         <error line="84" column="1" source="standard:max-line-length" />
         <error line="150" column="1" source="standard:max-line-length" />
         <error line="191" column="1" source="standard:max-line-length" />
-        <error line="192" column="1" source="standard:max-line-length" />
-        <error line="195" column="1" source="standard:max-line-length" />
-        <error line="266" column="1" source="standard:max-line-length" />
-        <error line="272" column="1" source="standard:max-line-length" />
-        <error line="323" column="1" source="standard:max-line-length" />
-        <error line="324" column="1" source="standard:max-line-length" />
-        <error line="330" column="1" source="standard:max-line-length" />
+        <error line="198" column="1" source="standard:max-line-length" />
+        <error line="269" column="1" source="standard:max-line-length" />
+        <error line="275" column="1" source="standard:max-line-length" />
+        <error line="327" column="1" source="standard:max-line-length" />
+        <error line="335" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/NitroValidatorConcurrent.kt">
         <error line="68" column="1" source="standard:max-line-length" />
@@ -32,12 +30,12 @@
         <error line="78" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/TabContainer.kt">
-        <error line="114" column="1" source="standard:max-line-length" />
-        <error line="141" column="1" source="standard:max-line-length" />
-        <error line="155" column="1" source="standard:max-line-length" />
-        <error line="165" column="1" source="standard:max-line-length" />
-        <error line="192" column="1" source="standard:max-line-length" />
-        <error line="220" column="1" source="standard:max-line-length" />
+        <error line="115" column="1" source="standard:max-line-length" />
+        <error line="143" column="1" source="standard:max-line-length" />
+        <error line="157" column="1" source="standard:max-line-length" />
+        <error line="167" column="1" source="standard:max-line-length" />
+        <error line="194" column="1" source="standard:max-line-length" />
+        <error line="222" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/element/CommonElement.kt">
         <error line="86" column="1" source="standard:max-line-length" />
@@ -62,18 +60,21 @@
         <error line="24" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/element/ElementText.kt">
-        <error line="28" column="1" source="standard:max-line-length" />
+        <error line="31" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/element/ElementValue.kt">
-        <error line="57" column="1" source="standard:max-line-length" />
-        <error line="95" column="1" source="standard:max-line-length" />
+        <error line="59" column="1" source="standard:max-line-length" />
+        <error line="119" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/tabs/TabConsole.kt">
-        <error line="45" column="1" source="standard:max-line-length" />
-        <error line="97" column="1" source="standard:max-line-length" />
+        <error line="33" column="1" source="standard:max-line-length" />
+        <error line="91" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/tabs/TabProxy.kt">
-        <error line="68" column="1" source="standard:max-line-length" />
-        <error line="213" column="1" source="standard:max-line-length" />
+        <error line="55" column="1" source="standard:max-line-length" />
+        <error line="196" column="1" source="standard:max-line-length" />
+    </file>
+    <file name="src/main/kotlin/com/spoiligaming/generator/gui/tabs/TabVisuals.kt">
+        <error line="1" column="1" source="standard:no-empty-file" />
     </file>
 </baseline>

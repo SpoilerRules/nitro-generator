@@ -61,7 +61,13 @@ class TabConsole : AbstractTab(3, "Console") {
             add(
                 VBox().apply {
                     background =
-                        Background(BackgroundFill(Color.web(ColorPalette.secondaryColor), CornerRadii(16.0, false), null))
+                        Background(
+                            BackgroundFill(
+                                Color.web(ColorPalette.secondaryColor),
+                                CornerRadii(16.0, false),
+                                null,
+                            ),
+                        )
                     setMaxSize(410.0, 355.0)
                     setMinSize(410.0, 355.0)
                     GridPane.setMargin(this, Insets(0.0, 0.0, 0.0, 4.4))

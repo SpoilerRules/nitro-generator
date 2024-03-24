@@ -119,7 +119,8 @@ class TabGeneral : AbstractTab(0, "General") {
                                     BaseConfigurationFactory.updateValue {
                                         generalSettings.discordWebhookURL = newValue
                                     }
-                                }, padding = Insets(10.0, 0.0, 0.0, 10.0),
+                                },
+                                padding = Insets(10.0, 0.0, 0.0, 10.0),
                             ),
                         )
                     }

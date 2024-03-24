@@ -190,7 +190,13 @@ class Initializer : Application() {
             children.add(
                 BorderPane().apply {
                     background =
-                        Background(BackgroundFill(Color.web(ColorPalette.secondaryColor), CornerRadii(16.0), Insets.EMPTY))
+                        Background(
+                            BackgroundFill(
+                                Color.web(ColorPalette.secondaryColor),
+                                CornerRadii(16.0),
+                                Insets.EMPTY,
+                            ),
+                        )
                     setMaxSize(325.0, 40.0)
                     setMinSize(325.0, 40.0)
 

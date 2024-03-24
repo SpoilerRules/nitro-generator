@@ -63,7 +63,8 @@ class TabContainer : GridPane() {
 
         add(
             GridPane().apply {
-                background = Background(BackgroundFill(Color.web(ColorPalette.menuColor), CornerRadii(16.0, false), null))
+                background =
+                    Background(BackgroundFill(Color.web(ColorPalette.menuColor), CornerRadii(16.0, false), null))
                 setMaxSize(160.0, 275.0)
                 setMinSize(160.0, 275.0)
                 alignment = Pos.TOP_CENTER
@@ -124,7 +125,8 @@ class TabContainer : GridPane() {
     private fun implementStatisticsBox() {
         add(
             Region().apply {
-                background = Background(BackgroundFill(Color.web(ColorPalette.menuColor), CornerRadii(16.0, false), null))
+                background =
+                    Background(BackgroundFill(Color.web(ColorPalette.menuColor), CornerRadii(16.0, false), null))
                 setMaxSize(160.0, 75.0)
                 setMinSize(160.0, 75.0)
                 alignment = Pos.TOP_CENTER
@@ -230,7 +232,8 @@ class TabContainer : GridPane() {
     private fun implementInfoBox() {
         add(
             Region().apply {
-                background = Background(BackgroundFill(Color.web(ColorPalette.menuColor), CornerRadii(16.0, false), null))
+                background =
+                    Background(BackgroundFill(Color.web(ColorPalette.menuColor), CornerRadii(16.0, false), null))
                 setMaxSize(160.0, 40.0)
                 setMinSize(160.0, 40.0)
                 alignment = Pos.BOTTOM_CENTER
