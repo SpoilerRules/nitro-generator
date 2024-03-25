@@ -27,48 +27,48 @@ class Initializer : Application() {
     override fun start(primaryStage: Stage) {
         System.setProperty("prism.lcdtext", "false")
         System.setProperty("prism.text", "t2k")
-        val borderPane = BorderPane()
 
-        borderPane.left = TabContainer()
-        TabHandler.allocatePane()
-        borderPane.center = TabHandler.tabContentPane
-        borderPane.style = "-fx-background-color: ${ColorPalette.controlColor}; -fx-background-radius: 16;"
-        val scene = Scene(borderPane, 600.0, 425.0)
-        scene.fill = Color.TRANSPARENT
+        primaryStage.apply {
+            this.scene =
+                Scene(
+                    BorderPane().apply {
+                        left = TabContainer()
+                        TabHandler.allocatePane()
+                        center = TabHandler.tabContentPane
+                        style = "-fx-background-color: ${ColorPalette.controlColor}; -fx-background-radius: 16;"
+                        bottom = addFundamentalButtons(primaryStage)
+                    },
+                    600.0, 425.0,
+                ).apply {
+                    fill = Color.TRANSPARENT
 
-        primaryStage.scene = scene
-        primaryStage.initStyle(StageStyle.TRANSPARENT)
+                    setOnMousePressed { event ->
+                        xOffset = event.sceneX
+                        yOffset = event.sceneY
+                    }
+                    setOnMouseDragged { event ->
+                        // prevents the user from dragging the window outside the visible area of the screen or behind the taskbar
+                        Screen.getPrimary().visualBounds.let { bounds ->
+                            primaryStage.x =
+                                (event.screenX - xOffset).coerceIn(bounds.minX, bounds.maxX - primaryStage.width)
+                            primaryStage.y =
+                                (event.screenY - yOffset).coerceIn(bounds.minY, bounds.maxY - primaryStage.height)
+                        }
+                    }
 
-        scene.setOnMousePressed { event ->
-            xOffset = event.sceneX
-            yOffset = event.sceneY
-        }
-
-        scene.setOnMouseDragged { event ->
-            // prevents the user from dragging the window outside the visible area of the screen or behind the taskbar
-            Screen.getPrimary().visualBounds.let { bounds ->
-                primaryStage.apply {
-                    x = (event.screenX - xOffset).coerceIn(bounds.minX, bounds.maxX - width)
-                    y = (event.screenY - yOffset).coerceIn(bounds.minY, bounds.maxY - height)
+                    stylesheets.addAll(
+                        javaClass.getResource("/console-style.css")!!.toExternalForm(),
+                        javaClass.getResource("/checkbox-style.css")!!.toExternalForm(),
+                        javaClass.getResource("/combobox-style.css")!!.toExternalForm(),
+                        javaClass.getResource("/textarea-style.css")!!.toExternalForm(),
+                    )
                 }
-            }
+            initStyle(StageStyle.TRANSPARENT)
+            title = "Spoili's Nitro Generator - 1.0.1"
+            isResizable = false
+            show()
         }
 
-        scene.stylesheets.add(javaClass.getResource("/console-style.css")!!.toExternalForm())
-        scene.stylesheets.add(javaClass.getResource("/checkbox-style.css")!!.toExternalForm())
-        scene.stylesheets.add(javaClass.getResource("/combobox-style.css")!!.toExternalForm())
-        scene.stylesheets.add(javaClass.getResource("/textarea-style.css")!!.toExternalForm())
-
-        primaryStage.title = "Spoili's Nitro Generator - 1.0.1"
-        primaryStage.isResizable = false
-
-        primaryStage.setOnCloseRequest {
-            exitProcess(0)
-        }
-
-        borderPane.bottom = addFundamentalButtons(primaryStage)
-
-        primaryStage.show()
         GeneratorBean.startGeneratingNitro()
     }
 
