@@ -168,7 +168,12 @@ class Initializer : Application() {
                 style = buttonStyle(ColorPalette.textColor)
 
                 setOnAction {
-                    exitProcess(0)
+                    style = buttonStyle(ColorPalette.accentColor)
+                    text = "Exiting..."
+                    Thread {
+                        Thread.sleep(50) // allow text and style to update
+                        exitProcess(0)
+                    }.start()
                 }
 
                 setOnMouseEntered {
