@@ -24,7 +24,6 @@ object ElementBoolean {
             children.addAll(
                 CheckBox().apply {
                     alignment = Pos.CENTER
-                    styleClass.add("check-box")
                     style =
                         "-fx-text-fill: ${ColorPalette.accentColor}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-mark-color: ${ColorPalette.accentColor};"
                     isSelected = initialValue
