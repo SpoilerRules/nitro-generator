@@ -1,6 +1,7 @@
 package com.spoiligaming.generator.gui
 
 import com.spoiligaming.generator.GeneratorBean
+import com.spoiligaming.generator.checkForUpdate
 import com.spoiligaming.logging.Logger
 import javafx.application.Application
 import javafx.beans.binding.Bindings
@@ -21,10 +22,16 @@ import javafx.stage.StageStyle
 import kotlin.system.exitProcess
 
 class Initializer : Application() {
-    private var xOffset = 0.0
-    private var yOffset = 0.0
+    companion object {
+        lateinit var arguments: Array<String>
+
+        private var xOffset = 0.0
+        private var yOffset = 0.0
+    }
 
     override fun start(primaryStage: Stage) {
+        if ("-skipupdate" !in arguments) checkForUpdate()
+
         System.setProperty("prism.lcdtext", "false")
         System.setProperty("prism.text", "t2k")
 

@@ -11,11 +11,11 @@ import java.net.URI
 
 fun main(args: Array<String>) {
     Logger.showDebug = "-debug" in args
-    if ("-skipupdate" !in args) checkForUpdate()
+    Initializer.arguments = args
     Application.launch(Initializer::class.java)
 }
 
-private fun checkForUpdate() =
+fun checkForUpdate() =
     runBlocking(Dispatchers.IO) {
         val localVersion =
             Thread.currentThread().contextClassLoader.getResourceAsStream("version")?.bufferedReader()

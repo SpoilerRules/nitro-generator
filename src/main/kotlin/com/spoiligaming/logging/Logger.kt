@@ -1,5 +1,6 @@
 package com.spoiligaming.logging
 
+import javafx.application.Platform
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -24,14 +25,16 @@ object Logger {
     ) = if (!nitroGenerationLog) {
         log("OK", message, CEnum.GREEN)
     } else {
-        println(
-            "${
-                createStatus(
-                    CEnum.GREEN,
-                    "OK",
-                )
-            } $message",
-        )
+        Platform.runLater {
+            println(
+                "${
+                    createStatus(
+                        CEnum.GREEN,
+                        "OK",
+                    )
+                } $message",
+            )
+        }
     }
 
     fun <V> printWarning(warning: V) = log("WARNING", warning, CEnum.YELLOW)
@@ -42,7 +45,7 @@ object Logger {
         level: String,
         message: V,
         color: CEnum,
-    ) {
+    ) = Platform.runLater {
         if (level != "DEBUG" || showDebug) {
             println("${createStatus(color, level)} $message")
         }
