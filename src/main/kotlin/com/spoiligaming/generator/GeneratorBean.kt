@@ -19,20 +19,23 @@ object GeneratorBean {
     fun startGeneratingNitro() {
         timer(
             initialDelay = 0,
-            daemon = true,
             period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay.takeIf { it != 0L } ?: 1,
         ) {
             val config = BaseConfigurationFactory.getInstance()
             // reset isConfigUpdated to ensure concurrent operations work
             BaseConfigurationFactory.isConfigUpdated = false
 
-            if (isGenerationPaused.get()) return@timer
+            if (isGenerationPaused.get()) {
+                return@timer
+            }
 
             val nitroCode = generateNitroCode(config.generalSettings.generatePromotionalGiftCode)
 
             if (!config.generalSettings.validateNitroCode) {
                 return@timer Logger.printSuccess("Generated nitro code: $nitroCode")
             }
+
+            Logger.printSuccess("YEP")
 
             if ((config.proxySettings.proxyFilePath.isNotEmpty() && config.proxySettings.mode == 2 && config.proxySettings.enabled) ||
                 config.proxySettings.enabled && config.proxySettings.mode != 2 ||
