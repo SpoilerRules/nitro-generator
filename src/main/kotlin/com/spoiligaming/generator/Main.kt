@@ -21,6 +21,7 @@ fun main(args: Array<String>) {
 
     Logger.uiEnabled = false
     checkForUpdate()
+    GeneratorBean.startGeneratingNitro()
 }
 
 fun checkForUpdate() =
