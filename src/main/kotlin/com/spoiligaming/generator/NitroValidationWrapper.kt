@@ -54,7 +54,7 @@ object NitroValidationWrapper {
                 200, 204 -> {
                     SessionStatistics.validNitroCodes += 1
                     // this if-else if block is logically suspicious. please report any issues you encounter with it
-                    if (config.autoClaimSettings.enabled) {
+                    if (config.autoClaimSettings.enabled && config.generalSettings.generatePromotionalGiftCode) {
                         claimValidNitro(nitroCode, false, config).also { result ->
                             config.generalSettings.alertWebhook.takeIf { it }?.let {
                                 when (result) {
