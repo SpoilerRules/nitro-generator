@@ -119,7 +119,7 @@ object ProxyHandler {
     @Synchronized
     fun getNextProxy(): Pair<String, Int>? {
         if (proxies.isEmpty()) {
-            Logger.printWarning("All proxies are exhausted. Consider inserting new set of proxies.")
+            Logger.printWarning("All proxies are exhausted. Consider inserting a new set of proxies.")
             return null
         }
 
@@ -128,13 +128,15 @@ object ProxyHandler {
                 Logger.printWarning("All proxies are exhausted. Starting from the beginning of the proxy list.")
                 proxyIndex.set(0)
             } else {
-                Logger.printWarning("All proxies are exhausted. Consider inserting new set of proxies.")
+                Logger.printWarning("All proxies are exhausted. Consider inserting a new set of proxies.")
                 return null
             }
         }
 
+        Logger.printDebug("${proxies.size - proxyIndex.get()} proxies remaining.")
+
         val proxy = proxies[proxyIndex.get()]
-        proxyIndex.set((proxyIndex.get() + 1) % proxies.size)
+        proxyIndex.incrementAndGet()
         return proxy
     }
 }

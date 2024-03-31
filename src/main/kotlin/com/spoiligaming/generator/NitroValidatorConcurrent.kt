@@ -65,7 +65,7 @@ object NitroValidatorConcurrent {
             }
         }.onFailure {
             Logger.printError(
-                "[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] Occurred while validating a nitro code: ${it.message}",
+                "[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] An unknown error occurred while validating a nitro code.",
             )
 
             if (config.generalSettings.retryTillValid) {
