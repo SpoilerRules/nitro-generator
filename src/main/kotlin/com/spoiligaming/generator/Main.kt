@@ -13,8 +13,14 @@ fun main(args: Array<String>) {
     val argsLowercase = args.map { it.lowercase() }.toTypedArray()
 
     Logger.showDebug = "-debug" in argsLowercase
-    Initializer.arguments = argsLowercase
-    Application.launch(Initializer::class.java)
+
+    if ("-noui" !in argsLowercase) {
+        Initializer.arguments = argsLowercase
+        Application.launch(Initializer::class.java)
+    }
+
+    Logger.uiEnabled = false
+    checkForUpdate()
 }
 
 fun checkForUpdate() =

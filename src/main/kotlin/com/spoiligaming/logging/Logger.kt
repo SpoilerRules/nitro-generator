@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter
 
 object Logger {
     var showDebug = false
+    var uiEnabled = true
 
     private val dateTimeFormatter by lazy { DateTimeFormatter.ofPattern("HH:mm:ss") }
     private val dateFormatter by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss") }
@@ -25,7 +26,18 @@ object Logger {
     ) = if (!nitroGenerationLog) {
         log("OK", message, CEnum.GREEN)
     } else {
-        Platform.runLater {
+        if (uiEnabled) {
+            Platform.runLater {
+                println(
+                    "${
+                        createStatus(
+                            CEnum.GREEN,
+                            "OK",
+                        )
+                    } $message",
+                )
+            }
+        } else {
             println(
                 "${
                     createStatus(
@@ -45,9 +57,15 @@ object Logger {
         level: String,
         message: V,
         color: CEnum,
-    ) = Platform.runLater {
+    ) {
         if (level != "DEBUG" || showDebug) {
-            println("${createStatus(color, level)} $message")
+            if (uiEnabled) {
+                Platform.runLater {
+                    println("${createStatus(color, level)} $message")
+                }
+            } else {
+                println("${createStatus(color, level)} $message")
+            }
         }
         logFile.appendText(
             "${
