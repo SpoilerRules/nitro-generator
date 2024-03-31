@@ -10,8 +10,10 @@ import kotlinx.coroutines.withTimeoutOrNull
 import java.net.URI
 
 fun main(args: Array<String>) {
-    Logger.showDebug = "-debug" in args
-    Initializer.arguments = args
+    val argsLowercase = args.map { it.lowercase() }.toTypedArray()
+
+    Logger.showDebug = "-debug" in argsLowercase
+    Initializer.arguments = argsLowercase
     Application.launch(Initializer::class.java)
 }
 
