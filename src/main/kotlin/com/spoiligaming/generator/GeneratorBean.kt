@@ -63,7 +63,11 @@ object GeneratorBean {
             var index = 0
             repeat(config.multithreadingSettings.threadLimit) {
                 launch(Dispatchers.IO) {
-                    while (isActive && !BaseConfigurationFactory.isConfigUpdated && !isGenerationPaused.get() && NitroValidatorConcurrent.isNextProxyAvailable.get()) {
+                    while (isActive &&
+                        !BaseConfigurationFactory.isConfigUpdated &&
+                        !isGenerationPaused.get() &&
+                        NitroValidatorConcurrent.isNextProxyAvailable.get()
+                    ) {
                         semaphore.acquire()
                         val nitroCode =
                             if (index++ == 0) initialNitroCode else generateNitroCode(config.generalSettings.generatePromotionalGiftCode)

@@ -331,7 +331,8 @@ object NitroValidationWrapper {
         when {
             shouldDelay -> {
                 repeat(configuration.generalSettings.retryDelay) { index ->
-                    val message = "${threadIdentityPrefix}Retrying validation of $nitroCode in ${CEnum.ORANGE}${configuration.generalSettings.retryDelay - index}${CEnum.RESET} seconds."
+                    val message =
+                        "${threadIdentityPrefix}Retrying validation of $nitroCode in ${CEnum.ORANGE}${configuration.generalSettings.retryDelay - index}${CEnum.RESET} seconds."
 
                     if (index == 0) {
                         Logger.printSuccess(message)
