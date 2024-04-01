@@ -9,8 +9,8 @@ import javafx.scene.control.Button
 import javafx.scene.control.ColorPicker
 import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
+import java.util.Locale
 
-// very experimental and undone.
 object ElementColorPicker {
     fun addColorPickerValue(
         initialValue: String,
@@ -38,21 +38,17 @@ object ElementColorPicker {
                 styleProperty().bind(
                     Bindings.concat(
                         "-fx-background-color: ",
-                        Bindings.createStringBinding(
-                            {
-                                String.format(
-                                    "#%02X%02X%02X",
-                                    (colorPicker.value.red * 255).toInt(),
-                                    (colorPicker.value.green * 255).toInt(),
-                                    (colorPicker.value.blue * 255).toInt(),
-                                )
-                            },
-                            colorPicker.valueProperty(),
+                        String.format(
+                            Locale.US,
+                            "#%02X%02X%02X",
+                            (colorPicker.value.red * 255).toInt(),
+                            (colorPicker.value.green * 255).toInt(),
+                            (colorPicker.value.blue * 255).toInt(),
                         ),
                         "; -fx-text-fill: ${ColorPalette.textColor}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 6; -fx-highlight-fill: ${ColorPalette.accentColor};",
                     ),
                 )
-                setOnAction { colorPicker.show() } // Open the ColorPicker dialog when the button is clicked
+                setOnAction { colorPicker.show() }
             },
             CommonElement.createLabel(labelText),
             colorPicker,
