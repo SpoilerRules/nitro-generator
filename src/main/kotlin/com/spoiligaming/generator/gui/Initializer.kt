@@ -74,7 +74,7 @@ class Initializer : Application() {
                     )
                 }
             initStyle(StageStyle.TRANSPARENT)
-            title = "Spoili's Nitro Generator - 1.0.1"
+            title = "Spoili's Nitro Generator - 1.0.2"
             isResizable = false
             show()
         }

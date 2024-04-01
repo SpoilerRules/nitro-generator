@@ -256,6 +256,6 @@ class TabContainer : GridPane() {
         }
 
         add(createLabel("Nitro Generator", Pos.TOP_CENTER, 0.0, ColorPalette.accentColor), 0, 2)
-        add(createLabel("1.0.1", Pos.BOTTOM_CENTER, 15.0, ColorPalette.controlColor), 0, 2)
+        add(createLabel("1.0.2", Pos.BOTTOM_CENTER, 15.0, ColorPalette.controlColor), 0, 2)
     }
 }
