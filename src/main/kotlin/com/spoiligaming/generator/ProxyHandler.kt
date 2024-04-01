@@ -100,13 +100,6 @@ object ProxyHandler {
          }*/
 
         when (BaseConfigurationFactory.getInstance().proxySettings.mode) {
-            1 -> {
-                "Proxy Mode was set to 'Static', and ProxyHandler class cannot be used for Static mode. Please contact your developer for assistance.".run {
-                    Logger.printError(this)
-                    throw UnsupportedOperationException(this)
-                }
-            }
-
             2 -> loadProxiesFromFile(BaseConfigurationFactory.getInstance().proxySettings.proxyFilePath)
             3 ->
                 loadProxiesFromURL(
