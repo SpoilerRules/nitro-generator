@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <baseline version="1.0">
     <file name="src/main/kotlin/com/spoiligaming/generator/GeneratorBean.kt">
-        <error line="49" column="1" source="standard:max-line-length" />
+        <error line="50" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/Main.kt">
-        <error line="40" column="1" source="standard:max-line-length" />
+        <error line="49" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/NitroValidationWrapper.kt">
         <error line="84" column="1" source="standard:max-line-length" />
@@ -24,10 +24,12 @@
     <file name="src/main/kotlin/com/spoiligaming/generator/ProxyHandler.kt">
         <error line="59" column="1" source="standard:max-line-length" />
         <error line="79" column="1" source="standard:max-line-length" />
-        <error line="104" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/Initializer.kt">
-        <error line="78" column="1" source="standard:max-line-length" />
+        <error line="91" column="1" source="standard:max-line-length" />
+    </file>
+    <file name="src/main/kotlin/com/spoiligaming/generator/gui/StylesheetVisualizationManager.kt">
+        <error line="55" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/TabContainer.kt">
         <error line="115" column="1" source="standard:max-line-length" />
@@ -43,10 +45,10 @@
         <error line="107" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/element/ElementBoolean.kt">
-        <error line="29" column="1" source="standard:max-line-length" />
+        <error line="28" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/element/ElementColorPicker.kt">
-        <error line="28" column="1" source="standard:max-line-length" />
+        <error line="48" column="1" source="standard:max-line-length" />
     </file>
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/element/ElementFilePicker.kt">
         <error line="31" column="1" source="standard:max-line-length" />
@@ -73,8 +75,5 @@
     <file name="src/main/kotlin/com/spoiligaming/generator/gui/tabs/TabProxy.kt">
         <error line="55" column="1" source="standard:max-line-length" />
         <error line="196" column="1" source="standard:max-line-length" />
-    </file>
-    <file name="src/main/kotlin/com/spoiligaming/generator/gui/tabs/TabVisuals.kt">
-        <error line="1" column="1" source="standard:no-empty-file" />
     </file>
 </baseline>
