@@ -35,8 +35,6 @@ object GeneratorBean {
                 return@timer Logger.printSuccess("Generated nitro code: $nitroCode")
             }
 
-            Logger.printSuccess("YEP")
-
             if ((config.proxySettings.proxyFilePath.isNotEmpty() && config.proxySettings.mode == 2 && config.proxySettings.enabled) ||
                 config.proxySettings.enabled && config.proxySettings.mode != 2 ||
                 !config.proxySettings.enabled
