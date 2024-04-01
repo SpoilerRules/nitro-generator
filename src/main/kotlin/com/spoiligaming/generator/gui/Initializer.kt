@@ -65,10 +65,13 @@ class Initializer : Application() {
                         }
                     }
 
-                    stylesheets.add(stylesheetVisualizationManager.getModifiedStylesheet(StylesheetVisualizationManager.Stylesheet.CHECKBOX))
-                    stylesheets.add(stylesheetVisualizationManager.getModifiedStylesheet(StylesheetVisualizationManager.Stylesheet.CONSOLE))
-
                     stylesheets.addAll(
+                        stylesheetVisualizationManager.getModifiedStylesheet(
+                            StylesheetVisualizationManager.Stylesheet.CHECKBOX,
+                        ),
+                        stylesheetVisualizationManager.getModifiedStylesheet(
+                            StylesheetVisualizationManager.Stylesheet.CONSOLE,
+                        ),
                         javaClass.getResource("/combobox-style.css")!!.toExternalForm(),
                         javaClass.getResource("/textarea-style.css")!!.toExternalForm(),
                     )
