@@ -4,6 +4,7 @@ import com.spoiligaming.generator.gui.tabs.TabAdvanced
 import com.spoiligaming.generator.gui.tabs.TabConsole
 import com.spoiligaming.generator.gui.tabs.TabGeneral
 import com.spoiligaming.generator.gui.tabs.TabProxy
+import com.spoiligaming.generator.gui.tabs.TabVisuals
 import com.spoiligaming.logging.Logger
 import javafx.geometry.Pos
 import javafx.scene.layout.BorderPane
@@ -23,10 +24,10 @@ object TabHandler {
             val generalContent = TabGeneral().getContent()
             val proxyContent = TabProxy().getContent()
             val advancedContent = TabAdvanced().getContent()
-            //     val visualsContent = TabVisuals().getContent()
+            val visualsContent = TabVisuals().getContent()
             val consoleContent = TabConsole().getContent()
 
-            val stackPane = StackPane(generalContent, proxyContent, advancedContent, consoleContent)
+            val stackPane = StackPane(generalContent, proxyContent, advancedContent, visualsContent, consoleContent)
             stackPane.alignment = Pos.CENTER
 
             center = stackPane

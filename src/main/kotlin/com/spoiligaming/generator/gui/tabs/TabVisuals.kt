@@ -1,54 +1,70 @@
 package com.spoiligaming.generator.gui.tabs
 
-/*import com.spoiligaming.generator.configuration.BaseConfigurationFactory
-import com.spoiligaming.generator.gui.TabContainer
+import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.element.CommonElement
 import com.spoiligaming.generator.gui.element.ElementColorPicker
-import com.spoiligaming.logging.Logger
-import javafx.geometry.Insets
+import com.spoiligaming.generator.gui.element.ElementNote
 import javafx.geometry.Pos
 import javafx.scene.layout.GridPane
 
-class TabVisuals : ITab {
-    private val visualsPane: GridPane = GridPane()
-
-    init {
-        Logger.printDebug("Created an instance of GridPane for Visuals tab.")
-
-        TabContainer.currentTabProperty().addListener { _, _, newValue ->
-            visualsPane.isVisible = newValue == 4
-        }
-    }
-
+class TabVisuals : AbstractTab(3, "Advanced") {
     override fun getContent(): GridPane =
-        visualsPane.apply {
+        pane.apply {
             alignment = Pos.TOP_CENTER
             hgap = 20.0
             vgap = 7.5
-            if (Logger.showDebug) {
-                CommonElement().run {
-                    createContentField(
-                        this@apply,
-                        "Theme",
-                        225.0,
-                        ElementColorPicker.addColorPickerValue(
-                            BaseConfigurationFactory.getInstance().themeSettings.accentColor,
-                            "Accent Color",
-                            { newValue ->
-                                BaseConfigurationFactory.updateValue {
-                                    themeSettings.accentColor = newValue
-                                }
-                            },
-                            Insets(10.0, 0.0, 0.0, 10.0),
-                        ),
-                    )
-                }
-            } else {
-                add(CommonElement.createLabel("Not stable yet.", "15"), 0, 0)
+            CommonElement().run {
+                createContentField(
+                    this@apply,
+                    "User Interface",
+                    245.0,
+                    ElementNote.addNote("Will take effect after restarting the software.", "13"),
+                    ElementColorPicker.addColorPickerValue(
+                        BaseConfigurationFactory.getInstance().themeSettings.accentColor,
+                        "Accent color",
+                        { newValue ->
+                            BaseConfigurationFactory.updateValue {
+                                themeSettings.accentColor = newValue
+                            }
+                        },
+                    ),
+                    ElementColorPicker.addColorPickerValue(
+                        BaseConfigurationFactory.getInstance().themeSettings.menuColor,
+                        "Menu color",
+                        { newValue ->
+                            BaseConfigurationFactory.updateValue {
+                                themeSettings.menuColor = newValue
+                            }
+                        },
+                    ),
+                    ElementColorPicker.addColorPickerValue(
+                        BaseConfigurationFactory.getInstance().themeSettings.controlColor,
+                        "Control color",
+                        { newValue ->
+                            BaseConfigurationFactory.updateValue {
+                                themeSettings.controlColor = newValue
+                            }
+                        },
+                    ),
+                    ElementColorPicker.addColorPickerValue(
+                        BaseConfigurationFactory.getInstance().themeSettings.secondaryColor,
+                        "Secondary color",
+                        { newValue ->
+                            BaseConfigurationFactory.updateValue {
+                                themeSettings.secondaryColor = newValue
+                            }
+                        },
+                    ),
+                    ElementColorPicker.addColorPickerValue(
+                        BaseConfigurationFactory.getInstance().themeSettings.textColor,
+                        "Text color",
+                        { newValue ->
+                            BaseConfigurationFactory.updateValue {
+                                themeSettings.textColor = newValue
+                            }
+                        },
+                    ),
+                )
             }
         }
-
-    override fun setVisibility(visibility: ITab.TabVisibility) {
-        visualsPane.isVisible = (TabContainer.currentTab == 4 && visibility == ITab.TabVisibility.VISIBLE)
-    }
-}*/
+}

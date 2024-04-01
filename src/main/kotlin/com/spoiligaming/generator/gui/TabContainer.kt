@@ -49,7 +49,7 @@ class TabContainer : GridPane() {
 
     private fun implementTabBox() {
         val tabs =
-            listOf("General", "Proxy", "Advanced", "Console").mapIndexed { index, labelText ->
+            listOf("General", "Proxy", "Advanced", "Visuals", "Console").mapIndexed { index, labelText ->
                 createTab(labelText, index)
             }
 
