@@ -39,7 +39,7 @@ class CommonElement {
                         )
                     setMaxSize(410.0, contentFieldHeight)
                     setMinSize(410.0, contentFieldHeight)
-                    GridPane.setMargin(this, Insets(-0.62, 0.0, 0.0, -2.4))
+                    GridPane.setMargin(this, Insets(-0.5, 0.0, 0.0, -2.4))
 
                     children.add(
                         HBox().apply {
