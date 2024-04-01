@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.spoiligaming"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     mavenCentral()
@@ -74,17 +74,12 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.register<Copy>("copyDependencies") {
-    from(configurations.runtimeClasspath)
-    into("libs")
-}
-
 tasks.shadowJar {
     mergeServiceFiles()
     duplicatesStrategy = DuplicatesStrategy.FAIL
     archiveFileName.set("NitroGenerator.jar")
     manifest {
-        attributes["Main-Class"] = "$group.generator.MainKt"
+        attributes["Main-Class"] = "com.spoiligaming.generator.MainKt"
     }
 }
 
@@ -94,11 +89,10 @@ tasks.jar {
     manifest {
         attributes["Main-Class"] = "com.spoiligaming.generator.MainKt"
     }
-    dependsOn("copyDependencies")
 }
 
 application {
-    mainClass.set("$group.generator.MainKt")
+    mainClass.set("com.spoiligaming.generator.MainKt")
 }
 
 kotlin {
