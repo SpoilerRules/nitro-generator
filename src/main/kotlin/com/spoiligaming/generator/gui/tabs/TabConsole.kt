@@ -18,7 +18,7 @@ import javafx.scene.paint.Color
 import java.io.OutputStream
 import java.io.PrintStream
 
-class TabConsole : AbstractTab(3, "Console") {
+class TabConsole : AbstractTab(4, "Console") {
     override fun getContent(): GridPane {
         val textArea =
             TextArea().apply {
@@ -70,7 +70,7 @@ class TabConsole : AbstractTab(3, "Console") {
                         )
                     setMaxSize(410.0, 355.0)
                     setMinSize(410.0, 355.0)
-                    GridPane.setMargin(this, Insets(0.0, 0.0, 0.0, 4.4))
+                    GridPane.setMargin(this, Insets(-0.5, 0.0, 0.0, 4.4))
                     children.add(
                         HBox().apply {
                             alignment = Pos.CENTER
