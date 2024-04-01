@@ -8,21 +8,7 @@ workspace/
 configuration.json
 
 ### IntelliJ IDEA ###
-/.idea/shelf/
-/.idea/workspace.xml
-/.idea/httpRequests/
-/.idea/dataSources/
-/.idea/inspectionProfiles/
-/.idea/dataSources.local.xml
-/.idea/jarRepositories.xml
-/.idea/uiDesigner.xml
-/.idea/modules.xml
-/.idea/detekt.xml
-/.idea/misc.xml
-/.idea/vsc.xml
-/.idea/discord.xml
-/.idea/gradle.xml
-
+.idea/
 *.iws
 *.iml
 *.ipr
