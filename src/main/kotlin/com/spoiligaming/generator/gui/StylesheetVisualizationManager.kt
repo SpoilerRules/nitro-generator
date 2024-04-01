@@ -37,10 +37,8 @@ class StylesheetVisualizationManager {
     }
 
     private fun getTempStylesheets(element: Stylesheet): File {
-        if (newStylesheetResource.isEmpty()) {
-            throw IllegalArgumentException(
-                "No modified stylesheets found for element ${element.fileName}. Please contact your developer for assistance.",
-            )
+        require(newStylesheetResource.isNotEmpty()) {
+            "No modified stylesheets found for element ${element.fileName}. Please contact your developer for assistance."
         }
 
         val tempFile = File(System.getProperty("java.io.tmpdir"), "${element.fileName}.css")
