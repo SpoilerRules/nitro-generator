@@ -18,6 +18,7 @@ configuration.json
 /.idea/uiDesigner.xml
 /.idea/modules.xml
 /.idea/detekt.xml
+/.idea/misc.xml
 /.idea/vsc.xml
 /.idea/discord.xml
 /.idea/gradle.xml
