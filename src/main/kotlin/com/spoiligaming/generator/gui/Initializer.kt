@@ -35,6 +35,8 @@ class Initializer : Application() {
         System.setProperty("prism.lcdtext", "false")
         System.setProperty("prism.text", "t2k")
 
+        val stylesheetVisualizationManager = StylesheetVisualizationManager()
+
         primaryStage.apply {
             this.scene =
                 Scene(
@@ -63,9 +65,10 @@ class Initializer : Application() {
                         }
                     }
 
+                    stylesheets.add(stylesheetVisualizationManager.getModifiedStylesheet(StylesheetVisualizationManager.Stylesheet.CHECKBOX))
+                    stylesheets.add(stylesheetVisualizationManager.getModifiedStylesheet(StylesheetVisualizationManager.Stylesheet.CONSOLE))
+
                     stylesheets.addAll(
-                        javaClass.getResource("/console-style.css")!!.toExternalForm(),
-                        javaClass.getResource("/checkbox-style.css")!!.toExternalForm(),
                         javaClass.getResource("/combobox-style.css")!!.toExternalForm(),
                         javaClass.getResource("/textarea-style.css")!!.toExternalForm(),
                     )
@@ -184,12 +187,12 @@ class Initializer : Application() {
                 }
 
                 setOnMouseEntered {
-                    style = buttonStyle("rgba(255, 255, 255, 0.8)")
+                    style = buttonStyle(toRgba(ColorPalette.textColor, 0.8))
                     scene.cursor = Cursor.HAND
                 }
 
                 setOnMouseExited {
-                    style = buttonStyle("#FFFFFF")
+                    style = buttonStyle(ColorPalette.textColor)
                     scene.cursor = Cursor.DEFAULT
                 }
             }

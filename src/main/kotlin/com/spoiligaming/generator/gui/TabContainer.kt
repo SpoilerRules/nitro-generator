@@ -55,7 +55,7 @@ class TabContainer : GridPane() {
 
         fun switchTab(tabNumber: Int) {
             tabs[currentTab].background = Background(BackgroundFill(Color.TRANSPARENT, CornerRadii(8.0, false), null))
-            tabs[tabNumber].background = Background(BackgroundFill(Color.web("#4C4C4C"), CornerRadii(8.0, false), null))
+            tabs[tabNumber].background = Background(BackgroundFill(Color.web(ColorPalette.controlColor), CornerRadii(8.0, false), null))
             currentTab = tabNumber
 
             Logger.printDebug("Current tab index: ${currentTabProperty.get()}")
