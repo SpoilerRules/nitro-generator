@@ -70,7 +70,7 @@ class TabConsole : AbstractTab(4, "Console") {
                         )
                     setMaxSize(410.0, 355.0)
                     setMinSize(410.0, 355.0)
-                    GridPane.setMargin(this, Insets(-0.5, 0.0, 0.0, 4.4))
+                    GridPane.setMargin(this, Insets(-1.5, 0.0, 0.0, 4.4))
                     children.add(
                         HBox().apply {
                             alignment = Pos.CENTER
