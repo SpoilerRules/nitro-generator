@@ -23,6 +23,8 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-common")
     }
 
+    implementation("com.charleskorn.kaml:kaml:0.58.0") // YAML support for Kotlin Serialization
+
     implementation("org.openjfx:javafx-controls:11.0.2")
     implementation("org.openjfx:javafx-graphics:11.0.2")
     implementation("org.openjfx:javafx-base:11.0.2")
@@ -58,7 +60,7 @@ ktlint {
     android.set(false)
     ignoreFailures.set(true)
     enableExperimentalRules.set(true)
-    baseline.set(file("config/klint/baseline.xml"))
+    baseline.set(file("config/ktlint/baseline.xml"))
 
     reporters {
         reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)

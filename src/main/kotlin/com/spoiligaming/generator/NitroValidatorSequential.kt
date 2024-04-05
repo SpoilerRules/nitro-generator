@@ -3,6 +3,8 @@ package com.spoiligaming.generator
 import com.spoiligaming.generator.NitroValidatorSequential.validateNitro
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.Logger
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * The standard nitro validator. This validator does not support multithreading
@@ -34,8 +36,10 @@ object NitroValidatorSequential {
         var nitroValidationRetries = retryCount
 
         while (true) {
+            val (connection, proxy) = NitroValidationWrapper.getConnection(nitroCode, null, config)
+
             try {
-                with(NitroValidationWrapper.getConnection(nitroCode, null, config)) {
+                with(connection) {
                     NitroValidationWrapper.setProperties(this, config)
 
                     disconnect()
@@ -43,7 +47,9 @@ object NitroValidatorSequential {
                         responseCode,
                         nitroCode,
                         nitroValidationRetries,
+                        LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
                         config,
+                        proxy,
                         null,
                     ) {
                         nitroValidationRetries++

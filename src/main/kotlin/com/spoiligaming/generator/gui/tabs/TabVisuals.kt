@@ -7,7 +7,7 @@ import com.spoiligaming.generator.gui.element.ElementNote
 import javafx.geometry.Pos
 import javafx.scene.layout.GridPane
 
-class TabVisuals : AbstractTab(3, "Advanced") {
+class TabVisuals : AbstractTab(4, "Advanced") {
     override fun getContent(): GridPane =
         pane.apply {
             alignment = Pos.TOP_CENTER

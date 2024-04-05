@@ -1,5 +1,6 @@
 package com.spoiligaming.generator
 
+import com.spoiligaming.generator.autoretention.AutoRetentionHandler
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
@@ -45,7 +46,9 @@ object NitroValidationWrapper {
         responseCode: Int,
         nitroCode: String,
         nitroValidationRetries: Int,
+        validationDate: String,
         config: BaseConfigurationFactory,
+        usedProxy: String?,
         threadIdentity: String?,
         retryBehaviour: () -> Unit,
     ) {
@@ -53,19 +56,38 @@ object NitroValidationWrapper {
             when (responseCode) {
                 200, 204 -> {
                     SessionStatistics.validNitroCodes += 1
+                    AutoRetentionHandler.saveValidNitroCode(nitroCode, config)
+                    var hasClaimSucceeded = false
+
                     // this if-else if block is logically suspicious. please report any issues you encounter with it
-                    if (config.autoClaimSettings.enabled && config.generalSettings.generatePromotionalGiftCode) {
+                    if (config.autoClaimSettings.enabled && !config.generalSettings.generatePromotionalGiftCode) {
                         claimValidNitro(nitroCode, false, config).also { result ->
-                            config.generalSettings.alertWebhook.takeIf { it }?.let {
+                            config.discordWebhookAlertSettings.alertWebhook.takeIf { it }?.let {
                                 when (result) {
-                                    0 -> alertWebhook(nitroCode, true)
+                                    0 ->
+                                        alertWebhook(nitroCode, true).run {
+                                            hasClaimSucceeded = true
+                                        }
                                     else -> alertWebhook(nitroCode, false)
                                 }
                             }
                         }
-                    } else if (config.generalSettings.alertWebhook) {
+                    } else if (config.discordWebhookAlertSettings.alertWebhook) {
                         alertWebhook(nitroCode, null)
                     }
+
+                    if (config.autoRetentionSettings.enabled && config.autoRetentionSettings.informationalFile) {
+                        AutoRetentionHandler.appendValidNitroCode(
+                            nitroCode,
+                            validationDate,
+                            config.generalSettings.generatePromotionalGiftCode,
+                            nitroValidationRetries,
+                            hasClaimSucceeded,
+                            usedProxy,
+                            threadIdentity,
+                        )
+                    }
+
                     "The code $nitroCode is valid. " + if (nitroValidationRetries > 0) "Took $nitroValidationRetries retries." else ""
                 }
 
@@ -100,7 +122,7 @@ object NitroValidationWrapper {
         runCatching {
             val currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             connection =
-                URI.create(BaseConfigurationFactory.getInstance().generalSettings.discordWebhookURL).toURL()
+                URI.create(BaseConfigurationFactory.getInstance().discordWebhookAlertSettings.discordWebhookURL).toURL()
                     .openConnection() as HttpsURLConnection
             connection?.apply {
                 requestMethod = "POST"
@@ -162,11 +184,13 @@ object NitroValidationWrapper {
         threadIdentity: String?,
         config: BaseConfigurationFactory,
         proxyInavailabilityBehavior: (() -> Unit)? = null,
-    ): HttpsURLConnection {
+    ): Pair<HttpsURLConnection, String?> {
         val threadIdentityPrefix =
             threadIdentity?.let {
                 "${CEnum.RESET}[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$it${CEnum.RESET}] "
             } ?: ""
+
+        var currentProxyInfo = ""
 
         val proxy =
             when {
@@ -184,11 +208,13 @@ object NitroValidationWrapper {
                             },
                         )
                     }
+                    currentProxyInfo = "${config.proxySettings.host}:${config.proxySettings.port}"
                     Proxy(proxyType, InetSocketAddress(config.proxySettings.host, config.proxySettings.port.toInt()))
                 }
                 else ->
                     ProxyHandler.getNextProxy()?.let { proxyInfo ->
                         Logger.printDebug("${threadIdentityPrefix}Using proxy: ${CEnum.CYAN}${proxyInfo.first}:${proxyInfo.second}${CEnum.RESET}")
+                        currentProxyInfo = "${proxyInfo.first}:${proxyInfo.second}"
                         Proxy(
                             config.proxySettings.getProxyType(config.proxySettings.protocol),
                             InetSocketAddress(proxyInfo.first, proxyInfo.second),
@@ -201,9 +227,12 @@ object NitroValidationWrapper {
 
         disableProxySecurity()
 
-        return URI(
-            "https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode?with_application=false&with_subscription_plan=true",
-        ).toURL().openConnection(proxy) as HttpsURLConnection
+        val connection =
+            URI(
+                "https://discordapp.com/api/v9/entitlements/gift-codes/$nitroCode?with_application=false&with_subscription_plan=true",
+            ).toURL().openConnection(proxy) as HttpsURLConnection
+
+        return Pair(connection, if (proxy == Proxy.NO_PROXY) null else currentProxyInfo)
     }
 
     @Suppress("EmptyFunctionBlock")

@@ -3,6 +3,8 @@ package com.spoiligaming.generator
 import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.logging.CEnum
 import com.spoiligaming.logging.Logger
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.atomic.AtomicBoolean
 
 object NitroValidatorConcurrent {
@@ -28,7 +30,9 @@ object NitroValidatorConcurrent {
         var nitroValidationRetries = retryCount
 
         runCatching {
-            with(NitroValidationWrapper.getConnection(nitroCode, threadIdentity, config)) {
+            val (connection, proxy) = NitroValidationWrapper.getConnection(nitroCode, threadIdentity, config)
+
+            with(connection) {
                 NitroValidationWrapper.disableProxySecurity()
                 NitroValidationWrapper.setProperties(this, config)
 
@@ -37,7 +41,9 @@ object NitroValidatorConcurrent {
                     responseCode,
                     nitroCode,
                     nitroValidationRetries,
+                    LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
                     config,
+                    proxy,
                     threadIdentity,
                 ) {
                     nitroValidationRetries++

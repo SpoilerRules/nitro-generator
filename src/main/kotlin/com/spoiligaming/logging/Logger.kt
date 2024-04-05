@@ -6,8 +6,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 object Logger {
-    var showDebug = false
-    var uiEnabled = true
+    var showDebug = true
+    var uiEnabled = false
 
     private val dateTimeFormatter by lazy { DateTimeFormatter.ofPattern("HH:mm:ss") }
     private val dateFormatter by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss") }

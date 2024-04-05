@@ -13,8 +13,6 @@ data class General(
     var generatePromotionalGiftCode: Boolean = false,
     var generationDelay: Long = 6000,
     var validateNitroCode: Boolean = true,
-    @SerialName("alertWebhookForValidNitroCode") var alertWebhook: Boolean = true,
-    var discordWebhookURL: String = "https://dummylink.com/suspicious-webhook/",
     @SerialName("retry") var retryTillValid: Boolean = true,
     var retryDelay: Int = 5,
 )
@@ -52,13 +50,25 @@ data class CustomProxy(
 }
 
 @Serializable
+data class DiscordWebhookAlert(
+    @SerialName("alertWebhookForValidNitroCode") var alertWebhook: Boolean = true,
+    var discordWebhookURL: String = "https://dummylink.com/suspicious-webhook/",
+)
+
+@Serializable
 data class AutoClaim(
     var enabled: Boolean = true,
     var retryTillSuccess: Boolean = true,
     var accountToken: String = "dGhpcyBpcyBhIGR1bW15IHRva2Vu",
 )
 
-// experimental and undone.
+@Serializable
+data class AutoRetention(
+    var enabled: Boolean = true,
+    var contentSeparator: String = "\n",
+    var informationalFile: Boolean = true,
+)
+
 @Serializable
 data class Theme(
     var accentColor: String = "#E85D9B",
@@ -73,8 +83,10 @@ data class BaseConfigurationFactory(
     @SerialName("General") var generalSettings: General = General(),
     @SerialName("Custom Proxy") var proxySettings: CustomProxy = CustomProxy(),
     @SerialName("Multi Threading") var multithreadingSettings: Multithreading = Multithreading(),
+    @SerialName("Discord Webhook Alert") var discordWebhookAlertSettings: DiscordWebhookAlert = DiscordWebhookAlert(),
     @SerialName("Auto Claim") var autoClaimSettings: AutoClaim = AutoClaim(),
-    @SerialName("Theme (unstable, do not modify)") var themeSettings: Theme = Theme(),
+    @SerialName("Auto Retention") var autoRetentionSettings: AutoRetention = AutoRetention(),
+    @SerialName("Theme") var themeSettings: Theme = Theme(),
 ) {
     companion object {
         var isConfigUpdated: Boolean = false

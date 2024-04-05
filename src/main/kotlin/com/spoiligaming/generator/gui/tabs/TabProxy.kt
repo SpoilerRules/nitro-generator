@@ -195,7 +195,7 @@ class TabProxy : AbstractTab(1, "Proxy") {
                             ElementText.addTextValue(
                                 if (BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator == "\n") "\\n" else BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator,
                                 "Content Separator",
-                                tooltipText = null,
+                                tooltipText = TooltipKeyAccessor.getValue("raw.content.contentseparator"),
                                 valueUpdater = { newValue ->
                                     BaseConfigurationFactory.updateValue {
                                         proxySettings.rawContentSeparator = newValue

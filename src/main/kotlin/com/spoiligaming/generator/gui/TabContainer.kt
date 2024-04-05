@@ -44,12 +44,12 @@ class TabContainer : GridPane() {
         implementStatisticsBox()
 
         hgap = 10.0
-        vgap = 7.5
+        vgap = 7.0
     }
 
     private fun implementTabBox() {
         val tabs =
-            listOf("General", "Proxy", "Advanced", "Visuals", "Console").mapIndexed { index, labelText ->
+            listOf("General", "Proxy", "Fortification", "Advanced", "Visuals", "Console").mapIndexed { index, labelText ->
                 createTab(labelText, index)
             }
 
@@ -65,8 +65,8 @@ class TabContainer : GridPane() {
             GridPane().apply {
                 background =
                     Background(BackgroundFill(Color.web(ColorPalette.menuColor), CornerRadii(16.0, false), null))
-                setMaxSize(160.0, 275.0)
-                setMinSize(160.0, 275.0)
+                setMaxSize(160.0, 280.0)
+                setMinSize(160.0, 280.0)
                 alignment = Pos.TOP_CENTER
                 setMargin(this, Insets(0.0, 0.0, -5.0, 0.0))
                 vgap = 10.0
@@ -130,7 +130,7 @@ class TabContainer : GridPane() {
                 setMaxSize(160.0, 75.0)
                 setMinSize(160.0, 75.0)
                 alignment = Pos.TOP_CENTER
-                setMargin(this, Insets(10.0, 0.0, 0.0, 0.0))
+                setMargin(this, Insets(7.5, 0.0, 0.0, 0.0))
             },
             0,
             0,
@@ -144,7 +144,7 @@ class TabContainer : GridPane() {
                 setMaxSize(160.0, 75.0)
                 setMinSize(160.0, 75.0)
                 alignment = Pos.TOP_CENTER
-                padding = Insets(10.0, 0.0, 0.0, 0.0)
+                padding = Insets(7.5, 0.0, 0.0, 0.0)
             },
             0,
             0,

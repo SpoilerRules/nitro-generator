@@ -18,7 +18,7 @@ import javafx.scene.paint.Color
 import java.io.OutputStream
 import java.io.PrintStream
 
-class TabConsole : AbstractTab(4, "Console") {
+class TabConsole : AbstractTab(5, "Console") {
     override fun getContent(): GridPane {
         val textArea =
             TextArea().apply {

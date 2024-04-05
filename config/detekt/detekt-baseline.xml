@@ -2,6 +2,7 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
+    <ID>MaxLineLength:AutoRetentionHandler.kt$AutoRetentionHandler$"Appended text '${CEnum.BLUE}$nitroCode${CEnum.RESET}' at ${CEnum.BRIGHT_PINK}line ${currentPosition.first + 1}${CEnum.RESET}, taking ${CEnum.BRIGHT_PINK}${newPosition.second - currentPosition.second} columns${CEnum.RESET}."</ID>
     <ID>MaxLineLength:CommonElement.kt$CommonElement.Companion$"-fx-text-fill: ${ColorPalette.textColor}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 12; -fx-background-radius: 12; -fx-background-color: ${ColorPalette.controlColor}; -fx-focus-color: transparent; -fx-padding: 0;"</ID>
     <ID>MaxLineLength:CommonElement.kt$CommonElement.Companion$"-fx-text-fill: ${ColorPalette.textColor}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 13; -fx-background-radius: 12; -fx-background-color: ${ColorPalette.secondaryColor};"</ID>
     <ID>MaxLineLength:ElementColorPicker.kt$ElementColorPicker$"; -fx-text-fill: ${ColorPalette.textColor}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 14; -fx-background-radius: 6; -fx-highlight-fill: ${ColorPalette.accentColor};"</ID>
@@ -13,8 +14,5 @@
     <ID>MaxLineLength:ElementValue.kt$ElementValue$"-fx-background-color: ${ColorPalette.controlColor}; -fx-text-fill: ${ColorPalette.textColor}; -fx-font-family: '${ResourceHandler.comfortaaSemiBold.family}'; -fx-font-size: 15; -fx-background-radius: 12;"</ID>
     <ID>MaxLineLength:GeneratorBean.kt$GeneratorBean$"Nitro generation was skipped because ${CEnum.UNDERLINE}the Proxy File path was empty${CEnum.RESET}, even though Custom Proxy mode was set to 'One File' and enabled. Please check your proxy settings."</ID>
     <ID>MaxLineLength:Main.kt$"${CEnum.RED}An update is available!${CEnum.RESET} Please visit https://github.com/SpoilerRules/nitro-generator/releases/latest to download the latest version (${CEnum.BRIGHT_PURPLE}$remoteVersion${CEnum.RESET})."</ID>
-    <ID>MaxLineLength:NitroValidatorConcurrent.kt$NitroValidatorConcurrent$Logger.printDebug("[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] Using proxy: ${CEnum.CYAN}${proxyInfo.first}:${proxyInfo.second}${CEnum.RESET}")</ID>
-    <ID>MaxLineLength:NitroValidatorConcurrent.kt$NitroValidatorConcurrent$throw ConnectException("[${CEnum.BLUE}THREAD: ${CEnum.RESET}${CEnum.CYAN}$threadIdentity${CEnum.RESET}] Failed to establish a connection to validate the nitro code because the next proxy is null.")</ID>
-    <ID>MaxLineLength:TabProxy.kt$TabProxy$if (BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator == "\n") "\\n" else BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator</ID>
   </CurrentIssues>
 </SmellBaseline>
