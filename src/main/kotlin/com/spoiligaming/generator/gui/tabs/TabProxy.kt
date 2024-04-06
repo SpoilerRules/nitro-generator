@@ -193,7 +193,11 @@ class TabProxy : AbstractTab(1, "Proxy") {
                             ),
                             ElementNote.addNote("Settings below will not take effect dynamically.", "13"),
                             ElementText.addTextValue(
-                                if (BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator == "\n") "\\n" else BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator,
+                                if (BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator == "\n") {
+                                    "\\n"
+                                } else {
+                                    BaseConfigurationFactory.getInstance().proxySettings.rawContentSeparator
+                                },
                                 "Content Separator",
                                 tooltipText = TooltipKeyAccessor.getValue("raw.content.contentseparator"),
                                 valueUpdater = { newValue ->
