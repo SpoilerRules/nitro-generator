@@ -33,6 +33,8 @@
 - **Nitro Code Retry Mechanism**: If a nitro code fails to be validated, the system will retry it automatically.
 - **Auto-Claim for Valid Codes**: When a valid nitro code is detected, it's claimed on your behalf.
   - **Retry Mechanism**: If the claim fails, the system will retry until successful.
+- **Auto-Retention for Valid Codes**: Upon detection of a valid Nitro code, the system will automatically save the code into a text file.
+  - **Additional Information File**: The system will save the valid Nitro code to a YAML file, including additional information such as the validation date.
 - **Discord Webhook Notifications**: Get instant alerts via Discord webhook when a valid nitro code is found.
 - **Concurrent Nitro Code Generation and Validation**: Generate and validate nitro codes simultaneously, maximizing efficiency. We achieve this using the Kotlin Coroutines Core library, which sets up a dedicated thread pool.
 - **Advanced Proxy Support**:
