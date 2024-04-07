@@ -19,7 +19,7 @@ object GeneratorBean {
     fun startGeneratingNitro() {
         timer(
             initialDelay = 0,
-            period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay.takeIf { it != 0L } ?: 1,
+            period = BaseConfigurationFactory.getInstance().generalSettings.generationDelay.takeIf { it > 0L } ?: 1,
         ) {
             val config = BaseConfigurationFactory.getInstance()
             // reset isConfigUpdated to ensure concurrent operations work
@@ -61,7 +61,7 @@ object GeneratorBean {
 
         runBlocking {
             var index = 0
-            repeat(config.multithreadingSettings.threadLimit) {
+            repeat(config.multithreadingSettings.threadLimit.takeIf { it > 0 } ?: 1) {
                 launch(Dispatchers.IO) {
                     while (isActive &&
                         !BaseConfigurationFactory.isConfigUpdated &&
@@ -81,7 +81,7 @@ object GeneratorBean {
                         semaphore.release()
                     }
                 }
-                delay(config.multithreadingSettings.threadLaunchDelay)
+                delay(config.multithreadingSettings.threadLaunchDelay.takeIf { it >= 0 } ?: 0)
             }
         }
     }

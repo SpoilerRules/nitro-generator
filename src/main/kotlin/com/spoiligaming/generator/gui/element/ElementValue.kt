@@ -133,14 +133,18 @@ object ElementValue {
         when (property) {
             is SimpleIntegerProperty -> {
                 val newValue = property.get().toLong() + increment
-                property.set(newValue.toInt())
-                valueUpdater(newValue.toInt())
+                if (newValue >= 0) {
+                    property.set(newValue.toInt())
+                    valueUpdater(newValue.toInt())
+                }
             }
 
             is SimpleLongProperty -> {
                 val newValue = property.get() + increment
-                property.set(newValue)
-                valueUpdater(newValue)
+                if (newValue >= 0) {
+                    property.set(newValue)
+                    valueUpdater(newValue)
+                }
             }
 
             else -> throw IllegalArgumentException("Unsupported property type")
