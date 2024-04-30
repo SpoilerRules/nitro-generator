@@ -25,11 +25,6 @@ dependencies {
 
     implementation("com.charleskorn.kaml:kaml:0.58.0") // YAML support for Kotlin Serialization
 
-    implementation("org.openjfx:javafx-controls:11.0.2")
-    implementation("org.openjfx:javafx-graphics:11.0.2")
-    implementation("org.openjfx:javafx-base:11.0.2")
-    //   implementation("org.controlsfx:controlsfx:11.2.0")
-
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
