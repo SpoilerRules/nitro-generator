@@ -56,12 +56,13 @@ class CommonElement {
                                 )
                             setMaxSize(410.0, 35.0)
                             setMinSize(410.0, 35.0)
-                            effect = DropShadow().apply { // Maple Lite shadow effect
-                                color = Color.color(0.0, 0.0, 0.0, 0.5)
-                                radius = 10.0
-                                offsetX = 0.0
-                                offsetY = 1.0
-                            }
+                            effect =
+                                DropShadow().apply { // Maple Lite shadow effect
+                                    color = Color.color(0.0, 0.0, 0.0, 0.5)
+                                    radius = 10.0
+                                    offsetX = 0.0
+                                    offsetY = 0.5
+                                }
                             children.add(
                                 Label(contentFieldTitle).apply {
                                     style = "-fx-text-fill: ${ColorPalette.accentColor}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 14;"
