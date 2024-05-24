@@ -9,6 +9,7 @@ import com.spoiligaming.generator.gui.element.ElementText
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.ScrollPane
+import javafx.scene.control.ScrollPane.ScrollBarPolicy
 
 class TabFortification : AbstractTab(2, "Fortification") {
     override fun getContent(): ScrollPane =
@@ -16,8 +17,8 @@ class TabFortification : AbstractTab(2, "Fortification") {
             maxWidth = 420.0
             minWidth = 420.0
             fitToWidthProperty().set(true)
-            hbarPolicy = javafx.scene.control.ScrollPane.ScrollBarPolicy.NEVER
-            vbarPolicy = javafx.scene.control.ScrollPane.ScrollBarPolicy.NEVER
+            hbarPolicy = ScrollBarPolicy.NEVER
+            vbarPolicy = ScrollBarPolicy.NEVER
             padding = Insets(-0.5, 0.0, 0.0, 0.0)
             style = "-fx-background-color: transparent; -fx-background: transparent; -fx-border-width: 0;"
 
@@ -28,7 +29,7 @@ class TabFortification : AbstractTab(2, "Fortification") {
                     vgap = 7.5
                     CommonElement().run {
                         createContentField(
-                            this@fortificationPaneApply, "Discord Webhook", 115.0,
+                            this@fortificationPaneApply, "Discord Webhook",
                             ElementBoolean.addBooleanValue(
                                 BaseConfigurationFactory.getInstance().discordWebhookAlertSettings.alertWebhook,
                                 "Alert Webhook",
@@ -56,7 +57,6 @@ class TabFortification : AbstractTab(2, "Fortification") {
                         createContentField(
                             this@fortificationPaneApply,
                             "Auto Claim",
-                            152.0,
                             ElementBoolean.addBooleanValue(
                                 BaseConfigurationFactory.getInstance().autoClaimSettings.enabled,
                                 "Enabled",
@@ -92,7 +92,6 @@ class TabFortification : AbstractTab(2, "Fortification") {
                         createContentField(
                             this@fortificationPaneApply,
                             "Auto Retention",
-                            152.0,
                             ElementBoolean.addBooleanValue(
                                 BaseConfigurationFactory.getInstance().autoRetentionSettings.enabled,
                                 "Enabled",
