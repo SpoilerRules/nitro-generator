@@ -17,7 +17,8 @@ class TabGeneral : AbstractTab(0, "General") {
             vgap = 7.5
             CommonElement().run {
                 createContentField(
-                    this@apply, "General",
+                    this@apply,
+                    "General",
                     ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().generalSettings.logGenerationInfo,
                         "Log Generation Info",
