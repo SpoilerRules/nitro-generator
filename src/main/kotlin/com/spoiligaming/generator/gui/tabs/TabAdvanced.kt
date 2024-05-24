@@ -20,7 +20,6 @@ class TabAdvanced : AbstractTab(3, "Advanced") {
                 createContentField(
                     this@apply,
                     "Multi Threading",
-                    150.0,
                     ElementBoolean.addBooleanValue(
                         BaseConfigurationFactory.getInstance().multithreadingSettings.enabled,
                         "Enabled",

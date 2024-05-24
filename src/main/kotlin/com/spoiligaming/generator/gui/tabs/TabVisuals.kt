@@ -17,7 +17,6 @@ class TabVisuals : AbstractTab(4, "Advanced") {
                 createContentField(
                     this@apply,
                     "User Interface",
-                    245.0,
                     ElementNote.addNote("Will take effect after restarting the software.", "13"),
                     ElementColorPicker.addColorPickerValue(
                         BaseConfigurationFactory.getInstance().themeSettings.accentColor,

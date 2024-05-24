@@ -36,7 +36,6 @@ class TabProxy : AbstractTab(1, "Proxy") {
                         createContentField(
                             this@proxyPaneApply,
                             "Custom Proxy",
-                            257.0,
                             ElementBoolean.addBooleanValue(
                                 BaseConfigurationFactory.getInstance().proxySettings.enabled,
                                 "Enabled",
@@ -143,7 +142,6 @@ class TabProxy : AbstractTab(1, "Proxy") {
                         createContentField(
                             this@proxyPaneApply,
                             "Additional Authentication",
-                            150.0,
                             ElementBoolean.addBooleanValue(
                                 BaseConfigurationFactory.getInstance().proxySettings.isAuthenticationRequired,
                                 "Enabled",
@@ -179,7 +177,6 @@ class TabProxy : AbstractTab(1, "Proxy") {
                         createContentField(
                             this@proxyPaneApply,
                             "Mode Specific",
-                            195.0,
                             ElementFilePicker.addTextValue(
                                 this@proxyPaneApply,
                                 BaseConfigurationFactory.getInstance().proxySettings.proxyFilePath,

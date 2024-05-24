@@ -13,6 +13,7 @@ import javafx.scene.layout.BackgroundFill
 import javafx.scene.layout.CornerRadii
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Region
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.util.Duration
@@ -23,9 +24,9 @@ class CommonElement {
     fun createContentField(
         gridPane: GridPane,
         contentFieldTitle: String,
-        contentFieldHeight: Double,
         vararg content: Node?,
     ) {
+
         gridPane.apply {
             add(
                 VBox().apply {
@@ -37,8 +38,9 @@ class CommonElement {
                                 null,
                             ),
                         )
-                    setMaxSize(410.0, contentFieldHeight)
-                    setMinSize(410.0, contentFieldHeight)
+                    maxWidth = 410.0
+                    minWidth = 410.0
+                    prefHeight = Region.USE_COMPUTED_SIZE
                     GridPane.setMargin(this, Insets(-0.5, 0.0, 0.0, -2.4))
 
                     children.add(
@@ -56,14 +58,18 @@ class CommonElement {
                             setMinSize(410.0, 35.0)
                             children.add(
                                 Label(contentFieldTitle).apply {
-                                    style = "-fx-text-fill: ${ColorPalette.accentColor}; " +
-                                        "-fx-font-family: '${ResourceHandler.comfortaaBold.family}'; " +
-                                        "-fx-font-size: 14;"
+                                    style = "-fx-text-fill: ${ColorPalette.accentColor}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 14;"
                                 },
                             )
                         },
                     )
                     children.addAll(content)
+                    children.add(
+                        Region().apply {
+                            minHeight = 7.5
+                            maxHeight = 7.5
+                        },
+                    )
                 },
                 0,
                 contentFieldIndex++,
