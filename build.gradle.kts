@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.9.23"
-    kotlin("plugin.serialization") version "1.9.23"
+    kotlin("jvm") version "1.9.24"
+    kotlin("plugin.serialization") version "1.9.24"
     id("org.openjfx.javafxplugin") version "0.1.0"
     id("io.gitlab.arturbosch.detekt") version "1.23.5"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
@@ -18,7 +18,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     // implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.8.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.3") {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-common")
     }

@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://kotlinlang.org/"><img src="https://img.shields.io/badge/Kotlin-1.9.23-blue.svg?style=flat-square&logo=kotlin" alt="Kotlin"></a>
+  <a href="https://kotlinlang.org/"><img src="https://img.shields.io/badge/Kotlin-1.9.24-blue.svg?style=flat-square&logo=kotlin" alt="Kotlin"></a>
   <a href="https://www.oracle.com/java/technologies/javase-downloads.html"><img src="https://img.shields.io/badge/Java-11-blue.svg?style=flat-square&logo=java&logoColor=white" alt="Java"></a>
   <a href="https://gradle.org/"><img src="https://img.shields.io/badge/Gradle-8.7-blue.svg?style=flat-square&logo=gradle&logoColor=white" alt="Gradle"></a>
 </p>
