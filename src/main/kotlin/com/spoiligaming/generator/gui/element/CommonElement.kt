@@ -1,10 +1,7 @@
 package com.spoiligaming.generator.gui.element
 
-import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.ColorPalette
 import com.spoiligaming.generator.gui.ResourceHandler
-import javafx.beans.property.BooleanProperty
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Node
@@ -23,11 +20,6 @@ import javafx.util.Duration
 
 class CommonElement {
     private var contentFieldIndex: Int = 0
-
-    private val visualEnhancements: BooleanProperty =
-        SimpleBooleanProperty(
-            BaseConfigurationFactory.getInstance().themeSettings.visualEnhancements,
-        )
 
     fun createContentField(
         gridPane: GridPane,
