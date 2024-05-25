@@ -1,14 +1,16 @@
 package com.spoiligaming.generator.gui.element
 
+import com.spoiligaming.generator.configuration.BaseConfigurationFactory
 import com.spoiligaming.generator.gui.ColorPalette
 import com.spoiligaming.generator.gui.ResourceHandler
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.Tooltip
-import javafx.scene.effect.DropShadow
 import javafx.scene.layout.Background
 import javafx.scene.layout.BackgroundFill
 import javafx.scene.layout.CornerRadii
@@ -21,6 +23,11 @@ import javafx.util.Duration
 
 class CommonElement {
     private var contentFieldIndex: Int = 0
+
+    private val visualEnhancements: BooleanProperty =
+        SimpleBooleanProperty(
+            BaseConfigurationFactory.getInstance().themeSettings.visualEnhancements,
+        )
 
     fun createContentField(
         gridPane: GridPane,
@@ -56,13 +63,6 @@ class CommonElement {
                                 )
                             setMaxSize(410.0, 35.0)
                             setMinSize(410.0, 35.0)
-                            effect =
-                                DropShadow().apply { // Maple Lite shadow effect
-                                    color = Color.color(0.0, 0.0, 0.0, 0.5)
-                                    radius = 10.0
-                                    offsetX = 0.0
-                                    offsetY = 0.5
-                                }
                             children.add(
                                 Label(contentFieldTitle).apply {
                                     style = "-fx-text-fill: ${ColorPalette.accentColor}; -fx-font-family: '${ResourceHandler.comfortaaBold.family}'; -fx-font-size: 14;"
