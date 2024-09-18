@@ -1,0 +1,24 @@
+[versions]
+kotlin = "2.0.20"
+serialization = "1.7.2"
+shadow = "8.3.1"
+coroutines = "1.8.1"
+kaml = "0.61.0"
+detekt = "1.23.7"
+ktlint = "12.1.1"
+javafxplugin = "0.1.0"
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-coroutines-javafx = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-javafx", version.ref = "coroutines" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version.ref = "serialization" }
+kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafxplugin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
