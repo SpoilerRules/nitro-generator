@@ -1,10 +1,10 @@
 plugins {
-    kotlin("jvm") version "1.9.24"
-    kotlin("plugin.serialization") version "1.9.24"
-    id("org.openjfx.javafxplugin") version "0.1.0"
-    id("io.gitlab.arturbosch.detekt") version "1.23.5"
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.javafx)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.shadow)
     application
 }
 
@@ -16,16 +16,12 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
-    // implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.8.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.3") {
-        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-common")
-    }
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlin.coroutines.javafx)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kaml) // YAML support for Kotlin Serialization
 
-    implementation("com.charleskorn.kaml:kaml:0.58.0") // YAML support for Kotlin Serialization
-
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation(libs.kotlin.test)
 }
 
 javafx {
