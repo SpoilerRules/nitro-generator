@@ -83,9 +83,7 @@ Both files serve the same purpose but cater to different needs. Choose the fat j
 
 We're seeking skilled contributors to improve this project with the following features:
 
-- **SVG Icons**: Integrate SVG icons adjacent to tab labels, akin to those in Maple Lite, to enrich the UI's visual appeal.
 - **ComboBox Styling**: Implement a ComboBox popup that mirrors the aesthetic and functionality of Maple Lite's design.
-- **UI Element Replacement**: Swap out the CheckBox for a toggle switch element, styled after Maple Lite's interface.
 - **Value Slider Addition**: Add a value slider next to text fields, modeled after Maple Lite's design. Reference implementation can be found in [ElementValue.kt](https://github.com/SpoilerRules/nitro-generator/blob/master/src/main/kotlin/com/spoiligaming/generator/gui/element/ElementValue.kt).
 
 If you're interested in contributing to any of these areas, please reach out to `spoilerrules` on Discord.
