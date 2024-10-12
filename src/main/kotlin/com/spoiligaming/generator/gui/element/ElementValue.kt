@@ -10,11 +10,13 @@ import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.control.Button
+import javafx.scene.control.Slider
 import javafx.scene.control.TextField
 import javafx.scene.input.ContextMenuEvent
 import javafx.scene.input.KeyCode
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
 import java.text.DecimalFormat
 
 object ElementValue {
@@ -33,6 +35,7 @@ object ElementValue {
             this.padding = padding
 
             children.addAll(
+//                createSlider(property, valueUpdater), // Slider added before text field
                 createTextField(property, valueUpdater),
                 createButton("-", 30.0, 25.0) { updateValue(property, -1, valueUpdater as (Number) -> Unit) },
                 createButton("+", 30.0, 25.0) { updateValue(property, 1, valueUpdater as (Number) -> Unit) },
@@ -123,6 +126,53 @@ object ElementValue {
         setOnMouseEntered { cursor = Cursor.HAND }
         setOnMouseExited { cursor = Cursor.DEFAULT }
         setOnAction { onClick() }
+    }
+
+    private fun <T : Number> createSlider(
+        property: Any,
+        valueUpdater: (T) -> Unit
+    ) = Slider().apply {
+        min = 0.0
+        max = 100.0
+
+        if (property is SimpleIntegerProperty) {
+            value = property.get().toDouble()
+        } else if (property is SimpleLongProperty) {
+            value = property.get().toDouble()
+        }
+
+        style = """
+            .track {
+                -fx-background-color: gray;
+            }
+            .track:filled {
+                -fx-background-color: darkgray;
+            }
+            .thumb {
+                -fx-background-color: ${ColorPalette.accentColor};
+            }
+        """.trimIndent()
+
+        isShowTickMarks = false
+        isShowTickLabels = false
+        isSnapToTicks = true
+
+        valueProperty().addListener { _, _, newValue ->
+            if (newValue.toInt() >= 0) {
+                when (property) {
+                    is SimpleIntegerProperty -> {
+                        property.set(newValue.toInt())
+                        valueUpdater(newValue as T)
+                    }
+                    is SimpleLongProperty -> {
+                        property.set(newValue.toLong())
+                        valueUpdater(newValue as T)
+                    }
+                }
+            }
+        }
+
+        HBox.setHgrow(this, Priority.ALWAYS)
     }
 
     private fun updateValue(
